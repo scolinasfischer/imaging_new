@@ -33,4 +33,7 @@ function process_this_group(xlsx_dir, analysis_output_dir, cond, strain, pars, f
 
 
     %plotting
+
+
+    fprintf('Processed group %s\n', cond);
 end

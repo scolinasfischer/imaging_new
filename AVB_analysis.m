@@ -21,7 +21,7 @@
     strain = "BARxxx";
     pars = "20_2_details";
     
-    extract_from_mat = "FALSE";
+    extract_from_mat = "TRUE";
     frame_rate = 9.9;
 
 

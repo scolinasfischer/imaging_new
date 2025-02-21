@@ -21,6 +21,8 @@ function data = process_single_worm(fname)
 
 
 
+    fprintf('Processed worm %s\n', short_fname);
+
 end
 
 
