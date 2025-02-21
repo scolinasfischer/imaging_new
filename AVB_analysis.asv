@@ -121,22 +121,15 @@ codes = [
 
 dir_size = size(all_mat_dirs);
 
-if extract_from_mat == "TRUE"
+if strcmp(extract_from_mat, "TRUE")
     
 
-    for r = 1:dir_size(1) %cycle through rows
-        for c = 1:dir_size(2) %cycle through columns
-    
-        extract_mat2xls(all_mat_dirs{r,c},all_xlsx_dirs{r,c},frame_rate)
-        fprintf("mat files extracted to xls")
-    
-        end
-    end  
-
-    fprintf("mat files extracted to xls")
 end
 
 clear r c 
+
+
+
 
 
 
@@ -175,7 +168,7 @@ for r = 1:dir_size(1)
         for i = 1:n %number of worms in this cond
 
             fname = files_to_analyse(i);
-            short_fname = erase(fname, ".xls");
+            short_fname = erase(fname, ".xlsx");
             s= strfind(fname,'/');
             short_fname = extractAfter(short_fname,max(s));
       
@@ -187,6 +180,10 @@ for r = 1:dir_size(1)
             catch
                 warning("Failed to read file: %s", fname);
                 continue;
+
+
+
+                %perform analysis
             
             end
 
@@ -196,4 +193,16 @@ for r = 1:dir_size(1)
 end
 
 
+%% %%%%%%%%%%%%%%%% 
+%% Extract Data if Needed
+if extract_from_mat == "TRUE"
+    cycle_to_extract_mat_files(all_mat_dirs, all_xlsx_dirs, frame_rate);
+end
 
+%% Process Each Condition
+dir_size = size(all_xlsx_dirs);
+for rowIdx = 1:dir_size(1)
+    for colIdx = 1:dir_size(2)
+        process_condition(all_xlsx_dirs{rowIdx, colIdx}, analysis_output_dir, codes(rowIdx, colIdx), strain, pars, frame_rate, maxlength);
+    end
+end
