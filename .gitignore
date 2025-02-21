@@ -1,1 +1,7 @@
 .DS_Store
+# Ignore MATLAB autosave files
+*.asv
+
+# Ignore the help folder
+help/
+
