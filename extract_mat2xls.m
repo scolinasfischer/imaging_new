@@ -20,7 +20,6 @@ end
 
 % Get a list of all .mat files in the input folder (no subfolders)
 matFiles = dir(fullfile(input_dir, '*.mat'));
-%matFiles
 
 
 % Exit early if no files found
