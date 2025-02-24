@@ -1,12 +1,12 @@
 function process_this_group(xlsx_dir, analysis_output_dir, cond, strain, pars, frame_rate, max_movie_length)
-    % Get file list
+% Get file list    
     files_to_analyse = get_xlsx_filepaths(xlsx_dir);
     n = length(files_to_analyse);
     strain_name = strcat(strain, cond, pars);
     
-    % Create output directory
+    % Check for output directory
     outputdir = fullfile(analysis_output_dir, cond);
-    if ~exist(outputdir, 'dir')
+    if ~exist(outputdir, 'dir') %NB on server dont have write permissions so need to make sure directory already created
         mkdir(outputdir);
     end
     

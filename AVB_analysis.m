@@ -19,9 +19,9 @@
 %general
     
     strain = "BARxxx";
-    pars = "20_2_details";
+    pars = "24_2_details";
     
-    extract_from_mat = "TRUE";
+    extract_from_mat = "FALSE";
     frame_rate = 9.9;
 
 
@@ -58,8 +58,8 @@
     bstart = 792;%first frame of baseline
     bend = 891; %last frame of baseline
     mend = 2079; %last used frame of movie
-    full_movie_length = 220; %full movie length in seconds
-    max_movie_length = ceil(frame_rate) * full_movie_length; % maximum possible frame of movie (this is frame rate were actually 10fps, which is not. in reality most movies around 2185 frames). 
+    full_movie_lengthS = 220; %full movie length in seconds
+    max_movie_length = ceil(frame_rate) * full_movie_lengthS; % maximum possible frame of movie (this is frame rate were actually 10fps, which is not. in reality most movies around 2185 frames). 
     timesecs = [80 90 120 150 180 210]; %vector containing timepoints in seconds (time since record start)
     timeframes  = [792 892 1188 1485 1782 2079]; %vector containing timepoints in frames (time since record start)
     timelabels=({'0' '10' '40' '70' '100' '130'});  %cell array containing timepoints in seconds (time since baseline start)
@@ -75,19 +75,20 @@
 %set input and output directories 
 
 %set path for mat files of each condition here: 
-mock_mat_dir = "/Users/glia/Documents/neuroUCL/phd/current/project/imaging/feb2025_testing/BAR184 AIB copy_mats/mock";
-avsv_mat_dir = "/Users/glia/Documents/neuroUCL/phd/current/project/imaging/feb2025_testing/BAR184 AIB copy_mats/avsv";
-sexc_mat_dir = "/Users/glia/Documents/neuroUCL/phd/current/project/imaging/feb2025_testing/BAR184 AIB copy_mats/sexc";
-
+mock_mat_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/matfiles/AVB/mock";
+avsv_mat_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/matfiles/AVB/avsv";
+sexc_mat_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/matfiles/AVB/sexc";
 
 %set path for xlsx files of each condition here: 
-mock_xlsx_dir = "/Users/glia/Documents/neuroUCL/phd/current/project/imaging/feb2025_testing/xls files/mock";
-avsv_xlsx_dir = "/Users/glia/Documents/neuroUCL/phd/current/project/imaging/feb2025_testing/xls files/avsv";
-sexc_xlsx_dir = "/Users/glia/Documents/neuroUCL/phd/current/project/imaging/feb2025_testing/xls files/sexc";
+mock_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/newAVBxls/mock";
+avsv_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/newAVBxls/avsv";
+sexc_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/newAVBxls/sexc";
 
 
-%set path for overall analysis output (will need to make subfolders inside)
-analysis_output_dir = "/Users/glia/Documents/neuroUCL/phd/current/project/imaging/feb2025_testing/analysis_output";
+%set path for overall analysis output
+% subfolders inside this need to have exact name as the "codes" listed
+% below for each group
+analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/newAVBoutput";
 
 
 %% Create cell arrays to hold input directories

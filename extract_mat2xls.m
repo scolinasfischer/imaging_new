@@ -13,7 +13,7 @@ function extract_mat2xls(input_dir,output_dir,frame_rate)
 
 % Ensure output directory exists, if not, make it
 if ~exist(output_dir, 'dir') %check if there is a _folder_ at this directory
-    mkdir(output_dir);       %if not, create it
+    mkdir(output_dir);       %if not, create it NB this wont work on server
     warning('output directory not found, created %s', output_dir);
 end
 
