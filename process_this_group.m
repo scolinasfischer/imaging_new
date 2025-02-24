@@ -2,7 +2,7 @@ function process_this_group(xlsx_dir, analysis_output_dir, cond, strain, pars, f
 % Get file list    
     files_to_analyse = get_xlsx_filepaths(xlsx_dir);
     n = length(files_to_analyse);
-    strain_name = strcat(strain, cond, pars);
+    group_name = strcat(strain, cond, pars);
     
     % Check for output directory
     outputdir = fullfile(analysis_output_dir, cond);

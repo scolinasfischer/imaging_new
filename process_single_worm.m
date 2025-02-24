@@ -4,7 +4,7 @@
 % - plot
 % - could add optional argument for whter to call bleach-correction
 
-function data = process_single_worm(fname, bstart,bend,mend)
+function data = process_single_worm(fname, bstart,bend,mend,)
 
     %get a short filename for this file (filename only, no path or
     %extension)
