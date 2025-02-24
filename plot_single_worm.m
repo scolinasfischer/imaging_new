@@ -1,5 +1,5 @@
 
-function plot_single_worm(seconds, ratios, timesecs, timelabels, ycoords, colors3d, ploty1, ploty2, worm_name, group_name, pdir)
+function plot_single_worm(seconds, ratios, YLAB, timesecs, timelabels, ycoords, colors3d, ploty1, ploty2, worm_name, group_name, pdir)
     % PLOT_ADJRATIOS plots adjusted fluorescence ratios over time with shading.
     %
     % Inputs:
@@ -37,7 +37,7 @@ function plot_single_worm(seconds, ratios, timesecs, timelabels, ycoords, colors
     xticks(timesecs) %s since baseline begins
     xticklabels(timelabels) %time in secs since baseline begins
     xlabel('Time (s)')
-    ylabel('(R - R0)/R0')
+    ylabel(YLAB)
      
     
     % Set plot export name 
@@ -59,5 +59,3 @@ function plot_single_worm(seconds, ratios, timesecs, timelabels, ycoords, colors
 
 end
 
-
-% plot_adjratios(seconds, badjratios, timesecs, timelabels, ycoords, colors, ploty1, ploty2, short_fname, group_name, pdir);

@@ -4,7 +4,7 @@
 % - plot
 % - could add optional argument for whter to call bleach-correction
 
-function data = process_single_worm(fname, bstart,bend,mend,)
+function data = process_single_worm(fname, bstart,bend,mend)
 
     %get a short filename for this file (filename only, no path or
     %extension)
@@ -25,7 +25,7 @@ function data = process_single_worm(fname, bstart,bend,mend,)
     % R0 = average ratio during baseline period (bstart - bend)
 
     
-    badjratio = calc_baseline_adj_ratio(ratios, bstart, bend);
+    badjratios = calc_baseline_adj_ratio(ratios, bstart, bend);
 
 
     %calculate min/max normalised ratio
@@ -33,11 +33,16 @@ function data = process_single_worm(fname, bstart,bend,mend,)
     %Fmin = avg of lowest 5% of values in the trace
     %Fmax = avg of highest 5% of values in the trace
 
-    normratio = calc_normalised_ratio(ratios, bstart, mend);
+    normratios = calc_normalised_ratio(ratios, bstart, mend);
 
 
+    %Plot baseline-adj ratio - ensure Y label matches ratio plotted
+    % badjratios should be "R-R0/R0"
+    % normratios should be "F-Fmin/Fmax"
+    plot_adjratios(secs, badjratios, "R-R0/R0", timesecs, timelabels, ycoords, colors3d, ploty1, ploty2, short_fname, group_name, pdir);
 
      
+
 
 
 

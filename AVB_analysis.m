@@ -14,7 +14,7 @@
 %
 
 
-%% set parameters
+%% set parameters, organised into structures for ease of function calling
 
 %general
     
@@ -24,47 +24,52 @@
     extract_from_mat = "FALSE";
     frame_rate = 9.9;
 
+  
 
-
-%colors
-    purplergb = [0.6039 0.1961 0.8039]; %colors in rgb code /255
-    grayrgb = [0.7020 0.7020 0.7020];
-    bluergb     = [179 204 255]/255;
+%Colors
+    % Define colors struct
+    colors.purple = [0.6039 0.1961 0.8039];  % Purple RGB
+    colors.gray = [0.7020 0.7020 0.7020];    % Gray RGB
+    colors.blue = [179 204 255] / 255;       % Blue RGB
+    colors.mockgray = [161 159 161] / 255;   % Mock gray RGB
+    colors.avsvgreen = [40 243 40] / 255;    % Green RGB
+    colors.sexcondpink = [249 138 122] / 255; % Pink RGB
+    colors.pdf1purple = [120 0 169] / 255;   % PDF1 purple RGB
     
-    mockgray    = [161 159 161]/255;
-    avsvgreen   = [40 243 40]/255;
-    sexcondpink = [249 138 122]/255;
-    pdf1purple  = [120 0 169]/255;
+    % Define 3D color array for patch colors
+    patchcolors = [colors.gray; colors.purple; colors.gray; colors.purple; colors.gray]; 
+    patchcolors3d = patchcolors(:,1);
+    patchcolors3d(:,:,2) = patchcolors(:,2);
+    patchcolors3d(:,:,3) = patchcolors(:,3);
     
-    %Set colors for plot background
-    colors = [grayrgb; purplergb; grayrgb; purplergb; grayrgb]; 
-    colors3d = colors( :,1);
-    colors3d(:,:,2) = colors(:,2);
-    colors3d(:,:,3) = colors(:,3);
+    % Add patchcolors3d to struct
+    colors.patchcolors3d = patchcolors3d;
 
 
-% % ylimits for plots
-    ploty1  = -0.5; %lower y axis limit for single traces plots
-    ploty2  = +0.5; %upper y axis limit for single traces plots
-    ploty1avg  = -0.5; %lower y axis limit for avg traces plots
-    ploty2avg  = +0.5; %upper y axis limit for avg traces plots
-    hmy1    = -0.75; %lower y axis limit for heatmaps nb this sets limit within which scale colors
-    hmy2    = +0.75; %upper y axis limit for heatmaps nb this sets limit within which scale colors
+%Y limits for plots
+
+    plotting.ploty1  = -0.5; %lower y axis limit for single traces plots
+    plotting.ploty2  = +0.5; %upper y axis limit for single traces plots
+    plotting.ploty1avg  = -0.5; %lower y axis limit for avg traces plots
+    plotting.ploty2avg  = +0.5; %upper y axis limit for avg traces plots
+    plotting.hmy1    = -0.75; %lower y axis limit for heatmaps nb this sets limit within which scale colors
+    plotting.hmy2    = +0.75; %upper y axis limit for heatmaps nb this sets limit within which scale colors
 
 
 
 % Movie parameters
-% baseline and time for 220smovie, 10fps, 10sec baseline, 30sON-30sOFF-30sON-30sOFF
-    bstart = 792;%first frame of baseline
-    bend = 891; %last frame of baseline
-    mend = 2079; %last used frame of movie
-    full_movie_lengthS = 220; %full movie length in seconds
-    max_movie_length = ceil(frame_rate) * full_movie_lengthS; % maximum possible frame of movie (this is frame rate were actually 10fps, which is not. in reality most movies around 2185 frames). 
-    timesecs = [80 90 120 150 180 210]; %vector containing timepoints in seconds (time since record start)
-    timeframes  = [792 892 1188 1485 1782 2079]; %vector containing timepoints in frames (time since record start)
-    timelabels=({'0' '10' '40' '70' '100' '130'});  %cell array containing timepoints in seconds (time since baseline start)
-    ycoords = [-10 -10 -10 -10 -10 ; +10 +10 +10 +10 +10; +10 +10 +10 +10 +10; -10 -10 -10 -10 -10 ]; %for patch function
 
+    % baseline and time for 220smovie, 10fps, 10sec baseline, 30sON-30sOFF-30sON-30sOFF
+    moviepars.bstart = 792;%first frame of baseline
+    moviepars.bend = 891; %last frame of baseline
+    moviepars.mend = 2079; %last used frame of movie
+    moviepars.full_movie_lengthS = 220; %full movie length in seconds
+    moviepars.max_movie_length = ceil(frame_rate) * full_movie_lengthS; % maximum possible frame of movie (this is frame rate were actually 10fps, which is not. in reality most movies around 2185 frames). 
+    moviepars.timesecs = [80 90 120 150 180 210]; %vector containing timepoints in seconds (time since record start)
+    moviepars.timeframes  = [792 892 1188 1485 1782 2079]; %vector containing timepoints in frames (time since record start)
+    moviepars.timelabels=({'0' '10' '40' '70' '100' '130'});  %cell array containing timepoints in seconds (time since baseline start)
+    moviepars.ycoords = [-10 -10 -10 -10 -10 ; +10 +10 +10 +10 +10; +10 +10 +10 +10 +10; -10 -10 -10 -10 -10 ]; %for patch function
+    
 
 
 
