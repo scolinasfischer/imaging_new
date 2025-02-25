@@ -6,7 +6,7 @@
 
 %data =
 %process_single_worm(files_to_analyse(i),group_name,pdir,colors,plotting,moviepars);
-function data = process_single_worm(fname, group_name, pdir, colors, plotting, moviepars)
+function [this_worm_raw, short_fname, badjratios, normratios] = process_single_worm(fname, group_name, pdir, colors, plotting, moviepars)
 
     %get a short filename for this file (filename only, no path or
     %extension)
@@ -16,9 +16,12 @@ function data = process_single_worm(fname, group_name, pdir, colors, plotting, m
     this_worm_dirs.short_fname = short_fname;
     this_worm_dirs.group_name = group_name;
     this_worm_dirs.pdir = pdir;
+    this_worm_dirs.fullpath = fullfile(pdir, strcat(group_name, short_fname));
+
 
     %load data for this worm
     [raw_ratios, raw_green, raw_red, frames, secs] = load_single_worm(fname);
+    this_worm_raw = [raw_ratios raw_green raw_red];
 
     %smooth ratio to remove spikes generated as result of small
     %misalignment between led lighting and camera shutter
@@ -48,8 +51,12 @@ function data = process_single_worm(fname, group_name, pdir, colors, plotting, m
     % normratios should be "F-Fmin/Fmax"
     plot_single_worm(secs, badjratios, "R-R0/R0", this_worm_dirs, colors, plotting, moviepars);
 
-     
+    plot_single_worm(secs, normratios, "F-Fmin/Fmax", this_worm_dirs, colors, plotting, moviepars);
 
+
+     
+    
+    
 
 
 

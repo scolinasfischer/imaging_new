@@ -19,7 +19,7 @@
 %general
     
     general.strain = "BARxxx";
-    general.pars = "24_2_details";
+    general.pars = "25_2_details";
     
     general.extract_from_mat = "FALSE";
     general.frame_rate = 9.9;
@@ -44,6 +44,7 @@
     
     % Add patchcolors3d to struct
     colors.patchcolors3d = patchcolors3d;
+    clear patchcolors patchcolors3d %clear so as to not clutter workspace
 
 
 %Y limits for plots
@@ -64,7 +65,7 @@
     moviepars.bend = 891; %last frame of baseline
     moviepars.mend = 2079; %last used frame of movie
     moviepars.full_movie_lengthS = 220; %full movie length in seconds
-    moviepars.max_movie_length = ceil(frame_rate) * full_movie_lengthS; % maximum possible frame of movie (this is frame rate were actually 10fps, which is not. in reality most movies around 2185 frames). 
+    moviepars.max_movie_length = ceil(general.frame_rate) * moviepars.full_movie_lengthS; % maximum possible frame of movie (this is frame rate were actually 10fps, which is not. in reality most movies around 2185 frames). 
     moviepars.timesecs = [80 90 120 150 180 210]; %vector containing timepoints in seconds (time since record start)
     moviepars.timeframes  = [792 892 1188 1485 1782 2079]; %vector containing timepoints in frames (time since record start)
     moviepars.timelabels=({'0' '10' '40' '70' '100' '130'});  %cell array containing timepoints in seconds (time since baseline start)
@@ -126,7 +127,7 @@ codes = [
 
 %% if needed, extract .mat files to xlsx
 
-if strcmp(extract_from_mat, "TRUE")
+if strcmp(general.extract_from_mat, "TRUE")
     cycle_to_extract_mat_files(all_mat_dirs, all_xlsx_dirs, general.frame_rate);
 end
 

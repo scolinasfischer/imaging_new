@@ -11,8 +11,10 @@ function plot_single_worm(seconds, ratios, YLAB, this_worm_dirs, colors, plottin
     %   ploting        - struct containing parameters for plotting
     %   moviepars      - struct containing time parameters related to movie
     
-
     fig = figure;
+
+    ax = gca; % Get current axes
+    ax.Box = 'on'; % Turn on the box
     hold on
 
     %plot ratios against time
@@ -26,7 +28,7 @@ function plot_single_worm(seconds, ratios, YLAB, this_worm_dirs, colors, plottin
     %Set axes and labels
     ylim ([plotting.ploty1,plotting.ploty2]);
     xlim ([moviepars.timesecs(1), moviepars.timesecs(end)]);
-    title(this_worm_dirs.short_fname)
+    title(this_worm_dirs.short_fname, 'Interpreter', 'none') %interpreter none avoids latex formatting
     xticks(moviepars.timesecs) %s since baseline begins
     xticklabels(moviepars.timelabels) %time in secs since baseline begins
     xlabel('Time (s)')
@@ -34,7 +36,7 @@ function plot_single_worm(seconds, ratios, YLAB, this_worm_dirs, colors, plottin
      
     
     % Set plot export name 
-    singleplotname = fullfile(this_worm_dirs.pdir, strcat(this_worm_dirs.group_name, this_worm_dirs.short_fname));
+    singleplotname = this_worm_dirs.fullpath;
      
     % Save as PNG
     saveas(fig, strcat(singleplotname, '.png'));
