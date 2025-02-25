@@ -1,22 +1,18 @@
 
-function plot_single_worm(seconds, ratios, YLAB, timesecs, timelabels, ycoords, colors3d, ploty1, ploty2, worm_name, group_name, pdir)
+function plot_single_worm(seconds, ratios, YLAB, this_worm_dirs, colors, plotting, moviepars)
     % PLOT_ADJRATIOS plots adjusted fluorescence ratios over time with shading.
     %
     % Inputs:
-    %   seconds     - Time vector for x-axis in seconds
-    %   ratios      - Fluorescence ratio values
-    %   timesecs    - Time points for x-axis ticks and shading
-    %   timelabels  - Labels for x-axis ticks
-    %   ycoords     - Y-coordinates for shaded regions (odour on/off)
-    %   colors      - Color matrix for shaded regions (odour on/off)
-    %   ploty1      - Lower y-axis limit
-    %   ploty2      - Upper y-axis limit
-    %   worm_name   - Title of the figure (has number of worm and date)
-    %   group_name  - Prefix for saved file name (strain, cond, pars)
-    %   pdir        - Directory to save the plot
+    %   seconds        - Time vector for x-axis in seconds
+    %   ratios         - Fluorescence ratio values
+    %   YLAB           - label for y axis, usually "R-R0/R0" or "F-Fmin/Fmax"
+    %   this_worm_dirs - struct containing names for files and directories
+    %   colors         - struct containing colors used in all plots
+    %   ploting        - struct containing parameters for plotting
+    %   moviepars      - struct containing time parameters related to movie
+    
 
-
-    fig = figure
+    fig = figure;
     hold on
 
     %plot ratios against time
@@ -24,24 +20,21 @@ function plot_single_worm(seconds, ratios, YLAB, timesecs, timelabels, ycoords, 
     
     
     % add shading for odour ON/OFF
-    xcoords = [timesecs(1:end-1); timesecs(1:end-1); timesecs(2:end); timesecs(2:end)];
-    
-    
-    patch(xcoords, ycoords, colors3d, 'FaceAlpha', .3,'EdgeAlpha',0 )
+    patch(moviepars.xcoords, moviepars.ycoords, colors.patchcolors3d, 'FaceAlpha', .3,'EdgeAlpha',0 )
     
 
     %Set axes and labels
-    ylim ([ploty1,ploty2]);
-    xlim ([timesecs(1), timesecs(end)]);
-    title(worm_name)
-    xticks(timesecs) %s since baseline begins
-    xticklabels(timelabels) %time in secs since baseline begins
+    ylim ([plotting.ploty1,plotting.ploty2]);
+    xlim ([moviepars.timesecs(1), moviepars.timesecs(end)]);
+    title(this_worm_dirs.short_fname)
+    xticks(moviepars.timesecs) %s since baseline begins
+    xticklabels(moviepars.timelabels) %time in secs since baseline begins
     xlabel('Time (s)')
     ylabel(YLAB)
      
     
     % Set plot export name 
-    singleplotname = fullfile(pdir, strcat(group_name, worm_name));
+    singleplotname = fullfile(this_worm_dirs.pdir, strcat(this_worm_dirs.group_name, this_worm_dirs.short_fname));
      
     % Save as PNG
     saveas(fig, strcat(singleplotname, '.png'));

@@ -4,11 +4,18 @@
 % - plot
 % - could add optional argument for whter to call bleach-correction
 
-function data = process_single_worm(fname, bstart,bend,mend)
+%data =
+%process_single_worm(files_to_analyse(i),group_name,pdir,colors,plotting,moviepars);
+function data = process_single_worm(fname, group_name, pdir, colors, plotting, moviepars)
 
     %get a short filename for this file (filename only, no path or
     %extension)
     [~, short_fname, ~] = fileparts(fname);
+
+    %create struct to hold directory and filenames for this worm / group
+    this_worm_dirs.short_fname = short_fname;
+    this_worm_dirs.group_name = group_name;
+    this_worm_dirs.pdir = pdir;
 
     %load data for this worm
     [raw_ratios, raw_green, raw_red, frames, secs] = load_single_worm(fname);
@@ -25,7 +32,7 @@ function data = process_single_worm(fname, bstart,bend,mend)
     % R0 = average ratio during baseline period (bstart - bend)
 
     
-    badjratios = calc_baseline_adj_ratio(ratios, bstart, bend);
+    badjratios = calc_baseline_adj_ratio(ratios, moviepars.bstart, moviepars.bend);
 
 
     %calculate min/max normalised ratio
@@ -33,13 +40,13 @@ function data = process_single_worm(fname, bstart,bend,mend)
     %Fmin = avg of lowest 5% of values in the trace
     %Fmax = avg of highest 5% of values in the trace
 
-    normratios = calc_normalised_ratio(ratios, bstart, mend);
+    normratios = calc_normalised_ratio(ratios, moviepars.bstart, moviepars.mend);
 
 
     %Plot baseline-adj ratio - ensure Y label matches ratio plotted
     % badjratios should be "R-R0/R0"
     % normratios should be "F-Fmin/Fmax"
-    plot_adjratios(secs, badjratios, "R-R0/R0", timesecs, timelabels, ycoords, colors3d, ploty1, ploty2, short_fname, group_name, pdir);
+    plot_single_worm(secs, badjratios, "R-R0/R0", this_worm_dirs, colors, plotting, moviepars);
 
      
 
@@ -47,7 +54,7 @@ function data = process_single_worm(fname, bstart,bend,mend)
 
 
 
-    fprintf('Processed worm %s\n', short_fname);
+    fprintf('Processed worm %s\n', this_worm_dirs.short_fname);
 
 end
 

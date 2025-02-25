@@ -18,11 +18,11 @@
 
 %general
     
-    strain = "BARxxx";
-    pars = "24_2_details";
+    general.strain = "BARxxx";
+    general.pars = "24_2_details";
     
-    extract_from_mat = "FALSE";
-    frame_rate = 9.9;
+    general.extract_from_mat = "FALSE";
+    general.frame_rate = 9.9;
 
   
 
@@ -68,8 +68,9 @@
     moviepars.timesecs = [80 90 120 150 180 210]; %vector containing timepoints in seconds (time since record start)
     moviepars.timeframes  = [792 892 1188 1485 1782 2079]; %vector containing timepoints in frames (time since record start)
     moviepars.timelabels=({'0' '10' '40' '70' '100' '130'});  %cell array containing timepoints in seconds (time since baseline start)
-    moviepars.ycoords = [-10 -10 -10 -10 -10 ; +10 +10 +10 +10 +10; +10 +10 +10 +10 +10; -10 -10 -10 -10 -10 ]; %for patch function
-    
+    moviepars.ycoords = [-10 -10 -10 -10 -10 ; +10 +10 +10 +10 +10; +10 +10 +10 +10 +10; -10 -10 -10 -10 -10 ]; %y coords for patch function
+    moviepars.xcoords = [moviepars.timesecs(1:end-1); moviepars.timesecs(1:end-1); moviepars.timesecs(2:end); moviepars.timesecs(2:end)]; %x coords for patch function
+
 
 
 
@@ -126,7 +127,7 @@ codes = [
 %% if needed, extract .mat files to xlsx
 
 if strcmp(extract_from_mat, "TRUE")
-    cycle_to_extract_mat_files(all_mat_dirs, all_xlsx_dirs, frame_rate);
+    cycle_to_extract_mat_files(all_mat_dirs, all_xlsx_dirs, general.frame_rate);
 end
 
 
@@ -141,7 +142,7 @@ end
 dir_size = size(all_xlsx_dirs);
 for r = 1:dir_size(1)
     for c = 1:dir_size(2)
-        process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), strain, pars, frame_rate, max_movie_length);
+        process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
     end
 end
 
