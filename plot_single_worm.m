@@ -42,7 +42,7 @@ function plot_single_worm(seconds, ratios, YLAB, this_worm_dirs, colors, plottin
     saveas(fig, strcat(singleplotname, '.png'));
 
     % Save as EPS (vector graphics)
-    exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
+   % exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
 
     
 

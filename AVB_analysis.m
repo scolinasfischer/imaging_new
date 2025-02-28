@@ -19,7 +19,7 @@
 %general
     
     general.strain = "BARxxx";
-    general.pars = "25_2_details";
+    general.pars = "26_2_details";
     
     general.extract_from_mat = "FALSE";
     general.frame_rate = 9.9;
@@ -95,7 +95,7 @@ sexc_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/
 %set path for overall analysis output
 % subfolders inside this need to have exact name as the "codes" listed
 % below for each group
-analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/newAVBoutput";
+analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/newAVBoutput2";
 
 
 %% Create cell arrays to hold input directories
@@ -143,9 +143,50 @@ end
 dir_size = size(all_xlsx_dirs);
 for r = 1:dir_size(1)
     for c = 1:dir_size(2)
-        process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
+        [all_badjratios, check_frame_variation] = process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
+        
+        if c == 1
+            mockframes = check_frame_variation;
+
+        elseif c==2
+            avsvframes = check_frame_variation;
+
+        else
+
+            sexcframes = check_frame_variation;
+    
+        end
+   
+
+
     end
 end
+
+
+
+figure;
+boxplot(all_frames, 'Symbol', 'o'); % Standard boxplot
+hold on;
+
+% Generate random jitter for x-axis
+x_jitter = 1 + (rand(size(all_frames)) - 0.5) * 0.2; % Small random shift around x = 1
+
+% Scatter plot with jittered x-coordinates
+scatter(x_jitter, all_frames, 'filled', 'MarkerFaceAlpha', 0.5);
+
+% Count occurrences of each unique y-value
+[unique_y, ~, idx] = unique(all_frames);
+counts = accumarray(idx, 1); % Get count of each unique value
+
+% Add text labels next to each unique y-value
+for i = 1:length(unique_y)
+    text(1.2, unique_y(i), num2str(counts(i)), 'FontSize', 10, 'FontWeight', 'bold'); 
+end
+
+% Set y-axis ticks to only include integers
+yticks(min(all_frames):1:max(all_frames));
+
+hold off;
 
 
 
