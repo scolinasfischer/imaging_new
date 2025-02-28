@@ -53,12 +53,12 @@ function [all_badjratios, check_frame_variation] = process_this_group(xlsx_dir, 
     end
 
 
-%     %Remove rows that are fully NaN 
+%     %Remove end rows that are fully NaN - will do this by removing frames
+%     above the median frame number
 %     % (probably frames between 2185-2200 )
-%     all_badjratios = all_badjratios(~all(isnan(all_badjratios), 2), :);
-%     all_normratios = all_normratios(~all(isnan(all_normratios), 2), :);
 
 
+    
 
     %Within group plots:
     % Average + shaded SEM
@@ -66,7 +66,7 @@ function [all_badjratios, check_frame_variation] = process_this_group(xlsx_dir, 
     % heatmap
 
 %     plot_within_group()
-
+    analyze_and_plot_group_ratios(badjratios,'ratio_type', )
 
 
 

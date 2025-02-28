@@ -49,8 +49,11 @@
 
 %Y limits for plots
 
-    plotting.ploty1  = -0.5; %lower y axis limit for single traces plots
-    plotting.ploty2  = +0.5; %upper y axis limit for single traces plots
+    plotting.ploty1R0  = -0.5; %lower y axis limit for single traces plots baseline-adjusted ratios
+    plotting.ploty2R0  = +0.5; %upper y axis limit for single traces plots baseline-adjusted ratios
+    plotting.ploty1Fm  = 0; %lower y axis limit for single traces plots maxmin normalised ratios
+    plotting.ploty2Fm  = +0.5; %upper y axis limit for single traces plots maxmin normalised ratios   
+
     plotting.ploty1avg  = -0.5; %lower y axis limit for avg traces plots
     plotting.ploty2avg  = +0.5; %upper y axis limit for avg traces plots
     plotting.hmy1    = -0.75; %lower y axis limit for heatmaps nb this sets limit within which scale colors
