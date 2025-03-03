@@ -1,40 +1,40 @@
 
-function plot_single_worm(seconds, ratios, plot_params, this_worm_dirs, colors, plotting, moviepars)
+function plot_single_worm(seconds, ratios,ratiotype, this_worm_dirs, colors, plotting, moviepars)
     % PLOT_ADJRATIOS plots adjusted fluorescence ratios over time with shading.
     %
     % Inputs:
     %   seconds        - Time vector for x-axis in seconds
-    %   ratios         - Fluorescence ratio values
-    %   plot.params    - struct to contain name-value input arguments
-    %                    *ratiotype: "badjratios" or "normratios", determines ylim and ylab 
+    %   ratios         - Fluorescence ratio values    
     %   this_worm_dirs - struct containing names for files and directories
     %   colors         - struct containing colors used in all plots
-    %   ploting        - struct containing parameters for plotting
+    %   plotting        - struct containing parameters for plotting
     %   moviepars      - struct containing time parameters related to movie
+    %   ratiotype      - string, can be: "badjratios" or "normratios", determines ylim and ylab 
         
+    %input argument validation 
     arguments
-        seconds (:,1) double    %ensures input is column vector
-        ratios (:,1) double     %ensures input is column vector
-        plot_params.ratiotype (1,1) string {mustBeMember(plot_params.ratiotype, ["badjratios", "normratios"])} 
-                                %ensures input is single string and is one of those two options!
-        
-        this_worm_dirs struct   %ensures input is struct
-        colors struct           %ensures input is struct
-        plotting struct         %ensures input is struct
-        moviepars struct        %ensures input is struct
+            seconds (:,1) double   % Ensures input is a column vector
+            ratios (:,1) double    % Ensures input is a column vector
+            ratiotype (1,1) string {mustBeMember(ratiotype, ["badjratios", "normratios"])}
+            this_worm_dirs struct
+            colors struct
+            plotting struct
+            moviepars struct
     end
 
-
     %set Ylim and Ylabel values according to ratiotype
+    switch ratiotype
+        case "badjratios"
+            these_ylims = [plotting.R0ploty1 , plotting.R0ploty2];
+            this_ylab = "R-R0/R0";
+            this_plottype = plotting.R0name;
+        case "normratios"
+            these_ylims = [plotting.Fmploty1, plotting.Fmploty2];
+            this_ylab = "F-Fmin/Fmax";
+            this_plottype = plotting.Fmname;
 
-    if strcmp(plot_params.ratiotype, "badjratios")
-        these_ylims = [plotting.ploty1R0,plotting.ploty2R0];
-        this_ylab   = "R-R0/R0";
-    elseif strcmp(plot_params.ratiotype, "normratios")
-        these_ylims = [plotting.ploty1Fm,plotting.ploty2Fm];
-        this_ylab   = "F-Fmin/Fmax";
-    else
-        error("Unexpected ratiotype: %s", plot_params.ratiotype);
+        otherwise
+            error("Unexpected ratiotype: %s", ratiotype);
     end
 
     
@@ -65,7 +65,7 @@ function plot_single_worm(seconds, ratios, plot_params, this_worm_dirs, colors, 
          
         
         % Set plot export name 
-        singleplotname = this_worm_dirs.fullpath;
+        singleplotname = strcat(this_worm_dirs.fullpath, this_plottype);
          
         % Save as PNG
         saveas(fig, strcat(singleplotname, '.png'));
@@ -77,13 +77,20 @@ function plot_single_worm(seconds, ratios, plot_params, this_worm_dirs, colors, 
 
 
     catch ME
-    warning("Error during plotting: %s", ME.message); % Log the error
+    warning("%s: %s", ME.identifier, ME.message); % log the error if occurs
+
+    
+    
+%     % Ensure figure is closed even if an error occurs
+%     close(fig);
+%     hold off;
+    
+    
     end
 
-    % Ensure figure is closed to free memory, even if error in plotting
+
     close(fig);
     hold off;
-
 
 end
 

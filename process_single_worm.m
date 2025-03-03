@@ -49,9 +49,9 @@ function [this_worm_raw, short_fname, badjratios, normratios] = process_single_w
     %Plot baseline-adj ratio - ensure Y label matches ratio plotted
     % badjratios should be "R-R0/R0"
     % normratios should be "F-Fmin/Fmax"
-    plot_single_worm(secs, badjratios, "badjratios", this_worm_dirs, colors, plotting, moviepars);
-
-    plot_single_worm(secs, normratios, "normratios", this_worm_dirs, colors, plotting, moviepars);
+%     plot_single_worm(secs, badjratios, "badjratios", this_worm_dirs, colors, plotting, moviepars);
+% 
+%     plot_single_worm(secs, normratios, "normratios", this_worm_dirs, colors, plotting, moviepars);
 
 
      

@@ -21,7 +21,7 @@ function [all_badjratios, check_frame_variation] = process_this_group(xlsx_dir, 
     %Create cell array of strings to hold column names to use for output xlsx of all_adjratios
     worm_names = cell(1, n);
 
-    check_frame_variation = [];
+
     % Process each worm
     for i = 1:n
         
@@ -66,7 +66,9 @@ function [all_badjratios, check_frame_variation] = process_this_group(xlsx_dir, 
     % heatmap
 
 %     plot_within_group()
-    analyze_and_plot_group_ratios(badjratios,'ratio_type', )
+%     analyze_and_plot_group_ratios(badjratios,'ratio_type', )
+
+    analyse_and_plot_group_ratios(all_badjratios, "badjratios", worm_names, general, colors, plotting, moviepars, pdir, cond)
 
 
 
