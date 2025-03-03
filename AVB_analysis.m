@@ -19,7 +19,7 @@
 %general
     
     general.strain = "BARxxx";
-    general.pars = "28_2_details";
+    general.pars = "3_3_details";
     
     general.extract_from_mat = "FALSE";
     general.frame_rate = 9.9;
@@ -105,7 +105,7 @@ sexc_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/
 %set path for overall analysis output
 % subfolders inside this need to have exact name as the "codes" listed
 % below for each group
-analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/newAVBoutput3";
+analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/newAVBoutput5";
 
 
 %% Create cell arrays to hold input directories
@@ -153,7 +153,7 @@ end
 dir_size = size(all_xlsx_dirs);
 for r = 1:dir_size(1)
     for c = 1:dir_size(2)
-        [all_badjratios, check_frame_variation] = process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
+        all_badjratios = process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
         
         
    

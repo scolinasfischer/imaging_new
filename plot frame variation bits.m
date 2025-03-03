@@ -1,6 +1,10 @@
 %% script with bits to plot check_frame_variation
 
 
+%this bit goes inside loop of process_this_group "process_this_worm" 
+ % Append the num_rows value to the check_frame_variation array
+        check_frame_variation(end + 1) = num_rows; % Append the value
+
 figure;
 boxplot(all_frames, 'Symbol', 'o'); % Standard boxplot
 hold on;

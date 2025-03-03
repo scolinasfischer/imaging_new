@@ -20,9 +20,10 @@ function analyse_and_plot_group_ratios(all_adjratios, ratiotype, worm_names, gen
     plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, worm_names, pdir, cond, plotting, moviepars, general);
 
     % Save data to spreadsheets
-    save_groupdata_to_spreadsheets(all_adjratios, avg_all_adjratios, ratiotype, SEM,pdir, cond, all_secs, general);
+    save_groupdata_to_spreadsheets(all_adjratios, avg_all_adjratios, ratiotype, worm_names,SEM,pdir, cond, all_secs, general);
+    
 
-    fprintf('Analysis complete for group: %s\n', cond);
+    fprintf('Plots complete for group: %s\n', cond);
 end
 
 

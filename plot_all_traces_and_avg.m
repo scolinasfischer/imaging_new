@@ -23,10 +23,11 @@ function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, rat
         ax.Box = 'on'; % Turn on the box
         hold on
 
-        title(['Single Traces + AVG ', cond, general.strain]);
+        title(['Single Traces + AVG ', cond, general.strain],'Interpreter', 'none');
     
+
         % Plot all traces
-        plot(all_secs, all_adjratios, 'Color', colors.gray, 'LineWidth', 0.6);
+        plot(all_secs, all_adjratios, 'LineWidth', 0.6);
     
         % Plot average in bold black
         plot(all_secs, avg_all_adjratios, 'k', 'LineWidth', 1.5);
@@ -44,7 +45,8 @@ function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, rat
     
     
         % Set plot export name 
-        singleplotname = strcat(pdir, cond, this_plottype, '_all_traces_avg');
+        singleplotname = fullfile(pdir, cond, strcat(general.strain, this_plottype, '_all_traces_avg'));
+
          
         % Save as PNG
         saveas(fig, strcat(singleplotname, '.png'));

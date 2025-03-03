@@ -1,5 +1,5 @@
 %process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
-function [all_badjratios, check_frame_variation] = process_this_group(xlsx_dir, analysis_output_dir, cond, general, colors, plotting, moviepars)
+function [all_badjratios] = process_this_group(xlsx_dir, analysis_output_dir, cond, general, colors, plotting, moviepars)
 % Get file list    
     files_to_analyse = get_xlsx_filepaths(xlsx_dir);
     n = length(files_to_analyse);
@@ -47,8 +47,7 @@ function [all_badjratios, check_frame_variation] = process_this_group(xlsx_dir, 
         worm_names{i}                 = this_worm;
        
          
-        % Append the num_rows value to the check_frame_variation array
-        check_frame_variation(end + 1) = num_rows; % Append the value
+       
 
     end
 
@@ -68,7 +67,7 @@ function [all_badjratios, check_frame_variation] = process_this_group(xlsx_dir, 
 %     plot_within_group()
 %     analyze_and_plot_group_ratios(badjratios,'ratio_type', )
 
-    analyse_and_plot_group_ratios(all_badjratios, "badjratios", worm_names, general, colors, plotting, moviepars, pdir, cond)
+    analyse_and_plot_group_ratios(all_badjratios, "badjratios", worm_names, general, colors, plotting, moviepars, analysis_output_dir, cond)
 
 
 

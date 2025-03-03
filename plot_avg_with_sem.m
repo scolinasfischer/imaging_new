@@ -24,7 +24,7 @@ function plot_avg_with_sem(all_secs, avg_all_adjratios,ratiotype, SEM, pdir, con
             ax.Box = 'on'; % Turn on the box
             hold on
        
-        title(['Average all traces + SEM ', cond, general.strain]);
+        title(['Average all traces + SEM ', cond, general.strain],'Interpreter', 'none') %interpreter none avoids latex formatting);
     
         % Add background shading
         patch(moviepars.xcoords, moviepars.ycoords, colors.patchcolors3d, 'FaceAlpha', 0.3, 'EdgeAlpha', 0);
@@ -32,8 +32,17 @@ function plot_avg_with_sem(all_secs, avg_all_adjratios,ratiotype, SEM, pdir, con
         % Create SEM shading
         meanPlusSEM = avg_all_adjratios + SEM;
         meanMinusSEM = avg_all_adjratios - SEM;
-        patch([all_secs; flip(all_secs)], [meanPlusSEM; flip(meanMinusSEM)], colors.blue, 'EdgeColor', 'none', 'FaceAlpha', 0.4);
+%         patch([all_secs; flip(all_secs)], [meanPlusSEM; flip(meanMinusSEM)], colors.blue, 'EdgeColor', 'none', 'FaceAlpha', 0.4);
     
+
+
+
+         patch([all_secs(moviepars.timeframes(1): moviepars.timeframes(end))' flip(all_secs(moviepars.timeframes(1): moviepars.timeframes(end)))'], ...
+             [meanPlusSEM(moviepars.timeframes(1): moviepars.timeframes(end))' flip(meanMinusSEM(moviepars.timeframes(1): moviepars.timeframes(end)))'], ...
+             [0 0.4470 0.7410], 'EdgeColor', 'none', 'FaceAlpha', 0.4); 
+
+
+
         % Plot mean
         plot(all_secs, avg_all_adjratios, 'LineWidth', 1);
     
@@ -47,7 +56,7 @@ function plot_avg_with_sem(all_secs, avg_all_adjratios,ratiotype, SEM, pdir, con
     
 
         % Set plot export name 
-        singleplotname = strcat(pdir, cond, this_plottype, '_SEMplot');
+        singleplotname = fullfile(pdir, cond, strcat(general.strain, this_plottype, '_SEMplot'));
          
         % Save as PNG
         saveas(fig, strcat(singleplotname, '.png'));
