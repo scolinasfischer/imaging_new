@@ -19,10 +19,13 @@
 %general
     
     general.strain = "BARxxx";
-    general.pars = "3_3_details";
+    general.pars = "7_3_details";
     
     general.extract_from_mat = "FALSE";
     general.frame_rate = 9.9;
+
+    general.wt_genotype_code = "wt"; %for r = 1
+    general.mutant_genotype_code1 = "pdf1"; %for r = 2
 
   
 
@@ -63,8 +66,8 @@
     plotting.Fmploty2  = +0.5; %upper y axis limit for single traces plots maxmin normalised ratios   
     plotting.Fmploty1avg  = -0.1; %lower y axis limit for avg traces plots
     plotting.Fmploty2avg  = +0.5; %upper y axis limit for avg traces plots
-    plotting.R0hmy1    = -0.1; %lower y axis limit for heatmaps nb this sets limit within which scale colors
-    plotting.R0hmy2    = +0.75; %upper y axis limit for heatmaps nb this sets limit within which scale colors
+    plotting.Fmhmy1    = -0.1; %lower y axis limit for heatmaps nb this sets limit within which scale colors
+    plotting.Fmhmy2    = +0.75; %upper y axis limit for heatmaps nb this sets limit within which scale colors
     plotting.Fmname  = "norm";
 
 
@@ -105,7 +108,7 @@ sexc_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/
 %set path for overall analysis output
 % subfolders inside this need to have exact name as the "codes" listed
 % below for each group
-analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/newAVBoutput5";
+analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/newAVBoutput6";
 
 
 %% Create cell arrays to hold input directories
@@ -157,11 +160,11 @@ for r = 1:dir_size(1)
         
 
         %Save adjratios and SEM of each condition / genotype under different name
-         % Store processed data dynamically based on genotype (wt or mt)
+         % Store processed data dynamically based on genotype (or something else)
             if r == 1
-                genotype = "wt"; % Wild-type
+                genotype = general.wt_genotype_code; % Wild-type
             elseif r == 2
-                genotype = "mt"; % Mutant
+                genotype = general.mutant_genotype_code1; % Mutant
             else
                 error("Unexpected genotype row index: %d", r);
             end
@@ -173,7 +176,7 @@ for r = 1:dir_size(1)
             bratio_data.(genotype).(condition_name) = badjratios_avg; 
             bSEM_data.(genotype).(condition_name) = SEMbadj;
 
-            % Store minmax normalise ratios and SEM values
+            % Store minmax normalised ratios and SEM values
             nratio_data.(genotype).(condition_name) = normratios_avg; 
             nSEM_data.(genotype).(condition_name) = SEMnorm;
 
@@ -185,8 +188,15 @@ end
 %% Create plots showing multiple conditions
 
 %3cond plots for baseline-adjusted (R0)
-plot_avg_with_sem_multi(all_secs, bratio_data, bSEM_data, "badjratio", colors, plotting, moviepars, general);
+plot_avg_with_sem_3cond(all_secs, bratio_data, bSEM_data, "badjratios", analysis_output_dir,colors, plotting, moviepars, general);
 
 %3cond plots for normalised (Fm)
-plot_avg_with_sem_multi(all_secs, nratio_data, nSEM_data, "normratio", colors, plotting, moviepars, general);
+plot_avg_with_sem_3cond(all_secs, nratio_data, nSEM_data, "normratios",analysis_output_dir, colors, plotting, moviepars, general);
 
+
+
+
+
+%%%%%%% testing
+
+plot_avg_with_sem_3cond(all_secs, bratio_data2, bSEM_data2, "badjratios", analysis_output_dir,colors, plotting, moviepars, general);

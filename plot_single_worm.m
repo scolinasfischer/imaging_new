@@ -57,7 +57,7 @@ function plot_single_worm(seconds, ratios,ratiotype, this_worm_dirs, colors, plo
         %Set axes and labels
         ylim (these_ylims);
         xlim ([moviepars.timesecs(1), moviepars.timesecs(end)]);
-        title(this_worm_dirs.short_fname, 
+        title(this_worm_dirs.short_fname);
 
         xticks(moviepars.timesecs) %s since baseline begins
         xticklabels(moviepars.timelabels) %time in secs since baseline begins
