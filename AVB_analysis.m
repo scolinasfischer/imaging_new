@@ -153,13 +153,40 @@ end
 dir_size = size(all_xlsx_dirs);
 for r = 1:dir_size(1)
     for c = 1:dir_size(2)
-        all_badjratios = process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
+        [badjratios_avg, SEMbadj, normratios_avg, SEMnorm, all_secs] = process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
         
-        
-   
+
+        %Save adjratios and SEM of each condition / genotype under different name
+         % Store processed data dynamically based on genotype (wt or mt)
+            if r == 1
+                genotype = "wt"; % Wild-type
+            elseif r == 2
+                genotype = "mt"; % Mutant
+            else
+                error("Unexpected genotype row index: %d", r);
+            end
+            
+            % Extract condition name from codes (e.g., "wt_mock_", "mt_avsv_")
+            condition_name = codes(r, c);
+            
+            % Store baseline-adjusted ratios and SEM values
+            bratio_data.(genotype).(condition_name) = badjratios_avg; 
+            bSEM_data.(genotype).(condition_name) = SEMbadj;
+
+            % Store minmax normalise ratios and SEM values
+            nratio_data.(genotype).(condition_name) = normratios_avg; 
+            nSEM_data.(genotype).(condition_name) = SEMnorm;
 
 
     end
 end
 
+
+%% Create plots showing multiple conditions
+
+%3cond plots for baseline-adjusted (R0)
+plot_avg_with_sem_multi(all_secs, bratio_data, bSEM_data, "badjratio", colors, plotting, moviepars, general);
+
+%3cond plots for normalised (Fm)
+plot_avg_with_sem_multi(all_secs, nratio_data, nSEM_data, "normratio", colors, plotting, moviepars, general);
 

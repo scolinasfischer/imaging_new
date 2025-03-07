@@ -1,7 +1,7 @@
 % 3plots for within group
 
 
-function analyse_and_plot_group_ratios(all_adjratios, ratiotype, worm_names, general, colors, plotting, moviepars, pdir, cond)
+function [avg_all_adjratios, SEM, all_secs]= analyse_and_plot_group_ratios(all_adjratios, ratiotype, worm_names, general, colors, plotting, moviepars, pdir, cond)
     % Ensure output directory exists
     if ~exist(pdir, 'dir')
         mkdir(pdir);
