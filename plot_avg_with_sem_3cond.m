@@ -1,5 +1,36 @@
 function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, pdir, colors, plotting, moviepars, general)
-  
+%% plot_avg_with_sem_3cond
+% Plots the average ratio with SEM shading for three conditionings 
+% (mock, aversive, and sexually conditioning) for both wild-type (WT) and 
+% mutant (MT) genotypes (if present). Additionally, if mutant data is present, 
+% it generates comparative plots of WT vs. mutant data for each condition.
+%
+% Parameters:
+%   all_secs      - Time vector for x-axis.
+%   avgratio_data - Struct containing average ratio data for each genotype 
+%                   and condition.
+%   SEM_data      - Struct containing SEM values for each genotype and condition.
+%   ratiotype     - String specifying the type of ratio 
+%                   ('badjratios' (baseline adjusted, R0) or 
+%                   'normratios' (minmax normalised, Fm)).
+%   pdir          - Directory path where plots should be saved.
+%   colors        - Struct containing color definitions for each condition and background.
+%   plotting      - Struct with plot limits, labels, and other formatting info.
+%   moviepars     - Struct with timeframes, x-coordinates for patches, and axis labels.
+%   general       - Struct with genotype information and strain details.
+%
+% Functionality:
+% 1. Plots mean ratio values with SEM shading for each genotype (WT & mutant) 
+%    across the three conditions.
+% 2. Generates separate plots comparing WT and MT in each condition (if
+%       mutant data is present)
+% 3. Saves all plots as PNG and EPS files.
+%
+% Outputs:
+% - Figures are saved but not returned to the workspace.  
+
+
+
 
     switch ratiotype
         case "badjratios"
@@ -41,6 +72,9 @@ function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, p
             % Add background shading
             patch(moviepars.xcoords, moviepars.ycoords, colors.patchcolors3d, 'FaceAlpha', 0.3, 'EdgeAlpha', 0);
             
+            % Initialize an array to store plot handles for the legend
+            trace_legendHandles = gobjects(1,3);  
+
             % Loop over the conditions (mock, avsv, sexc)
             for i = 1:3
                 % Get the current condition name
@@ -69,51 +103,65 @@ function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, p
                 patch([all_secs(moviepars.timeframes(1):moviepars.timeframes(end))' flip(all_secs(moviepars.timeframes(1):moviepars.timeframes(end)))'], ...
                     [meanPlusSEM(moviepars.timeframes(1):moviepars.timeframes(end))' flip(meanMinusSEM(moviepars.timeframes(1):moviepars.timeframes(end)))'], ...
                     group_color, 'EdgeColor', 'none', 'FaceAlpha', 0.4);
+               
 
-                
                 % Plot the average (mean trace) for the current condition
-                plot(all_secs, group_ratio, 'LineWidth', 1, 'Color', group_color);
+                trace_legendHandles(i) = plot(all_secs, group_ratio, 'LineWidth', 1.5, 'Color', group_color);
+
             end
-
-
-
-        % Format axes
-        xlabel('Time (s)');
-        ylabel(this_ylab);
-        ylim(these_ylims);
-        xticks(moviepars.timesecs);
-        xticklabels(moviepars.timelabels);
-        xlim([moviepars.timesecs(1), moviepars.timesecs(end)]);
-
-
-        % Add a legend for the conditions
-        legend({'Mock', 'AVSV', 'SEXC'}, 'Location', 'best', 'Interpreter', 'none');
+          
+            % Format axes
+            xlabel('Time (s)');
+            ylabel(this_ylab);
+            ylim(these_ylims);
+            xticks(moviepars.timesecs);
+            xticklabels(moviepars.timelabels);
+            xlim([moviepars.timesecs(1), moviepars.timesecs(end)]);
     
-        % Set plot export name 
-        singleplotname = fullfile(pdir, strcat(general.pars,general.strain, this_plottype, '_3condSEMplot_', group_name));
-         
-        
-        % Save as PNG
-        saveas(fig, strcat(singleplotname, '.png'));
-        
-        % Save as EPS (vector graphics)
-        % exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
+            %Add legend for traces and odour/buffer blocks
 
+%                 % Add the legend for traces using the stored plot handles
+%                 legend(legendHandles, {'Mock', 'Aversive', 'Sex Cond'}, 'Location', 'northeast', 'Interpreter', 'none');
+%         
+%     
+                % Create small invisible patches for odour/buffer
+                odour_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.purple, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
+                buffer_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.gray, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
+                
+                % Combine trace handles and odour/buffer patches in one legend
+                legend([trace_legendHandles, odour_patch, buffer_patch], ...
+                       {'Mock', 'Aversive', 'Sex Cond', 'Odour', 'Buffer'}, ...
+                       'Location', 'northeast', 'Interpreter', 'none');
+
+        
+            % Set plot export name 
+            singleplotname = fullfile(pdir, strcat(general.pars,general.strain, this_plottype, '_3condSEMplot_', group_name));
+             
+            
+            % Save as PNG
+            saveas(fig, strcat(singleplotname, '.png'));
+            
+            % Save as EPS (vector graphics)
+            exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
     
         
-        close(fig);
-        hold off;
+            
+            close(fig);
+            hold off;
 
 
         end
 
-        disp("finished first half")
         
          % === NEW FEATURE: PLOT wt vs mutant of each condition ===
 
     % Check if both wt and mutant data exist
     if isfield(avgratio_data, general.wt_genotype_code) && isfield(avgratio_data, general.mutant_genotype_code1)
         conditions = {'mock', 'avsv', 'sexc'};
+
+
+    % Store plot handles for legend (2 rows for wt & mt, 3 columns for conditions)
+    trace_legendHandles = gobjects(2,3);
 
         %Cycle through 3 conditions and make 3 new plots
         for i = 1:3
@@ -162,10 +210,13 @@ function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, p
             hold on;
             
             % Title
-            title([general.wt_genotype_code, ' vs ',general.mutant_genotype_code1, general.strain, curr_cond], 'Interpreter', 'none');
+            title([general.wt_genotype_code ' vs ' general.mutant_genotype_code1, general.strain, curr_cond], 'Interpreter', 'none');
+
+            % Add background shading
+            patch(moviepars.xcoords, moviepars.ycoords, colors.patchcolors3d, 'FaceAlpha', 0.3, 'EdgeAlpha', 0);
 
 
-            % Add SEM shading for both
+            % Add SEM shading for wt and mutant
             patch([all_secs(moviepars.timeframes(1):moviepars.timeframes(end))' ...
                    flip(all_secs(moviepars.timeframes(1):moviepars.timeframes(end)))'], ...
                   [wt_PlusSEM(moviepars.timeframes(1):moviepars.timeframes(end))' ...
@@ -178,9 +229,23 @@ function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, p
                    flip(mt_MinusSEM(moviepars.timeframes(1):moviepars.timeframes(end)))'], ...
                   mt_color1, 'EdgeColor', 'none', 'FaceAlpha', 0.4);
 
-            % Plot the mean traces
-            plot(all_secs, wt_ratio, 'LineWidth', 1.5, 'Color', wt_color);
-            plot(all_secs, mt_ratio, 'LineWidth', 1.5, 'Color', mt_color1);
+
+ 
+            
+            % Plot the mean traces and store the handles
+            trace_legendHandles(1, i) = plot(all_secs, wt_ratio, 'LineWidth', 1.5, 'Color', wt_color);
+            trace_legendHandles(2, i) = plot(all_secs, mt_ratio, 'LineWidth', 1.5, 'Color', mt_color1);
+        
+            
+            % Create small invisible patches for odour/buffer legend
+            odour_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.purple, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
+            buffer_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.gray, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
+            
+            % Combine both legends (traces and odour buffer) into one
+            legend([trace_legendHandles(1, i), trace_legendHandles(2, i), odour_patch, buffer_patch], ...
+                   {general.wt_genotype_code, general.mutant_genotype_code1, 'Odour', 'Buffer'}, ...
+                   'Location', 'northeast', 'Interpreter', 'none');
+
 
             % Formatting
             xlabel('Time (s)');
@@ -189,11 +254,15 @@ function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, p
             xticks(moviepars.timesecs);
             xticklabels(moviepars.timelabels);
             xlim([moviepars.timesecs(1), moviepars.timesecs(end)]);
-            legend({general.wt_genotype_code, general.mutant_genotype_code1,}, 'Location', 'best', 'Interpreter', 'none');
 
             % Save plot
-            singleplotname = fullfile(pdir, strcat(general.pars, general.strain, this_plottype, general.wt_genotype_code,'vs', general.mutant_genotype_code1, curr_cond));
+            singleplotname = fullfile(pdir, strcat(general.pars, general.strain, this_plottype, '_', general.wt_genotype_code,'vs', general.mutant_genotype_code1, curr_cond));
+            
             saveas(fig, strcat(singleplotname, '.png'));
+
+            % Save as EPS (vector graphics)
+            exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
+
 
             hold off;
             close(fig);
