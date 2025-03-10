@@ -62,8 +62,8 @@ for i = 1:length(matFiles)
 
     %% get variables
     % Extract necessary variables 
-    green = data.leftvalues;        %green fluorescence 
-    red = data.rightvalues;         %red fluorescence
+    OG_green = data.leftvalues;        %green fluorescence 
+    OG_red = data.rightvalues;         %red fluorescence
     ratios = data.ratios;   %green/red fluorescence ratio
 
 
@@ -73,6 +73,26 @@ for i = 1:length(matFiles)
     seconds = (0:numFrames-1)' / frame_rate; % Time in seconds, corresponding to each frame
 
 
+    %% if clause for old 20fps videos which have only half of ratios data
+    %for videos where ratios data is aproximately half of red and green, 
+    % need to also extract only half of red and green to match the
+    % previously extracted half of ratios vector
+
+    if length(OG_green) == (length(ratios) * 2) || length(OG_green) == (length(ratios) * 2 - 1) 
+    % if it is the case that this is only half of the ratio data, save only
+    % half of the green and red raw fluorescence
+        green = OG_green(1:2:end);
+        red = OG_red(1:2:end);
+        
+        fprintf("This file was 20fps, saved only half of raw green and red: %s\n", filePath);
+    
+    %if not, save the red and green fluorescence as is
+    else
+        green = OG_green;
+        red = OG_red;
+
+
+    end
 
 
 

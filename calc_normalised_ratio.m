@@ -12,7 +12,18 @@
 function [norm_ratios] = calc_normalised_ratio(ratios, bstart, mend)
    
     % Sort all values in ratios from baseline start to end of movie in ascending order
-    sortedratios = sort(ratios(bstart:mend));
+        %check if movie is long enough to reach movie end frame, if not,
+        %take last frame available
+    if length(ratios)<mend
+        sortedratios = sort(ratios(bstart:end));
+
+    else
+
+         sortedratios = sort(ratios(bstart:mend));
+    end
+        
+        
+       
     
     % Remove NaN values 
     sortedratios = sortedratios(~isnan(sortedratios));
