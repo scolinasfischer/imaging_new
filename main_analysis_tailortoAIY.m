@@ -1,7 +1,7 @@
 %script to analyse basic neuron
 
-% This scrip is meant to analyse the green/red fluorescence ratio of the
-% AVB neurons. It accepts as input a list of .mat files produced by NEURON.
+% This scrip is meant to analyse the green/red fluorescence ratio.
+% It accepts as input a list of .mat files produced by NEURON.
 % The steps in analysis are:
 %   - Extract desired features from .mat files and save as excels in new
 %   directory
@@ -112,16 +112,21 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 
 %Colors
     % Define colors struct
-    colors.purple = [0.6039 0.1961 0.8039];  % Purple RGB
-    colors.gray = [0.7020 0.7020 0.7020];    % Gray RGB
-    colors.blue = [179 204 255] / 255;       % Blue RGB
-    colors.mockgray = [161 159 161] / 255;   % Mock gray RGB
-    colors.avsvgreen = [40 243 40] / 255;    % Green RGB
-    colors.sexcondpink = [249 138 122] / 255; % Pink RGB
-    colors.pdf1purple = [120 0 169] / 255;   % PDF1 purple RGB
+    colors.purple      = [0.6039 0.1961 0.8039];  % Purple RGB
+    colors.palegray    = [0.7020 0.7020 0.7020];  % Pale Gray RGB (for shading)
+    colors.paleblue    = [179 204 255] / 255;     % Pale Blue RGB (for shading)
+    colors.mockgray    = [161 159 161] / 255;     % Mock gray RGB
+    colors.avsvgreen   = [40 243 40] / 255;       % Green RGB
+    colors.sexcondpink = [249 138 122] / 255;     % Pink RGB
+    colors.pdf1purple  = [120 0 169] / 255;       % PDF1 purple RGB
+    colors.lightblue   = [0.3010 0.7450 0.9330];  % Light blue (eg for type 1 neurons)
+    colors.darkblue    = [0 0.4470 0.7410];       % Dark blue (eg for type 2 neurons)
+
+    
+
     
     % Define 3D color array for patch colors
-    patchcolors = [colors.gray; colors.blue; colors.gray; colors.blue; colors.gray]; 
+    patchcolors = [colors.palegray; colors.paleblue; colors.palegray; colors.paleblue; colors.palegray]; 
     patchcolors3d = patchcolors(:,1);
     patchcolors3d(:,:,2) = patchcolors(:,2);
     patchcolors3d(:,:,3) = patchcolors(:,3);
@@ -130,6 +135,11 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     colors.patchcolors3d = patchcolors3d;
     clear patchcolors patchcolors3d %clear so as to not clutter workspace
 
+
+%Parameters for type1 and type 2 analysis
+    T1T2analysis.T2cutoffinsecs = 15;
+    T1T2analysis.thresholdFm = 0.4;
+    T1T2analysis.thresholdR0 = 1;
 
 
 %% Create cell arrays to hold input directories
@@ -180,8 +190,11 @@ end
 dir_size = size(all_xlsx_dirs);
 for r = 1:dir_size(1)
     for c = 1:dir_size(2)
-        [badjratios_avg, SEMbadj, normratios_avg, SEMnorm, all_secs] = process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
+        [all_badjratios, badjratios_avg, SEMbadj, all_normratios, normratios_avg, SEMnorm, all_secs, worm_names] = process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
         
+%     could set "T1T2 analysis to yes inside process_this_group, or could
+%     do it outside?
+
 
         %Save adjratios and SEM of each condition / genotype under different name
          % Store processed data dynamically based on genotype (or something else)
@@ -196,13 +209,20 @@ for r = 1:dir_size(1)
             % Extract condition name from codes (e.g., "wt_mock_", "mt_avsv_")
             condition_name = codes(r, c);
             
+            %store worm names
+            worm_names.(genotype).(condition_name) = worm_names;
+
             % Store baseline-adjusted ratios and SEM values
-            bratio_data.(genotype).(condition_name) = badjratios_avg; 
+            bratio_all_data.(genotype).(condition_name) = all_badjratios; 
+            bratio_avg_data.(genotype).(condition_name) = badjratios_avg; 
             bSEM_data.(genotype).(condition_name) = SEMbadj;
+            
 
             % Store minmax normalised ratios and SEM values
-            nratio_data.(genotype).(condition_name) = normratios_avg; 
+            nratio_all_data.(genotype).(condition_name) = all_normratios;             
+            nratio_avg_data.(genotype).(condition_name) = normratios_avg; 
             nSEM_data.(genotype).(condition_name) = SEMnorm;
+
 
 
     end
@@ -212,10 +232,10 @@ end
 %% Create plots showing multiple conditions
 
 %3cond plots for baseline-adjusted (R0)
-plot_avg_with_sem_3cond(all_secs, bratio_data, bSEM_data, "badjratios", analysis_output_dir,colors, plotting, moviepars, general);
+plot_avg_with_sem_3cond(all_secs, bratio_avg_data, bSEM_data, "badjratios", analysis_output_dir,colors, plotting, moviepars, general);
 
 %3cond plots for normalised (Fm)
-plot_avg_with_sem_3cond(all_secs, nratio_data, nSEM_data, "normratios",analysis_output_dir, colors, plotting, moviepars, general);
+plot_avg_with_sem_3cond(all_secs, nratio_avg_data, nSEM_data, "normratios",analysis_output_dir, colors, plotting, moviepars, general);
 
 
 
@@ -224,7 +244,15 @@ plot_avg_with_sem_3cond(all_secs, nratio_data, nSEM_data, "normratios",analysis_
 %% OTher condition-specific analysis
 
 
-%%Type1 Type2 analysis (originally set for AIY)
+%%Type1 Type2 analysis (originally set for AIY). Can only handle one
+%%condition at a time, so need to cycle through
+
+if strcmp(analysisparams.T1T2analysis,"TRUE")
+    loop_to_run_type1type2_analysis(bratio_all_data, "badjratio", T1T2analysispars, analysis_output_dir, colors, plotting, moviepars, general)
+    loop_to_run_type1type2_analysis(nratio_all_data, "normratio", T1T2analysispars, analysis_output_dir, colors, plotting, moviepars, general)
+    
+
+end
 
 
 

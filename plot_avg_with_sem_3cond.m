@@ -126,8 +126,8 @@ function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, p
 %         
 %     
                 % Create small invisible patches for odour/buffer
-                odour_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.blue, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
-                buffer_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.gray, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
+                odour_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.paleblue, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
+                buffer_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.palegray, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
                 
                 % Combine trace handles and odour/buffer patches in one legend
                 legend([trace_legendHandles, odour_patch, buffer_patch], ...
@@ -239,8 +239,8 @@ function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, p
         
             
             % Create small invisible patches for odour/buffer legend
-            odour_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.blue, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
-            buffer_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.gray, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
+            odour_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.paleblue, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
+            buffer_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.palegray, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
             
             % Combine both legends (traces and odour buffer) into one
             legend([trace_legendHandles(1, i), trace_legendHandles(2, i), odour_patch, buffer_patch], ...

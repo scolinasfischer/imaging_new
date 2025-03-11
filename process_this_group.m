@@ -1,5 +1,5 @@
 %process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
-function [badj_avg, SEMbadj, norm_avg, SEMnorm, all_secs] = process_this_group(xlsx_dir, analysis_output_dir, cond, general, colors, plotting, moviepars)
+function [all_badjratios, badj_avg, SEMbadj, all_normratios, norm_avg, SEMnorm, all_secs, worm_names] = process_this_group(xlsx_dir, analysis_output_dir, cond, general, colors, plotting, moviepars)
 % Get file list    
     files_to_analyse = get_xlsx_filepaths(xlsx_dir);
     n = length(files_to_analyse);
