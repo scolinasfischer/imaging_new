@@ -20,7 +20,8 @@ function [avg_all_adjratios, SEM, all_secs]= analyse_and_plot_group_ratios(all_a
     plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, worm_names, pdir, cond, plotting, moviepars, general);
 
     % Save data to spreadsheets
-    save_groupdata_to_spreadsheets(all_adjratios, avg_all_adjratios, ratiotype, worm_names,SEM,pdir, cond, all_secs, general);
+    name = ""; %here is blank but can add something if you want (used in other cases of calling this function)
+    save_groupdata_to_spreadsheets(all_adjratios, avg_all_adjratios, name, ratiotype, worm_names,SEM,pdir, cond, all_secs, general);
     
 
     fprintf('Plots complete for group: %s\n', cond);

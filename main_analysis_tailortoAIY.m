@@ -84,7 +84,7 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 
 %for maxmin normalised ratios (Fm)
     plotting.Fmploty1  = -0.1; %lower y axis limit for single traces plots maxmin normalised ratios
-    plotting.Fmploty2  = +1; %upper y axis limit for single traces plots maxmin normalised ratios   
+    plotting.Fmploty2  = +1; %upper y axis limit for ssingle traces plots maxmin normalised ratios   
     plotting.Fmploty1avg  = 0; %lower y axis limit for avg traces plots
     plotting.Fmploty2avg  = +0.7; %upper y axis limit for avg traces plots
     plotting.Fmhmy1    = -0; %lower y axis limit for heatmaps nb this sets limit within which scale colors
@@ -100,6 +100,7 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     moviepars.bstart = 792;%first frame of baseline
     moviepars.bend = 891; %last frame of baseline
     moviepars.mend = 2079; %last used frame of movie
+%     moviepars.halfmend =      ; %last frame of 1st odour off
     moviepars.full_movie_lengthS = 220; %full movie length in seconds
     moviepars.max_movie_length = ceil(general.frame_rate) * moviepars.full_movie_lengthS; % maximum possible frame of movie (this is frame rate were actually 10fps, which is not. in reality most movies around 2185 frames). 
     moviepars.timesecs = [80 90 120 150 180 210]; %vector containing timepoints in seconds (time since record start)
@@ -120,7 +121,7 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     colors.pdf1purple = [120 0 169] / 255;   % PDF1 purple RGB
     
     % Define 3D color array for patch colors
-    patchcolors = [colors.gray; colors.purple; colors.gray; colors.purple; colors.gray]; 
+    patchcolors = [colors.gray; colors.blue; colors.gray; colors.blue; colors.gray]; 
     patchcolors3d = patchcolors(:,1);
     patchcolors3d(:,:,2) = patchcolors(:,2);
     patchcolors3d(:,:,3) = patchcolors(:,3);
@@ -128,9 +129,6 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     % Add patchcolors3d to struct
     colors.patchcolors3d = patchcolors3d;
     clear patchcolors patchcolors3d %clear so as to not clutter workspace
-
-
-
 
 
 
@@ -218,6 +216,16 @@ plot_avg_with_sem_3cond(all_secs, bratio_data, bSEM_data, "badjratios", analysis
 
 %3cond plots for normalised (Fm)
 plot_avg_with_sem_3cond(all_secs, nratio_data, nSEM_data, "normratios",analysis_output_dir, colors, plotting, moviepars, general);
+
+
+
+
+
+%% OTher condition-specific analysis
+
+
+%%Type1 Type2 analysis (originally set for AIY)
+
 
 
 
