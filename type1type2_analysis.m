@@ -93,8 +93,8 @@ function type1type2_analysis(all_adjratios, ratiotype, col_names, T1T2analysis, 
     %save all traces and avg separated in type 1 type 2. 
 
     %calculate average and SEM 
-    type1avg, SEM_T1, all_secs = compute_plot_statistics(type1, general.frame_rate);
-    type2avg, SEM_T2, all_secs = compute_plot_statistics(type2, general.frame_rate);
+    [type1avg, SEM_T1, all_secs] = compute_plot_statistics(type1, general.frame_rate);
+    [type2avg, SEM_T2, all_secs] = compute_plot_statistics(type2, general.frame_rate);
 
     %save using groupdata_to_spreadsheet function
     save_groupdata_to_spreadsheets(type1, type1avg, "Type1", ratiotype, cols_T1,SEM_T1,pdir, cond, all_secs, general)
@@ -113,11 +113,11 @@ function type1type2_analysis(all_adjratios, ratiotype, col_names, T1T2analysis, 
     dataset.sem = {SEM_T1, SEM_T2};                   % Cell array of SEM data for each dataset
     dataset.colors = {colors.lightblue, colors.darkblue};   % Cell array of colors for each dataset
     dataset.labels = {'Type1', 'Type2'};                    % Cell array of dataset labels (used in legend and title)
-    dataset.plot_title = "example1_testT1T2";               % String for plot title and filename suffix
+    dataset.plot_title = "type1type2";               % String for plot title and filename suffix
 
 
     %Call general plotting function with above dataset
-    plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir, plotting, moviepars, general);
+    plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,cond,colors, plotting, moviepars, general);
 
 
 

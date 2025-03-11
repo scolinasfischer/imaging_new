@@ -53,7 +53,7 @@ mt_sexc_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testi
 %set path for overall analysis output
 % subfolders inside this need to have exact name as the "codes" listed
 % below for each group
-analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIY/newAIYoutput1";
+analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIY/newAIYoutput2";
 
 
 %% set parameters, organised into structures for ease of function calling
@@ -61,7 +61,7 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 %general
     
     general.strain = "AIYtest";
-    general.pars = "10_3_details";
+    general.pars = "11_3_details";
     
     general.extract_from_mat = "FALSE"; %set to TRUE if its first time and need to extract mat to excel, FALSE if already done
     general.frame_rate = 9.9;
@@ -137,9 +137,9 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 
 
 %Parameters for type1 and type 2 analysis
-    T1T2analysis.T2cutoffinsecs = 15;
-    T1T2analysis.thresholdFm = 0.4;
-    T1T2analysis.thresholdR0 = 1;
+    T1T2analysispars.T2cutoffinsecs = 15;
+    T1T2analysispars.thresholdFm = 0.4;
+    T1T2analysispars.thresholdR0 = 1;
 
 
 %% Create cell arrays to hold input directories
@@ -190,10 +190,8 @@ end
 dir_size = size(all_xlsx_dirs);
 for r = 1:dir_size(1)
     for c = 1:dir_size(2)
-        [all_badjratios, badjratios_avg, SEMbadj, all_normratios, normratios_avg, SEMnorm, all_secs, worm_names] = process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
-        
-%     could set "T1T2 analysis to yes inside process_this_group, or could
-%     do it outside?
+        [all_badjratios, badjratios_avg, SEMbadj, all_normratios, normratios_avg, SEMnorm, all_secs, col_names] = process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
+
 
 
         %Save adjratios and SEM of each condition / genotype under different name
@@ -210,7 +208,7 @@ for r = 1:dir_size(1)
             condition_name = codes(r, c);
             
             %store worm names
-            worm_names.(genotype).(condition_name) = worm_names;
+            worm_names.(genotype).(condition_name) = col_names;
 
             % Store baseline-adjusted ratios and SEM values
             bratio_all_data.(genotype).(condition_name) = all_badjratios; 
@@ -247,12 +245,12 @@ plot_avg_with_sem_3cond(all_secs, nratio_avg_data, nSEM_data, "normratios",analy
 %%Type1 Type2 analysis (originally set for AIY). Can only handle one
 %%condition at a time, so need to cycle through
 
-if strcmp(analysisparams.T1T2analysis,"TRUE")
-    loop_to_run_type1type2_analysis(bratio_all_data, "badjratio", T1T2analysispars, analysis_output_dir, colors, plotting, moviepars, general)
-    loop_to_run_type1type2_analysis(nratio_all_data, "normratio", T1T2analysispars, analysis_output_dir, colors, plotting, moviepars, general)
+% if strcmp(analysisparams.T1T2analysis,"TRUE")
+    loop_to_run_type1type2_analysis(bratio_all_data, "badjratios", worm_names, T1T2analysispars, analysis_output_dir, colors, plotting, moviepars, general)
+    loop_to_run_type1type2_analysis(nratio_all_data, "normratios", worm_names, T1T2analysispars, analysis_output_dir, colors, plotting, moviepars, general)
     
 
-end
+% end
 
 
 

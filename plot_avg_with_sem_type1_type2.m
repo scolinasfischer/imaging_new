@@ -1,5 +1,12 @@
+
+
+
 function plot_avg_with_sem_type1_type2(all_secs, avg_type1, sem_type1, avg_type2, sem_type2, ratiotype, pdir, colors, plotting, moviepars, general)
-    % plot_avg_with_sem_type1_type2
+    
+%% CURRENTLY NOT IN USE _ REPLACED BY plot_avg_with_sem_flexible
+
+
+% plot_avg_with_sem_type1_type2
     %
     % Plots the average ratio with SEM shading for Type1 and Type2 neurons on the same plot.
     %
