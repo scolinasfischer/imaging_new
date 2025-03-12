@@ -1,6 +1,6 @@
 
 %% Save data to spreadsheets
-function save_groupdata_to_spreadsheets(all_adjratios, avg_all_adjratios, name, ratiotype, worm_names,SEM,pdir, cond, all_secs, general)
+function save_groupdata_to_spreadsheets(all_adjratios, avg_all_adjratios, ratiotype,name, worm_names,SEM,pdir, cond, all_secs, general)
     % Convert to table for saving
 %     Tall_adjratios = array2table(all_adjratios, 'VariableNames', worm_names);
     

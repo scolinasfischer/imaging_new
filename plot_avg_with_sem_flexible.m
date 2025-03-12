@@ -88,7 +88,7 @@ function plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,cond, col
     xlim([moviepars.timesecs(1), moviepars.timesecs(end)]);
     
     % Save plot
-    singleplotname = fullfile(pdir, strcat(general.pars, general.strain, '_', dataset.plot_title, '_',cond, ratiotype));
+    singleplotname = fullfile(pdir, cond, strcat(general.pars, general.strain, '_', dataset.plot_title, '_',cond, ratiotype));
     
     saveas(fig, strcat(singleplotname, '.png'));
     

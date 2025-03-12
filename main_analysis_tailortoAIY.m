@@ -53,7 +53,7 @@ mt_sexc_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testi
 %set path for overall analysis output
 % subfolders inside this need to have exact name as the "codes" listed
 % below for each group
-analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIY/newAIYoutput2";
+analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIY/newAIYoutput3";
 
 
 %% set parameters, organised into structures for ease of function calling

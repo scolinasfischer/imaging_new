@@ -1,7 +1,7 @@
 
 
 %% Plot: Heatmap
-function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, worm_names, pdir, cond, plotting, moviepars, general)
+function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, heatmapname, worm_names, pdir, cond, plotting, moviepars, general)
     
     switch ratiotype
             case "badjratios"
@@ -19,12 +19,15 @@ function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, worm_names, p
 
     fig = figure;
         
+%%%% super important! never include hold on in heatmap , as will mess with
+%%%% how imagesc plots data (it was being inverted here)
+
     try
         ax = gca; % Get current axes
         ax.Box = 'on'; % Turn on the box
-        hold on
 
-        title(['Heatmap', cond, this_plottitle, general.strain],'Interpreter', 'none');
+
+        title(['Heatmap',heatmapname, cond, this_plottitle, general.strain],'Interpreter', 'none');
     
         % Transpose data for heatmap
         all_adjratiosT = all_adjratios';
@@ -66,7 +69,7 @@ function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, worm_names, p
 
     
         % Set plot export name 
-        singleplotname = fullfile(pdir, cond, strcat(general.strain, this_plottype, '_heatmap'));
+        singleplotname = fullfile(pdir, cond, strcat(general.strain, this_plottype,heatmapname, '_heatmap'));
 
          
         % Save as PNG

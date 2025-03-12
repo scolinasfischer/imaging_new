@@ -17,11 +17,12 @@ function [avg_all_adjratios, SEM, all_secs]= analyse_and_plot_group_ratios(all_a
     plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, ratiotype,pdir, cond, colors, plotting, moviepars, general);
 
     % Plot 3: Heatmap
-    plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, worm_names, pdir, cond, plotting, moviepars, general);
+    heatmapname = "";
+    plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, heatmapname, worm_names, pdir, cond, plotting, moviepars, general);
 
     % Save data to spreadsheets
-    name = ""; %here is blank but can add something if you want (used in other cases of calling this function)
-    save_groupdata_to_spreadsheets(all_adjratios, avg_all_adjratios, name, ratiotype, worm_names,SEM,pdir, cond, all_secs, general);
+    savingname = ""; %here is blank but can add something if you want (used in other cases of calling this function)
+    save_groupdata_to_spreadsheets(all_adjratios, avg_all_adjratios, ratiotype, savingname, worm_names,SEM,pdir, cond, all_secs, general);
     
 
     fprintf('Plots complete for group: %s\n', cond);

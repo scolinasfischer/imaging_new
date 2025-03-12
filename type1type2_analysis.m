@@ -1,5 +1,8 @@
-function type1type2_analysis(all_adjratios, ratiotype, col_names, T1T2analysis, cond, pdir, colors, plotting, moviepars, general)
-    % Function to carry out Type1Type2 analysis and save/plot results.
+function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, T1T2analysis, cond, pdir, colors, plotting, moviepars, general)
+    
+
+% Function to carry out Type1Type2 analysis and save/plot results. runs
+    % on each group (eg 1st group is wt_mock_) at a time
     % Inputs:
     %   all_adjratios - matrix of adjusted ratios for all worms
     %   ratiotype     - String specifying the type of ratio 
@@ -81,6 +84,10 @@ function type1type2_analysis(all_adjratios, ratiotype, col_names, T1T2analysis, 
         end
     end
 
+    % Save number of type 1 and type 2 to output variables:
+    nT1 = length(cols_T1);
+    nT2 = length(cols_T2);
+
     %% Step 3: Save Data to Spreadsheet
     % Save maxindex and maxvalues
     maxindexs = maxindex / 9.9; % Convert frames to seconds
@@ -102,7 +109,7 @@ function type1type2_analysis(all_adjratios, ratiotype, col_names, T1T2analysis, 
     
 
     %% Step 4: Plot Sorted Heatmap
-    plot_heatmap(sorted_all_adjratiosT', avg_all_adjratiosT', ratiotype, sorted_col_names, pdir, cond, plotting, moviepars, general);
+    plot_heatmap(sorted_all_adjratiosT', avg_all_adjratiosT', ratiotype, "Sorted timetomax",sorted_col_names, pdir, cond, plotting, moviepars, general);
 
 
     %% Step 5: Plot Average of All Traces + SEM (Type1 and Type2) on same plot. 
