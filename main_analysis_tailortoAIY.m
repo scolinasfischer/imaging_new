@@ -47,13 +47,10 @@ mt_avsv_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testi
 mt_sexc_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIY/newAIYxls/pdf1_sexc_";
 
 
-
-
-
 %set path for overall analysis output
 % subfolders inside this need to have exact name as the "codes" listed
 % below for each group
-analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIY/newAIYoutput3";
+analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIY/newAIYoutput6";
 
 
 %% set parameters, organised into structures for ease of function calling
@@ -61,15 +58,36 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 %general
     
     general.strain = "AIYtest";
-    general.pars = "11_3_details";
+    general.pars = "13_3_final";
     
-    general.extract_from_mat = "FALSE"; %set to TRUE if its first time and need to extract mat to excel, FALSE if already done
     general.frame_rate = 9.9;
 
     general.wt_genotype_code = "wt"; %for r = 1
     general.mutant_genotype_code1 = "pdf1"; %for r = 2
 
   
+
+ %set analysis parameters
+
+    analysis_pars.extract_from_mat = "FALSE"; %set to TRUE if its first time and need to extract mat to excel, FALSE if already done    
+    analysis_pars.full_or_halfmovieplots = "half"; %set to full for full movie, half for half movie NB this only used to set plot ylim, not for anything else    
+    analysis_pars.calculateR0 = "FALSE"; %set to TRUE will calculate R0 (baseline-adjusted ratio R-R0/R0)
+    analysis_pars.calculateFm = "TRUE"; %set to TRUE will calculate Fm (minmax normalised ratio F-Fmin/Fmax)
+    analysis_pars.export_eps = "FALSE";  %export plots as eps and png or only eps. eps takes long but is needed to edit in affinity
+%     analysis_pars.bleach_correct = "TRUE"; %set true if want to perform bleach correction (and show raw vs bleach corrected comparison plots)
+%     analysis_pars.furtheranalysis_Type1Type2 = "TRUE"; %perform type1tpe2 analysis (like for AIY) and output sorted heatmaps, etc
+%     analysis_pars.furtheranalysis_ONOFFclassif = "TRUE"; %perform ON/OFF classification analysis (like for RIM and AIB). 
+%     
+
+    %Parameters for type1 and type 2 analysis
+    T1T2analysispars.T2cutoffinsecs = 15;
+    T1T2analysispars.thresholdFm = 0.4;
+    T1T2analysispars.thresholdR0 = 1;
+
+
+
+    % need to make save of these parameters to output folder^^^^^
+
 
 %Y limits and label for plots, depending on ratio type
 
@@ -99,12 +117,12 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     % baseline and time for 220smovie, 10fps, 10sec baseline, 30sON-30sOFF-30sON-30sOFF
     moviepars.bstart = 792;%first frame of baseline
     moviepars.bend = 891; %last frame of baseline
-    moviepars.mend = 2079; %last used frame of movie
-%     moviepars.halfmend =      ; %last frame of 1st odour off
+    moviepars.mend = 2079; %last used frame of movie (full movie)
+    moviepars.halfmend =  1485    ; %last frame of 1st odour off
     moviepars.full_movie_lengthS = 220; %full movie length in seconds
     moviepars.max_movie_length = ceil(general.frame_rate) * moviepars.full_movie_lengthS; % maximum possible frame of movie (this is frame rate were actually 10fps, which is not. in reality most movies around 2185 frames). 
     moviepars.timesecs = [80 90 120 150 180 210]; %vector containing timepoints in seconds (time since record start)
-    moviepars.timeframes  = [792 892 1188 1485 1782 2079]; %vector containing timepoints in frames (time since record start)
+    moviepars.timeframes  = [792 891 1188 1485 1782 2079]; %vector containing timepoints in frames (time since record start)
     moviepars.timelabels=({'0' '10' '40' '70' '100' '130'});  %cell array containing timepoints in seconds (time since baseline start)
     moviepars.ycoords = [-10 -10 -10 -10 -10 ; +10 +10 +10 +10 +10; +10 +10 +10 +10 +10; -10 -10 -10 -10 -10 ]; %y coords for patch function
     moviepars.xcoords = [moviepars.timesecs(1:end-1); moviepars.timesecs(1:end-1); moviepars.timesecs(2:end); moviepars.timesecs(2:end)]; %x coords for patch function
@@ -136,10 +154,7 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     clear patchcolors patchcolors3d %clear so as to not clutter workspace
 
 
-%Parameters for type1 and type 2 analysis
-    T1T2analysispars.T2cutoffinsecs = 15;
-    T1T2analysispars.thresholdFm = 0.4;
-    T1T2analysispars.thresholdR0 = 1;
+
 
 
 %% Create cell arrays to hold input directories
@@ -172,11 +187,37 @@ codes = [
 
 
 
-%% if needed, extract .mat files to xlsx
+%% apply designated anaylsis parameters
 
-if strcmp(general.extract_from_mat, "TRUE")
+%full or half movie
+if strcmp(analysis_pars.full_or_halfmovieplots, "full")
+    moviepars.plotendf = moviepars.mend; %sets upper xlim for plot in frames
+elseif strcmp(analysis_pars.full_or_halfmovieplots, "half")
+    moviepars.plotendf = moviepars.halfmend; %sets upper xlim for plot in frames
+else
+    disp("Unexpected value at analysis_pars.full_or_halfmovieplots. Must be either half or full.")
+end
+
+moviepars.plotends = moviepars.plotendf / 9.9; %set xlim for plot in seconds
+
+
+
+% Calculate R0 and/or Fm: check at least one is TRUE
+if ~(strcmp(analysis_pars.calculateR0, "TRUE") || strcmp(analysis_pars.calculateFm, "TRUE"))
+    error('At least one of analysis_pars.calculateR0 or analysis_pars.calculateFm must be "TRUE".');
+end
+
+
+
+
+%% Extract .mat files to xlsx (if needed)
+
+if strcmp(analysis_pars.extract_from_mat, "TRUE")
     cycle_to_extract_mat_files(all_mat_dirs, all_xlsx_dirs, general.frame_rate);
 end
+
+
+
 
 
 
@@ -190,7 +231,7 @@ end
 dir_size = size(all_xlsx_dirs);
 for r = 1:dir_size(1)
     for c = 1:dir_size(2)
-        [all_badjratios, badjratios_avg, SEMbadj, all_normratios, normratios_avg, SEMnorm, all_secs, col_names] = process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
+        [all_badjratios, badjratios_avg, SEMbadj, all_normratios, normratios_avg, SEMnorm, all_secs, col_names] = process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general,analysis_pars, colors, plotting, moviepars);
 
 
 
@@ -210,13 +251,15 @@ for r = 1:dir_size(1)
             %store worm names
             worm_names.(genotype).(condition_name) = col_names;
 
-            % Store baseline-adjusted ratios and SEM values
+            
+
+            % Store baseline-adjusted ratios (R0) and SEM values                 
             bratio_all_data.(genotype).(condition_name) = all_badjratios; 
             bratio_avg_data.(genotype).(condition_name) = badjratios_avg; 
             bSEM_data.(genotype).(condition_name) = SEMbadj;
-            
+       
 
-            % Store minmax normalised ratios and SEM values
+            % Store minmax normalised ratios (Fm)and SEM values
             nratio_all_data.(genotype).(condition_name) = all_normratios;             
             nratio_avg_data.(genotype).(condition_name) = normratios_avg; 
             nSEM_data.(genotype).(condition_name) = SEMnorm;
@@ -230,11 +273,14 @@ end
 %% Create plots showing multiple conditions
 
 %3cond plots for baseline-adjusted (R0)
-plot_avg_with_sem_3cond(all_secs, bratio_avg_data, bSEM_data, "badjratios", analysis_output_dir,colors, plotting, moviepars, general);
+if strcmp(analysis_pars.calculateR0, "TRUE")
+    plot_avg_with_sem_3cond(all_secs, bratio_avg_data, bSEM_data, "badjratios", analysis_output_dir, general, analysis_pars,colors, plotting, moviepars);
+end
 
 %3cond plots for normalised (Fm)
-plot_avg_with_sem_3cond(all_secs, nratio_avg_data, nSEM_data, "normratios",analysis_output_dir, colors, plotting, moviepars, general);
-
+if strcmp(analysis_pars.calculateFm, "TRUE")
+    plot_avg_with_sem_3cond(all_secs, nratio_avg_data, nSEM_data, "normratios",analysis_output_dir, general, analysis_pars, colors, plotting, moviepars);
+end
 
 
 

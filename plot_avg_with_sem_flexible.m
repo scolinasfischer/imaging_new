@@ -1,7 +1,7 @@
-function plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,cond, colors, plotting, moviepars, general)
+function plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,cond,general, analysis_pars, colors, plotting, moviepars)
 
 
-    % plot_avg_with_sem_multi_datasets
+    % plot_avg_with_sem_flexible
     %
     % Plots the average ratio with SEM shading for multiple datasets on the same plot.
     %
@@ -67,7 +67,7 @@ function plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,cond, col
 
 
         % Plot the mean trace for the current dataset
-        trace_legendHandles(i) = plot(all_secs, avg, 'LineWidth', 1.5, 'Color', color);
+        trace_legendHandles(i) = plot(all_secs, avg, 'LineWidth', 1, 'Color', color);
     end
 
     % Create small invisible patches for odour/buffer legend
@@ -85,7 +85,7 @@ function plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,cond, col
     ylim(ylims);  
     xticks(moviepars.timesecs);
     xticklabels(moviepars.timelabels);
-    xlim([moviepars.timesecs(1), moviepars.timesecs(end)]);
+    xlim([moviepars.timesecs(1), moviepars.plotends]);
     
     % Save plot
     singleplotname = fullfile(pdir, cond, strcat(general.pars, general.strain, '_', dataset.plot_title, '_',cond, ratiotype));
@@ -93,7 +93,9 @@ function plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,cond, col
     saveas(fig, strcat(singleplotname, '.png'));
     
     % Save as EPS (vector graphics)
-%     exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
+    if strcmp(analysis_pars.export_eps, "TRUE")
+        exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
+    end
     
     hold off;
     close(fig);

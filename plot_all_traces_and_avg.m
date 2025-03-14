@@ -1,5 +1,5 @@
 %% Plot: All traces + average
-function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, ratiotype,pdir, cond, colors, plotting, moviepars, general)
+function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, ratiotype,pdir, cond, general, analysis_pars, colors, plotting, moviepars)
     
     switch ratiotype
         case "badjratios"
@@ -41,7 +41,7 @@ function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, rat
         ylim(these_ylims);
         xticks(moviepars.timesecs);
         xticklabels(moviepars.timelabels);
-        xlim([moviepars.timesecs(1), moviepars.timesecs(end)]);
+        xlim([moviepars.timesecs(1), moviepars.plotends]);
     
     
         % Set plot export name 
@@ -52,8 +52,10 @@ function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, rat
         saveas(fig, strcat(singleplotname, '.png'));
     
         % Save as EPS (vector graphics)
-        % exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
-
+        if strcmp(analysis_pars.export_eps, "TRUE")
+            exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
+        end
+        
     catch ME
 
         warning("%s: %s", ME.identifier, ME.message); % log the error if occurs

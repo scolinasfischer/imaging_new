@@ -1,5 +1,5 @@
 
-function plot_single_worm(seconds, ratios,ratiotype, this_worm_dirs, colors, plotting, moviepars)
+function plot_single_worm(seconds, ratios,ratiotype, this_worm_dirs, analysis_pars, colors, plotting, moviepars)
     % PLOT_ADJRATIOS plots adjusted fluorescence ratios over time with shading.
     %
     % Inputs:
@@ -17,6 +17,7 @@ function plot_single_worm(seconds, ratios,ratiotype, this_worm_dirs, colors, plo
             ratios (:,1) double    % Ensures input is a column vector
             ratiotype (1,1) string {mustBeMember(ratiotype, ["badjratios", "normratios"])}
             this_worm_dirs struct
+            analysis_pars struct
             colors struct
             plotting struct
             moviepars struct
@@ -70,10 +71,13 @@ function plot_single_worm(seconds, ratios,ratiotype, this_worm_dirs, colors, plo
          
         % Save as PNG
         saveas(fig, strcat(singleplotname, '.png'));
+
+
     
         % Save as EPS (vector graphics)
-       % exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
-    
+%         if strcmp(analysis_pars.export_eps, "TRUE")
+%             exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
+%         end
         
 
 

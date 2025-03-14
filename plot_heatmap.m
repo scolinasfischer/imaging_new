@@ -1,7 +1,7 @@
 
 
 %% Plot: Heatmap
-function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, heatmapname, worm_names, pdir, cond, plotting, moviepars, general)
+function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, heatmapname, worm_names, pdir, cond, general, analysis_pars, plotting, moviepars)
     
     switch ratiotype
             case "badjratios"
@@ -42,7 +42,7 @@ function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, heatmapname, 
         odour(moviepars.timeframes(5):moviepars.timeframes(6)) = these_ylims(1); % Odour off 1
         
     
-        all_adjratiosT = [avg_all_adjratiosT; all_adjratiosT; odour];
+        all_adjratiosT = [ odour; avg_all_adjratiosT; all_adjratiosT];
         n = size(all_adjratiosT);
     
         % Create transparency mask for NaNs
@@ -54,12 +54,12 @@ function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, heatmapname, 
         colormap parula;
         colorbar;
         caxis(these_ylims);
-        xlim([moviepars.bstart moviepars.mend])
+        xlim([moviepars.bstart moviepars.plotendf])
         ylim([0.5, (n(1)+0.5)]);
         xlabel('Time (s)');
         ylabel('Neuron');
         yticks(1:n(1))
-        yticklabels([{'AVERAGE'} worm_names {'ODOUR'}])
+        yticklabels([{'ODOUR'} {'AVERAGE'} worm_names ])
 
 
     
@@ -67,7 +67,7 @@ function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, heatmapname, 
         xticks(moviepars.timeframes);
         xticklabels(moviepars.timelabels);
 
-    
+      
         % Set plot export name 
         singleplotname = fullfile(pdir, cond, strcat(general.strain, this_plottype,heatmapname, '_heatmap'));
 
@@ -76,7 +76,10 @@ function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, heatmapname, 
         saveas(fig, strcat(singleplotname, '.png'));
     
         % Save as EPS (vector graphics)
-        % exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
+        
+        if strcmp(analysis_pars.export_eps, "TRUE")
+            exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
+        end
 
     catch ME
         warning("%s: %s", ME.identifier, ME.message); % log the error if occurs

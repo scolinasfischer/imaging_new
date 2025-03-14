@@ -1,4 +1,4 @@
-function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, pdir, colors, plotting, moviepars, general)
+function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, pdir, general,analysis_pars, colors, plotting, moviepars)
 %% plot_avg_with_sem_3cond
 % Plots the average ratio with SEM shading for three conditionings 
 % (mock, aversive, and sexually conditioning) for both wild-type (WT) and 
@@ -30,7 +30,7 @@ function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, p
 % - Figures are saved but not returned to the workspace.  
 
 
-
+fprintf('Making 3cond plots for %s\n', ratiotype);
 
     switch ratiotype
         case "badjratios"
@@ -47,6 +47,7 @@ function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, p
     end
 
 
+   
     
         
         % Loop over wt and mt groups
@@ -107,7 +108,7 @@ function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, p
                
 
                 % Plot the average (mean trace) for the current condition
-                trace_legendHandles(i) = plot(all_secs, group_ratio, 'LineWidth', 1.5, 'Color', group_color);
+                trace_legendHandles(i) = plot(all_secs, group_ratio, 'LineWidth', 1, 'Color', group_color);
 
             end
           
@@ -117,7 +118,7 @@ function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, p
             ylim(these_ylims);
             xticks(moviepars.timesecs);
             xticklabels(moviepars.timelabels);
-            xlim([moviepars.timesecs(1), moviepars.timesecs(end)]);
+            xlim([moviepars.timesecs(1), moviepars.plotends]);
     
             %Add legend for traces and odour/buffer blocks
 
@@ -234,8 +235,8 @@ function plot_avg_with_sem_3cond(all_secs, avgratio_data, SEM_data, ratiotype, p
  
             
             % Plot the mean traces and store the handles
-            trace_legendHandles(1, i) = plot(all_secs, wt_ratio, 'LineWidth', 1.5, 'Color', wt_color);
-            trace_legendHandles(2, i) = plot(all_secs, mt_ratio, 'LineWidth', 1.5, 'Color', mt_color1);
+            trace_legendHandles(1, i) = plot(all_secs, wt_ratio, 'LineWidth', 1, 'Color', wt_color);
+            trace_legendHandles(2, i) = plot(all_secs, mt_ratio, 'LineWidth', 1, 'Color', mt_color1);
         
             
             % Create small invisible patches for odour/buffer legend

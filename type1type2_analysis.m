@@ -109,7 +109,7 @@ function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, 
     
 
     %% Step 4: Plot Sorted Heatmap
-    plot_heatmap(sorted_all_adjratiosT', avg_all_adjratiosT', ratiotype, "Sorted timetomax",sorted_col_names, pdir, cond, plotting, moviepars, general);
+    plot_heatmap(sorted_all_adjratiosT', avg_all_adjratiosT', ratiotype, "Sorted timetomax",sorted_col_names, pdir, cond, general, analysis_pars, plotting, moviepars);
 
 
     %% Step 5: Plot Average of All Traces + SEM (Type1 and Type2) on same plot. 
@@ -124,7 +124,7 @@ function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, 
 
 
     %Call general plotting function with above dataset
-    plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,cond,colors, plotting, moviepars, general);
+    plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,cond,general, analysis_pars, colors, plotting, moviepars);
 
 
 

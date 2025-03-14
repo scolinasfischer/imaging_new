@@ -45,10 +45,10 @@ all_data = [{'Condition', 'nT1', 'nT2'}; all_data]; % Add headers
 data_table = cell2table(all_data(2:end, :), 'VariableNames', all_data(1, :));
 
 % Write to spreadsheet
-filename = fullfile(analysis_output_dir, 'nT1T2_data.xlsx');
+filename = fullfile(analysis_output_dir, strcat(ratiotype, 'nT1T2_data.xlsx'));
 writetable(data_table, filename);
 
-disp(['nT1T2 data saved to ', filename]);
+fprintf(ratiotype, 'nT1T2 data saved to ', filename);
 
 end
 

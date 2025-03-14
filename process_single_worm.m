@@ -6,7 +6,7 @@
 
 %data =
 %process_single_worm(files_to_analyse(i),group_name,pdir,colors,plotting,moviepars);
-function [this_worm_raw, short_fname, badjratios, normratios] = process_single_worm(fname, group_name, pdir, colors, plotting, moviepars)
+function [this_worm_raw, short_fname, badjratios, normratios] = process_single_worm(fname, group_name, pdir, analysis_pars, colors, plotting, moviepars)
 
     %get a short filename for this file (filename only, no path or
     %extension)
@@ -49,17 +49,19 @@ function [this_worm_raw, short_fname, badjratios, normratios] = process_single_w
     %Plot baseline-adj ratio - ensure Y label matches ratio plotted
     % badjratios should be "R-R0/R0"
     % normratios should be "F-Fmin/Fmax"
-    plot_single_worm(secs, badjratios, "badjratios", this_worm_dirs, colors, plotting, moviepars);
+    
+    if strcmp(analysis_pars.calculateR0, "TRUE")
+        plot_single_worm(secs, badjratios, "badjratios", this_worm_dirs, analysis_pars, colors, plotting, moviepars);
+    end
 
-    plot_single_worm(secs, normratios, "normratios", this_worm_dirs, colors, plotting, moviepars);
+    if strcmp(analysis_pars.calculateFm, "TRUE")
+        plot_single_worm(secs, normratios, "normratios", this_worm_dirs, analysis_pars, colors, plotting, moviepars);
+    end
 
 
      
 
     
-
-
-
 
     fprintf('Processed worm %s\n', this_worm_dirs.short_fname);
 
