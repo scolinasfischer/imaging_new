@@ -1,4 +1,4 @@
-function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, T1T2analysis, cond, pdir, colors, plotting, moviepars, general)
+function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, T1T2analysis, cond, pdir,general, colors, plotting, moviepars )
     
 
 % Function to carry out Type1Type2 analysis and save/plot results. runs
