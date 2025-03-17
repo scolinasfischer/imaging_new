@@ -131,7 +131,8 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 % baseline and time for 370smovie, 10fps, 30sec baseline,60sON-60sOFF-60sON-60sOFF (or half of this)
     moviepars.bstart = 792;%first frame of baseline
     moviepars.bend = 1089; %last frame of baseline
-    moviepars.last10OFF = 990; %in case different from baseline eg AIB
+    moviepars.ONend = 1683; %last frame of 1st odour ON
+    moviepars.last10OFF = 990; %in case different from baseline start eg AIB
     moviepars.last10ON = 1584;  %to calculate onLOW neurons R0 
     moviepars.mend = 3465; %last used frame of movie (full movie)
     moviepars.halfmend =  2277    ; %last frame of 1st odour off

@@ -30,7 +30,9 @@ for g = 1:length(genotypes)
         cond = conditions{c};
         
         % Extract normalised ratios data (Fm)
-        these_ratios = nratio_all_data.(genotype).(cond);
+        these_nratios = nratio_all_data.(genotype).(cond);
+        these_bratios = bratio_all_data.(genotype).(cond);
+        
         these_worm_names = worm_names.(genotype).(cond);
         
         % Create output directory
@@ -39,8 +41,11 @@ for g = 1:length(genotypes)
             mkdir(pdir);
         end
         
-        % Call the analysis function (categorise by ON/OFF states) 
-        [offHIGH_norm,offHIGH_badj, cols_offHIGH, onLOW_norm, onLOW_badj, cols_onLOW,bLOW_norm, bLOW_badj, cols_bLOW] = categorisebyONOFFstates(these_ratios, these_worm_names, cond,pdir, general, colors, plotting, moviepars);
+        % Call the analysis function (categorise bratio and normratio data by ON/OFF states in normratio data) 
+        [offHIGH_norm, offHIGH_badj, cols_offHIGH, ...
+         onLOW_norm, onLOW_badj, cols_onLOW, ...
+         bLOW_norm, bLOW_badj, cols_bLOW] = ...
+         categorisebyONOFFstates(these_nratios, these_bratios, these_worm_names,cond, pdir, general, colors, plotting, moviepars);
       
         
         %save baseline-adjusted data (R0) of categorised worms in struct
@@ -71,7 +76,18 @@ for g = 1:length(genotypes)
     end
 end
 
-% Prepare table for writing to Excel
+
+%% Plot
+
+%call general SEM flexible
+
+
+
+
+%% Save data
+
+
+% Prepare table for writing to Excel numbers of neurons in each category
 all_data = [{'Condition', 'offHIGH', 'onLOW', 'bLOW'}; all_data]; % Add headers
 
 % Convert to table
@@ -80,6 +96,13 @@ data_table = cell2table(all_data(2:end, :), 'VariableNames', all_data(1, :));
 % Write to spreadsheet
 filename = fullfile(pdir, cond, strcat(general.strain, cond, 'numberON-OFFneurons.xlsx'));
 writetable(data_table, filename);
+
+
+
+% Also save using save_groupdata function, one xls per category
+
+
+
 
 
 fprintf('%s: catgeorised ON-OFFneurons %s\n', filename);
