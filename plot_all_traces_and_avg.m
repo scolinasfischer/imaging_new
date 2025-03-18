@@ -5,11 +5,11 @@ function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, rat
         case "badjratios"
             these_ylims = [plotting.R0ploty1 , plotting.R0ploty2];
             this_ylab = "R-R0/R0";
-            this_plottype = plotting.R0name;
+            
         case "normratios"
             these_ylims = [plotting.Fmploty1, plotting.Fmploty2];
             this_ylab = "F-Fmin/Fmax";
-            this_plottype = plotting.Fmname;
+            
 
         otherwise
             error("Unexpected ratiotype: %s", ratiotype);
@@ -45,7 +45,7 @@ function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, rat
     
     
         % Set plot export name 
-        singleplotname = fullfile(pdir, strcat(general.strain, genotype, cond, this_plottype, '_all_traces_avg'));
+        singleplotname = fullfile(pdir, strcat(general.pars,general.strain, ratiotype, genotype, cond,  '_all_traces_avg'));
 
          
         % Save as PNG

@@ -99,7 +99,7 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     plotting.R0ploty2avg  = +2; %upper y axis limit for avg traces plots
     plotting.R0hmy1    = -0; %lower y axis limit for heatmaps nb this sets limit within which scale colors
     plotting.R0hmy2    = +1; %upper y axis limit for heatmaps nb this sets limit within which scale colors
-    plotting.R0name  = "badj";
+
 
 %for maxmin normalised ratios (Fm)
     plotting.Fmploty1  = -0; %lower y axis limit for single traces plots maxmin normalised ratios
@@ -108,7 +108,7 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     plotting.Fmploty2avg  = +1; %upper y axis limit for avg traces plots
     plotting.Fmhmy1    = -0; %lower y axis limit for heatmaps nb this sets limit within which scale colors
     plotting.Fmhmy2    = +1; %upper y axis limit for heatmaps nb this sets limit within which scale colors
-    plotting.Fmname  = "norm";
+
 
 
 

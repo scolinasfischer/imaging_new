@@ -7,11 +7,11 @@ function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, heatmapname, 
             case "badjratios"
                 these_ylims = [plotting.R0hmy1 , plotting.R0hmy2];
                 this_plottitle = "R-R0/R0";
-                this_plottype = plotting.R0name;
+                
             case "normratios"
                 these_ylims = [plotting.Fmhmy1 , plotting.Fmhmy2];
                 this_plottitle = "F-Fmin/Fmax";
-                this_plottype = plotting.Fmname;
+                
     
             otherwise
                 error("Unexpected ratiotype: %s", ratiotype);
@@ -69,7 +69,7 @@ function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, heatmapname, 
 
       
         % Set plot export name 
-        singleplotname = fullfile(pdir, strcat(general.strain, this_plottype,heatmapname, '_heatmap'));
+        singleplotname = fullfile(pdir, strcat(general.strain, ratiotype,heatmapname, '_heatmap'));
 
          
         % Save as PNG
