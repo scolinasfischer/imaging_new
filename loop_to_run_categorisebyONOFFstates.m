@@ -1,8 +1,7 @@
 function loop_to_run_categorisebyONOFFstates(bratio_all_data, nratio_all_data, worm_names, analysis_output_dir, general, colors, plotting, moviepars)
 
 
-%this function requires as input normalised ratio data (Fm: F-Fmin/Fmax).
-% It calls the function that categorises neurons by their on/off states. 
+%this function calls the function that categorises neurons by their on/off states. 
 
 %It accepts as input the two structures containing normalised ratio data
 %for all genotypes and conditions (one struct for normalised ratios and one
@@ -11,9 +10,7 @@ function loop_to_run_categorisebyONOFFstates(bratio_all_data, nratio_all_data, w
 
 %It also calls plotting function to plot the data separated by these categories, as well
 %as saving xls files with the following: 
-% 
-% 
-
+ 
 
 % Create struct to hold number of offHIGH/onLOW/bLOW neurons in each condition and genotype
 categorised_bratio = struct;
@@ -29,14 +26,14 @@ for g = 1:length(genotypes)
     for c = 1:length(conditions)
         cond = conditions{c};
         
-        % Extract normalised ratios data (Fm)
+        % Extract ratios data 
         these_nratios = nratio_all_data.(genotype).(cond);
         these_bratios = bratio_all_data.(genotype).(cond);
         
         these_worm_names = worm_names.(genotype).(cond);
         
         % Create output directory
-        pdir = fullfile(analysis_output_dir);
+        pdir = fullfile(analysis_output_dir, genotype, cond);
         if ~exist(pdir, 'dir')
             mkdir(pdir);
         end
@@ -77,9 +74,10 @@ for g = 1:length(genotypes)
 end
 
 
-%% Plot
+%% Calculate avg, SEM and then Plot
 
 %call general SEM flexible
+
 
 
 

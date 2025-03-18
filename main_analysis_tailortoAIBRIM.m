@@ -76,9 +76,9 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     analysis_pars.calculateFm = "TRUE"; %set to TRUE will calculate Fm (minmax normalised ratio F-Fmin/Fmax)
     analysis_pars.export_eps = "FALSE";  %export plots as eps and png or only eps. eps takes long but is needed to edit in affinity
 %     analysis_pars.bleach_correct = "TRUE"; %set true if want to perform bleach correction (and show raw vs bleach corrected comparison plots)
-%     analysis_pars.furtheranalysis_Type1Type2 = "TRUE"; %perform type1tpe2 analysis (like for AIY) and output sorted heatmaps, etc
+    analysis_pars.furtheranalysis_Type1Type2 = "FALSE"; %perform type1tpe2 analysis (like for AIY) and output sorted heatmaps, etc
 %     analysis_pars.furtheranalysis_ONOFFclassif = "TRUE"; %perform ON/OFF classification analysis (like for RIM and AIB). 
-%     
+
 
     %Parameters for type1 and type 2 analysis
     T1T2analysispars.T2cutoffinsecs = 15;
@@ -285,22 +285,23 @@ for g = 1:length(genotypes)
 end
 
 
-%% Create plots showing multiple conditions
-
+%% Create plots showing multiple conditions and genotypes, if present
 
 
 %3cond plots for baseline-adjusted (R0)
 if strcmp(analysis_pars.calculateR0, "TRUE")
-    loop_to_plot_all_conditions_per_genotype(all_secs, bratio_avg_data, bSEM_data, "badjratios", analysis_output_dir, general, analysis_pars,colors, plotting, moviepars)
-    loop_to_plot_all_genotypes_per_condition ()
+    loop_to_plot_all_conditions_per_genotype(all_secs, bratio_avg_data, bSEM_data, "badjratios", analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
+    loop_to_plot_all_genotypes_per_condition(all_secs, bratio_avg_data, bSEM_data, "badjratios", analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
 end
 
 
 
 
-% if strcmp(analysis_pars.calculateFm, "TRUE")
-%    loop_to_plot_all_conditions_per_genotype(all_secs, bratio_avg_data, bSEM_data, "badjratios", analysis_output_dir, general, analysis_pars,colors, plotting, moviepars)
-% end
+
+if strcmp(analysis_pars.calculateFm, "TRUE")
+    loop_to_plot_all_conditions_per_genotype(all_secs, nratio_avg_data, nSEM_data, "normratios", analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
+    loop_to_plot_all_genotypes_per_condition(all_secs, nratio_avg_data, nSEM_data, "normratios", analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
+end
 
 
 
@@ -308,8 +309,7 @@ end
 %% OTher condition-specific analysis
 
 
-%%Type1 Type2 analysis (originally set for AIY). Can only handle one
-%%condition at a time, so need to cycle through
+%% Type1 Type2 analysis (originally made for AIY)
 
  if strcmp(analysisparams.T1T2analysis,"TRUE")
     loop_to_run_type1type2_analysis(bratio_all_data, "badjratios", worm_names, T1T2analysispars, analysis_output_dir, general,colors, plotting, moviepars)
@@ -321,5 +321,7 @@ end
 
 
 
+
+%% Categorise as ONOFF (originally made for AIB and RIM)
 
 
