@@ -38,7 +38,7 @@ function plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,cond,gene
     hold on;
     
     % Title (use the provided title for general description)
-    title([general.strain, ' ', dataset.plot_title, ' ', cond, ' - ', ratiotype], 'Interpreter', 'none');
+    title([general.strain, ' ', dataset.plot_title, ' - ', ratiotype], 'Interpreter', 'none');
     
     % Add background shading
     patch(moviepars.xcoords, moviepars.ycoords, colors.patchcolors3d, 'FaceAlpha', 0.3, 'EdgeAlpha', 0);
@@ -88,7 +88,7 @@ function plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,cond,gene
     xlim([moviepars.timesecs(1), moviepars.plotends]);
     
     % Save plot
-    singleplotname = fullfile(pdir, cond, strcat(general.pars, general.strain, '_', dataset.plot_title, '_',cond, ratiotype));
+    singleplotname = fullfile(pdir, strcat(general.pars, general.strain, '_', dataset.plot_title, ratiotype));
     
     saveas(fig, strcat(singleplotname, '.png'));
     

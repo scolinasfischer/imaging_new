@@ -63,15 +63,15 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     general.frame_rate = 9.9;
 
     general.wt_genotype_code = "wt"; %for r = 1
-    general.mutant_genotype_code1 = "pdf1"; %for r = 2
+%     general.mutant_genotype_code1 = "pdf1"; %for r = 2
 
   
 
  %set analysis parameters
 
-    analysis_pars.extract_from_mat = "FALSE"; %set to TRUE if its first time and need to extract mat to excel, FALSE if already done    
+    analysis_pars.extract_from_mat = "TRUE"; %set to TRUE if its first time and need to extract mat to excel, FALSE if already done    
     analysis_pars.full_or_halfmovieplots = "half"; %set to full for full movie, half for half movie NB this only used to set plot ylim, not for anything else    
-    analysis_pars.calculateR0 = "FALSE"; %set to TRUE will calculate R0 (baseline-adjusted ratio R-R0/R0)
+    analysis_pars.calculateR0 = "TRUE"; %set to TRUE will calculate R0 (baseline-adjusted ratio R-R0/R0)
     analysis_pars.calculateFm = "TRUE"; %set to TRUE will calculate Fm (minmax normalised ratio F-Fmin/Fmax)
     analysis_pars.export_eps = "FALSE";  %export plots as eps and png or only eps. eps takes long but is needed to edit in affinity
 %     analysis_pars.bleach_correct = "TRUE"; %set true if want to perform bleach correction (and show raw vs bleach corrected comparison plots)
@@ -93,20 +93,20 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 
 %for baseline-adjusted ratios (R0)
     plotting.R0ploty1  = -1; %lower y axis limit for single traces plots baseline-adjusted ratios
-    plotting.R0ploty2  = +3; %upper y axis limit for single traces plots baseline-adjusted ratios
-    plotting.R0ploty1avg  = -0.2; %lower y axis limit for avg traces plots
+    plotting.R0ploty2  = +6.5; %upper y axis limit for single traces plots baseline-adjusted ratios
+    plotting.R0ploty1avg  = -0; %lower y axis limit for avg traces plots
     plotting.R0ploty2avg  = +1; %upper y axis limit for avg traces plots
-    plotting.R0hmy1    = -0.5; %lower y axis limit for heatmaps nb this sets limit within which scale colors
-    plotting.R0hmy2    = +2; %upper y axis limit for heatmaps nb this sets limit within which scale colors
+    plotting.R0hmy1    = -0; %lower y axis limit for heatmaps nb this sets limit within which scale colors
+    plotting.R0hmy2    = +1; %upper y axis limit for heatmaps nb this sets limit within which scale colors
     plotting.R0name  = "badj";
 
 %for maxmin normalised ratios (Fm)
-    plotting.Fmploty1  = -0.1; %lower y axis limit for single traces plots maxmin normalised ratios
+    plotting.Fmploty1  = -0; %lower y axis limit for single traces plots maxmin normalised ratios
     plotting.Fmploty2  = +1; %upper y axis limit for ssingle traces plots maxmin normalised ratios   
     plotting.Fmploty1avg  = 0; %lower y axis limit for avg traces plots
-    plotting.Fmploty2avg  = +0.7; %upper y axis limit for avg traces plots
+    plotting.Fmploty2avg  = +1; %upper y axis limit for avg traces plots
     plotting.Fmhmy1    = -0; %lower y axis limit for heatmaps nb this sets limit within which scale colors
-    plotting.Fmhmy2    = +0.9; %upper y axis limit for heatmaps nb this sets limit within which scale colors
+    plotting.Fmhmy2    = +1; %upper y axis limit for heatmaps nb this sets limit within which scale colors
     plotting.Fmname  = "norm";
 
 
@@ -182,13 +182,13 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 
 all_mat_dirs = {
     mock_mat_dir avsv_mat_dir sexc_mat_dir;
-    mt_mock_mat_dir mt_avsv_mat_dir mt_sexc_mat_dir
+%     mt_mock_mat_dir mt_avsv_mat_dir mt_sexc_mat_dir
 };
 
 
 all_xlsx_dirs = {
     mock_xlsx_dir avsv_xlsx_dir sexc_xlsx_dir;
-    mt_mock_xlsx_dir mt_avsv_xlsx_dir mt_sexc_xlsx_dir
+%     mt_mock_xlsx_dir mt_avsv_xlsx_dir mt_sexc_xlsx_dir
 };
 
 clear mock_mat_dir avsv_mat_dir sexc_mat_dir
@@ -199,8 +199,8 @@ clear mock_xlsx_dir avsv_xlsx_dir sexc_xlsx_dir
 %use columns for condition and rows for genotype
 
 codes = [
-    "wt_mock_" "wt_avsv_" "wt_sexc_";
-    "pdf1_mock_" "pdf1_avsv_" "pdf1_sexc_"
+    "mock" "avsv" "sexc";
+%     "pdf1_mock_" "pdf1_avsv_" "pdf1_sexc_"
     ];
 
 
@@ -263,7 +263,7 @@ for r = 1:dir_size(1)
                 error("Unexpected genotype row index: %d", r); %if get unexpected genotype row index is maybe becaus ehave more than 2 genotypes, in which case need to add more genotype code info
             end
             
-            % Extract condition name from codes (e.g., "wt_mock_", "mt_avsv_")
+            % Extract condition name from codes (e.g., "mock", "avsv")
             condition_name = codes(r, c);
             
             %store worm names

@@ -120,7 +120,7 @@ function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, 
     dataset.sem = {SEM_T1, SEM_T2};                   % Cell array of SEM data for each dataset
     dataset.colors = {colors.lightblue, colors.darkblue};   % Cell array of colors for each dataset
     dataset.labels = {'Type1', 'Type2'};                    % Cell array of dataset labels (used in legend and title)
-    dataset.plot_title = "type1type2";               % String for plot title and filename suffix
+    dataset.plot_title = strcat("type1type2 ", cond);               % String for plot title and filename suffix
 
 
     %Call general plotting function with above dataset
