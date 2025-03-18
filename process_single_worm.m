@@ -50,13 +50,13 @@ function [this_worm_raw, short_fname, badjratios, normratios] = process_single_w
     % badjratios should be "R-R0/R0"
     % normratios should be "F-Fmin/Fmax"
     
-    if strcmp(analysis_pars.calculateR0, "TRUE")
-        plot_single_worm(secs, badjratios, "badjratios", this_worm_dirs, analysis_pars, colors, plotting, moviepars);
-    end
-
-    if strcmp(analysis_pars.calculateFm, "TRUE")
-        plot_single_worm(secs, normratios, "normratios", this_worm_dirs, analysis_pars, colors, plotting, moviepars);
-    end
+%     if strcmp(analysis_pars.calculateR0, "TRUE")
+%         plot_single_worm(secs, badjratios, "badjratios", this_worm_dirs, analysis_pars, colors, plotting, moviepars);
+%     end
+% 
+%     if strcmp(analysis_pars.calculateFm, "TRUE")
+%         plot_single_worm(secs, normratios, "normratios", this_worm_dirs, analysis_pars, colors, plotting, moviepars);
+%     end
 
 
      

@@ -50,6 +50,6 @@ function loop_to_plot_all_conditions_per_genotype(all_secs, avgratiodata, semdat
         end
 
         % === Step 5: Call the general plotting function ===
-        plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir, genotype, general, analysis_pars, colors, plotting, moviepars);
+        plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir, general, analysis_pars, colors, plotting, moviepars);
     end
 end

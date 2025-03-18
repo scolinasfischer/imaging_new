@@ -28,9 +28,9 @@ avsv_mat_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/matfiles/AIB/BAR1
 sexc_mat_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/matfiles/AIB/BAR184/AIBlong/AIB SEX COND long half";
 
 %set path for xlsx files of each condition here: 
-mock_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIB/newAIBxls/wt_mock_";
-avsv_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIB/newAIBxls/wt_avsv_";
-sexc_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIB/newAIBxls/wt_sexc_";
+mock_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIB/newAIBxls/wt/mock";
+avsv_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIB/newAIBxls/wt/avsv";
+sexc_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIB/newAIBxls/wt/sexc";
 
 
 
@@ -50,7 +50,7 @@ sexc_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/
 %set path for overall analysis output
 % subfolders inside this need to have exact name as the "codes" listed
 % below for each group
-analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIB/newAIBoutput1";
+analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIB/newAIBoutput2";
 
 
 %% set parameters, organised into structures for ease of function calling
@@ -58,7 +58,7 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 %general
     
     general.strain = "AIBtest";
-    general.pars = "17_3";
+    general.pars = "18_3";
     
     general.frame_rate = 9.9;
 
@@ -69,7 +69,8 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 
  %set analysis parameters
 
-    analysis_pars.extract_from_mat = "TRUE"; %set to TRUE if its first time and need to extract mat to excel, FALSE if already done    
+    analysis_pars.extract_from_mat = "FALSE"; %set to TRUE if its first time and need to extract mat to excel, FALSE if already done    
+    analysis_pars.plot_single_worms = "FALSE"; %set to TRUE id
     analysis_pars.full_or_halfmovieplots = "half"; %set to full for full movie, half for half movie NB this only used to set plot ylim, not for anything else    
     analysis_pars.calculateR0 = "TRUE"; %set to TRUE will calculate R0 (baseline-adjusted ratio R-R0/R0)
     analysis_pars.calculateFm = "TRUE"; %set to TRUE will calculate Fm (minmax normalised ratio F-Fmin/Fmax)
@@ -94,8 +95,8 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 %for baseline-adjusted ratios (R0)
     plotting.R0ploty1  = -1; %lower y axis limit for single traces plots baseline-adjusted ratios
     plotting.R0ploty2  = +6.5; %upper y axis limit for single traces plots baseline-adjusted ratios
-    plotting.R0ploty1avg  = -0; %lower y axis limit for avg traces plots
-    plotting.R0ploty2avg  = +1; %upper y axis limit for avg traces plots
+    plotting.R0ploty1avg  = -2; %lower y axis limit for avg traces plots
+    plotting.R0ploty2avg  = +2; %upper y axis limit for avg traces plots
     plotting.R0hmy1    = -0; %lower y axis limit for heatmaps nb this sets limit within which scale colors
     plotting.R0hmy2    = +1; %upper y axis limit for heatmaps nb this sets limit within which scale colors
     plotting.R0name  = "badj";
@@ -198,10 +199,13 @@ clear mock_xlsx_dir avsv_xlsx_dir sexc_xlsx_dir
 %Create string array with the codes for each condition/genotype
 %use columns for condition and rows for genotype
 
-codes = [
-    "mock" "avsv" "sexc";
-%     "pdf1_mock_" "pdf1_avsv_" "pdf1_sexc_"
+conditions = [
+    "mock" "avsv" "sexc"
     ];
+
+genotypes = [
+    "wt";
+];
 
 
 
@@ -247,41 +251,34 @@ end
 %   plot accross worm within group
 
 dir_size = size(all_xlsx_dirs);
-for r = 1:dir_size(1)
-    for c = 1:dir_size(2)
-        [all_badjratios, badjratios_avg, SEMbadj, all_normratios, normratios_avg, SEMnorm, all_secs, col_names] = process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general,analysis_pars, colors, plotting, moviepars);
+for g = 1:length(genotypes)
+    genotype = genotypes(g);
 
 
+    for c = 1:length(conditions)
+        cond = conditions(c);
+        [all_badjratios, badjratios_avg, SEMbadj, all_normratios, normratios_avg, SEMnorm, all_secs, col_names] = process_this_group(all_xlsx_dirs{g, c}, analysis_output_dir, genotype, cond, general,analysis_pars, colors, plotting, moviepars);
 
-        %Save adjratios and SEM of each condition / genotype under different name
-         % Store processed data dynamically based on genotype (or something else)
-            if r == 1
-                genotype = general.wt_genotype_code; % Wild-type
-            elseif r == 2
-                genotype = general.mutant_genotype_code1; % Mutant
-            else
-                error("Unexpected genotype row index: %d", r); %if get unexpected genotype row index is maybe becaus ehave more than 2 genotypes, in which case need to add more genotype code info
-            end
-            
-            % Extract condition name from codes (e.g., "mock", "avsv")
-            condition_name = codes(r, c);
-            
-            %store worm names
-            worm_names.(genotype).(condition_name) = col_names;
 
             
+        %store worm names
+        worm_names.(genotype).(cond) = col_names;
 
+        
+        if strcmp(analysis_pars.calculateR0, "TRUE")
             % Store baseline-adjusted ratios (R0) and SEM values                 
-            bratio_all_data.(genotype).(condition_name) = all_badjratios; 
-            bratio_avg_data.(genotype).(condition_name) = badjratios_avg; 
-            bSEM_data.(genotype).(condition_name) = SEMbadj;
-       
+            bratio_all_data.(genotype).(cond) = all_badjratios; 
+            bratio_avg_data.(genotype).(cond) = badjratios_avg; 
+            bSEM_data.(genotype).(cond) = SEMbadj;
+        end
 
+
+        if strcmp(analysis_pars.calculateFm, "TRUE")
             % Store minmax normalised ratios (Fm)and SEM values
-            nratio_all_data.(genotype).(condition_name) = all_normratios;             
-            nratio_avg_data.(genotype).(condition_name) = normratios_avg; 
-            nSEM_data.(genotype).(condition_name) = SEMnorm;
-
+            nratio_all_data.(genotype).(cond) = all_normratios;             
+            nratio_avg_data.(genotype).(cond) = normratios_avg; 
+            nSEM_data.(genotype).(cond) = SEMnorm;
+        end
 
 
     end
@@ -290,15 +287,20 @@ end
 
 %% Create plots showing multiple conditions
 
+
+
 %3cond plots for baseline-adjusted (R0)
 if strcmp(analysis_pars.calculateR0, "TRUE")
-    plot_avg_with_sem_3cond(all_secs, bratio_avg_data, bSEM_data, "badjratios", analysis_output_dir, general, analysis_pars,colors, plotting, moviepars);
+    loop_to_plot_all_conditions_per_genotype(all_secs, bratio_avg_data, bSEM_data, "badjratios", analysis_output_dir, general, analysis_pars,colors, plotting, moviepars)
+    loop_to_plot_all_genotypes_per_condition ()
 end
 
-%3cond plots for normalised (Fm)
-if strcmp(analysis_pars.calculateFm, "TRUE")
-    plot_avg_with_sem_3cond(all_secs, nratio_avg_data, nSEM_data, "normratios",analysis_output_dir, general, analysis_pars, colors, plotting, moviepars);
-end
+
+
+
+% if strcmp(analysis_pars.calculateFm, "TRUE")
+%    loop_to_plot_all_conditions_per_genotype(all_secs, bratio_avg_data, bSEM_data, "badjratios", analysis_output_dir, general, analysis_pars,colors, plotting, moviepars)
+% end
 
 
 
@@ -309,12 +311,12 @@ end
 %%Type1 Type2 analysis (originally set for AIY). Can only handle one
 %%condition at a time, so need to cycle through
 
-% if strcmp(analysisparams.T1T2analysis,"TRUE")
+ if strcmp(analysisparams.T1T2analysis,"TRUE")
     loop_to_run_type1type2_analysis(bratio_all_data, "badjratios", worm_names, T1T2analysispars, analysis_output_dir, general,colors, plotting, moviepars)
     loop_to_run_type1type2_analysis(nratio_all_data, "normratios", worm_names, T1T2analysispars, analysis_output_dir, general,colors, plotting, moviepars)
     
 
-% end
+ end
 
 
 

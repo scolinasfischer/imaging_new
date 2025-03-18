@@ -1,6 +1,6 @@
 
 %% Save data to spreadsheets
-function save_groupdata_to_spreadsheets(all_adjratios, avg_all_adjratios, ratiotype,name, worm_names,SEM,pdir, cond, all_secs, general)
+function save_groupdata_to_spreadsheets(all_adjratios, avg_all_adjratios, ratiotype,name, worm_names,SEM,pdir, all_secs, general)
     % Convert to table for saving
 %     Tall_adjratios = array2table(all_adjratios, 'VariableNames', worm_names);
     
@@ -11,12 +11,12 @@ function save_groupdata_to_spreadsheets(all_adjratios, avg_all_adjratios, ratiot
 
 
     % Save all data
-    allratios_filename = fullfile(pdir, cond, strcat(general.strain, ratiotype,name, '_all.xlsx'));
+    allratios_filename = fullfile(pdir, strcat(general.strain, ratiotype,name, '_all.xlsx'));
     writetable(Tall_adjratios, allratios_filename, 'FileType', 'spreadsheet');
 
     % Save average, timepoints, and SEM
     avg_SEM_data = [all_secs, avg_all_adjratios, SEM];
-    avgratios_filename = fullfile(pdir, cond, strcat(general.strain, ratiotype, name, '_avg.xlsx'));
+    avgratios_filename = fullfile(pdir, strcat(general.strain, ratiotype, name, '_avg.xlsx'));
     writematrix(avg_SEM_data, avgratios_filename, 'FileType', 'spreadsheet');
 
 end

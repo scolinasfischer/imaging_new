@@ -1,4 +1,4 @@
-function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, T1T2analysis, cond, pdir,general, colors, plotting, moviepars )
+function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, T1T2analysis, genotype, cond, pdir,general, colors, plotting, moviepars )
     
 
 % Function to carry out Type1Type2 analysis and save/plot results. runs
@@ -92,7 +92,7 @@ function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, 
     % Save maxindex and maxvalues
     maxindexs = maxindex / 9.9; % Convert frames to seconds
     maxindexs_maxvals = [maxindexs, maxvalues];
-    maxindexsname = fullfile(pdir, cond, strcat(general.strain, ratiotype, 'timetomax_maxvalue'));
+    maxindexsname = fullfile(pdir, strcat(general.strain, genotype, cond, ratiotype, 'timetomax_maxvalue'));
    
     writematrix(maxindexs_maxvals, maxindexsname, 'FileType', 'spreadsheet');
 
@@ -104,27 +104,28 @@ function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, 
     [type2avg, SEM_T2, all_secs] = compute_plot_statistics(type2, general.frame_rate);
 
     %save using groupdata_to_spreadsheet function
-    save_groupdata_to_spreadsheets(type1, type1avg, "Type1", ratiotype, cols_T1,SEM_T1,pdir, cond, all_secs, general)
-    save_groupdata_to_spreadsheets(type2, type2avg, "Type2", ratiotype, cols_T2,SEM_T2,pdir, cond, all_secs, general)
+    save_groupdata_to_spreadsheets(type1, type1avg, ratiotype, "Type1", cols_T1,SEM_T1, pdir, all_secs, general)
+    save_groupdata_to_spreadsheets(type2, type2avg, ratiotype, "Type2",cols_T2,SEM_T2, pdir, all_secs, general)
+
     
 
     %% Step 4: Plot Sorted Heatmap
-    plot_heatmap(sorted_all_adjratiosT', avg_all_adjratiosT', ratiotype, "Sorted timetomax",sorted_col_names, pdir, cond, general, analysis_pars, plotting, moviepars);
+    plot_heatmap(sorted_all_adjratiosT', avg_all_adjratiosT', ratiotype, "Sorted timetomax",sorted_col_names, pdir, general, analysis_pars, plotting, moviepars);
 
 
     %% Step 5: Plot Average of All Traces + SEM (Type1 and Type2) on same plot. 
 %     plot_avg_with_sem_T1T2(all_secs, avg_type1, t1SEM, avg_type2, t2SEM, ratiotype, pdir, colors, plotting, moviepars, general);
     
     %Create struct with data we want to plot
-    dataset.avg = {type1avg, type2avg};                   % Cell array of average data for each dataset
-    dataset.sem = {SEM_T1, SEM_T2};                   % Cell array of SEM data for each dataset
-    dataset.colors = {colors.lightblue, colors.darkblue};   % Cell array of colors for each dataset
-    dataset.labels = {'Type1', 'Type2'};                    % Cell array of dataset labels (used in legend and title)
-    dataset.plot_title = strcat("type1type2 ", cond);               % String for plot title and filename suffix
+    dataset.avg = {type1avg, type2avg};                           % Cell array of average data for each dataset
+    dataset.sem = {SEM_T1, SEM_T2};                               % Cell array of SEM data for each dataset
+    dataset.colors = {colors.lightblue, colors.darkblue};         % Cell array of colors for each dataset
+    dataset.labels = {'Type1', 'Type2'};                          % Cell array of dataset labels (used in legend and title)
+    dataset.plot_title = strcat("type1type2 ", genotype, cond);   % String for plot title and filename suffix
 
 
     %Call general plotting function with above dataset
-    plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,cond,general, analysis_pars, colors, plotting, moviepars);
+    plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,general, analysis_pars, colors, plotting, moviepars);
 
 
 

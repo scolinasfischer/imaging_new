@@ -1,5 +1,5 @@
 %% Plot: All traces + average
-function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, ratiotype,pdir, cond, general, analysis_pars, colors, plotting, moviepars)
+function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, ratiotype,pdir, genotype, cond, general, analysis_pars, colors, plotting, moviepars)
     
     switch ratiotype
         case "badjratios"
@@ -23,7 +23,7 @@ function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, rat
         ax.Box = 'on'; % Turn on the box
         hold on
 
-        title(['Single Traces + AVG ', cond, general.strain],'Interpreter', 'none');
+        title(['Single Traces + AVG ', genotype, cond, general.strain],'Interpreter', 'none');
     
 
         % Plot all traces
@@ -45,7 +45,7 @@ function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, rat
     
     
         % Set plot export name 
-        singleplotname = fullfile(pdir, cond, strcat(general.strain, this_plottype, '_all_traces_avg'));
+        singleplotname = fullfile(pdir, strcat(general.strain, genotype, cond, this_plottype, '_all_traces_avg'));
 
          
         % Save as PNG
