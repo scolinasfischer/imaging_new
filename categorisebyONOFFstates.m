@@ -1,7 +1,7 @@
 function [offHIGH_norm, offHIGH_badj, cols_offHIGH, ...
           onLOW_norm, onLOW_badj, cols_onLOW, ...
           bLOW_norm, bLOW_badj, cols_bLOW] = ...
-          categorisebyONOFFstates(these_nratios, these_bratios, these_worm_names, moviepars)
+          categorisebyONOFFstates(threshold, these_nratios, these_bratios, these_worm_names, moviepars)
 %  Classifies neurons based on activity states during odour presentation.
 %
 % This function categorises neurons into one of three activity states based 
@@ -41,10 +41,7 @@ function [offHIGH_norm, offHIGH_badj, cols_offHIGH, ...
         error('moviepars indices exceed matrix dimensions.');
     end
     
-    % -----------------------------------
-    % Set threshold for classification
-    % -----------------------------------
-    threshold = 0.5;
+
     
     % -----------------------------------
     % Initialise outputs

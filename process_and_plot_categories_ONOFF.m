@@ -1,4 +1,4 @@
-function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nratio, categorised_bratio, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
+function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nratio, categorised_bratio, catg_wormnames, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
     % This function processes average ratios and SEM for different genotypes, conditions, and categories
     % and then calls a plotting function to visualize the results.
     %
@@ -7,6 +7,7 @@ function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nr
     %   conditions     - List of conditions (e.g., 'mock', 'avsv', 'sexc')
     %   categorised_nratio - Structure with categorized normalized ratios
     %   categorised_bratio - Structure with categorized baseline-adjusted ratios
+    %   catg_wormnames     - Structure with worm names separated by category 
     %   analysis_output_dir - Directory for saving output plots
     %   general        - General information for plotting (e.g., strain info)
     %   analysis_pars  - Analysis parameters for plotting
@@ -14,13 +15,14 @@ function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nr
     %   plotting       - Struct containing plotting settings (limits, labels, etc.)
     %   moviepars      - Movie parameters (e.g., frame rate)
 
-    %% Internal color struct and categories/ratiotypes
+    % Internal color struct and categories/ratiotypes
     colorstruct.mock = colors.mockgray;
     colorstruct.avsv = colors.avsvgreen;
     colorstruct.sexc = colors.sexcondpink;
 
+    % Define variables that will be looped over
     categories = {'offHIGH', 'onLOW', 'bLOW'};
-    ratiotypes = {'badjratios', 'normratios'};  % Define ratiotypes to loop over
+    ratiotypes = {'badjratios', 'normratios'};  
 
     % Structures to store the average and SEM values for normratios and bratio
     nratio_avg = struct();
@@ -46,12 +48,14 @@ function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nr
                 dataset.sem = cell(1, length(conditions));
                 dataset.colors = cell(1, length(conditions));
                 dataset.labels = conditions;
-                dataset.plot_title = strcat(genotype, ' - ', category, ' neurons (', ratiotype, ')');
+                dataset.plot_title = strcat(genotype, ' - ', category, ' (', ratiotype, ')');
                 
                 % Loop through conditions and compute statistics for each category
                 for c = 1:length(conditions)
                     cond = conditions{c};
                     
+                    these_worms = catg_wormnames.(genotype).(cond).(category);
+
                     % Extract the appropriate data based on ratiotype using switch/case
                     switch ratiotype
                         case 'normratios'
@@ -63,32 +67,42 @@ function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nr
                     end
                     
                     % Compute avg and SEM for current ratiotype
-                    [avg_ratios, SEM_ratios, all_secs] = compute_plot_statistics(these_ratios, moviepars.frame_rate);
+                    [avg_ratios, SEM, all_secs] = compute_plot_statistics(these_ratios, general.frame_rate);
                     
                     % Save the results in appropriate structures
                     switch ratiotype
                         case 'normratios'
                             nratio_avg.(genotype).(cond).(category) = avg_ratios;
-                            nratio_sem.(genotype).(cond).(category) = SEM_ratios;
+                            nratio_sem.(genotype).(cond).(category) = SEM;
                         case 'badjratios'
                             bratio_avg.(genotype).(cond).(category) = avg_ratios;
-                            bratio_sem.(genotype).(cond).(category) = SEM_ratios;
+                            bratio_sem.(genotype).(cond).(category) = SEM;
                     end
                     
                     % Fill dataset for plotting
                     dataset.avg{c} = avg_ratios;
-                    dataset.sem{c} = SEM_ratios;
+                    dataset.sem{c} = SEM;
                     dataset.colors{c} = colorstruct.(cond);
+
+
+                    % Output directory for within condition saving data
+                    pdir = fullfile(analysis_output_dir, genotype, cond);
+                    if ~exist(pdir, 'dir')
+                        mkdir(pdir);
+                    end
+
+
+                    %Call the saving function for the current group to save
+                    %spreadsheet with all data and spreadsheet with avg, time, SEM
+                    save_groupdata_to_spreadsheets(these_ratios, avg_ratios, ratiotype, category, these_worms,SEM,pdir, all_secs, general)
+
                 end
                 
-                % Output directory for plots
-                plotdir = fullfile(analysis_output_dir, genotype, category, ratiotype);
-                if ~exist(plotdir, 'dir')
-                    mkdir(plotdir);
-                end
+
                 
                 % Call the general plotting function for the current ratiotype
-                plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, plotdir, general, analysis_pars, colors, plotting, moviepars);
+                plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars);
+
             end
         end
     end

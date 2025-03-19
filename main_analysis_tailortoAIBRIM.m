@@ -77,15 +77,17 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     analysis_pars.export_eps = "FALSE";  %export plots as eps and png or only eps. eps takes long but is needed to edit in affinity
 %     analysis_pars.bleach_correct = "TRUE"; %set true if want to perform bleach correction (and show raw vs bleach corrected comparison plots)
     analysis_pars.furtheranalysis_Type1Type2 = "FALSE"; %perform type1tpe2 analysis (like for AIY) and output sorted heatmaps, etc
-%     analysis_pars.furtheranalysis_ONOFFclassif = "TRUE"; %perform ON/OFF classification analysis (like for RIM and AIB). 
+    analysis_pars.furtheranalysis_ONOFFclassif = "TRUE"; %perform ON/OFF classification analysis (like for RIM and AIB). 
 
 
     %Parameters for type1 and type 2 analysis
-    T1T2analysispars.T2cutoffinsecs = 15;
-    T1T2analysispars.thresholdFm = 0.4;
-    T1T2analysispars.thresholdR0 = 1;
+    analysis_pars.T1T2analysispars.T2cutoffinsecs = 15;
+    analysis_pars.T1T2analysispars.thresholdFm = 0.4;
+    analysis_pars.T1T2analysispars.thresholdR0 = 1;
 
 
+
+    analysis_pars.ONOFFcategorisation.threshold = 0.5; %activity level (Fm) required to be classed as on / off (=> is on, <= is off). 
 
     % need to make save of these parameters to output folder^^^^^
 
@@ -312,8 +314,8 @@ end
 %% Type1 Type2 analysis (originally made for AIY)
 
  if strcmp(analysisparams.T1T2analysis,"TRUE")
-    loop_to_run_type1type2_analysis(bratio_all_data, "badjratios", worm_names, T1T2analysispars, analysis_output_dir, general,colors, plotting, moviepars)
-    loop_to_run_type1type2_analysis(nratio_all_data, "normratios", worm_names, T1T2analysispars, analysis_output_dir, general,colors, plotting, moviepars)
+    loop_to_run_type1type2_analysis(bratio_all_data, "badjratios", worm_names, analysis_pars, analysis_output_dir, general,colors, plotting, moviepars)
+    loop_to_run_type1type2_analysis(nratio_all_data, "normratios", worm_names, analysis_pars, analysis_output_dir, general,colors, plotting, moviepars)
     
 
  end
@@ -323,5 +325,6 @@ end
 
 
 %% Categorise as ONOFF (originally made for AIB and RIM)
+
 
 

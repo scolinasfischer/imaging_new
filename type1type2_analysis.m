@@ -1,4 +1,4 @@
-function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, T1T2analysis, genotype, cond, pdir,general, colors, plotting, moviepars )
+function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, analysis_pars, genotype, cond, pdir,general, colors, plotting, moviepars )
     
 
 % Function to carry out Type1Type2 analysis and save/plot results. runs
@@ -30,9 +30,9 @@ function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, 
 
      switch ratiotype
         case "badjratios"
-            threshold = T1T2analysis.thresholdR0;
+            threshold = analysis_pars.T1T2analysispars.thresholdR0;
         case "normratios"
-            threshold = T1T2analysis.thresholdFm;
+            threshold = analysis_pars.T1T2analysispars.thresholdFm;
         otherwise
             error("Unexpected ratiotype: %s", ratiotype);
     end
@@ -59,7 +59,7 @@ function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, 
 
 
     %% Step 2: Categorize into Type1 and Type2
-    T2cutoff = round(9.9 * T1T2analysis.T2cutoffinsecs);
+    T2cutoff = round(9.9 * analysis_pars.T1T2analysispars.T2cutoffinsecs);
     type1 = [];
     type2 = [];
     % nb these matrices are not transposed, same format as all_adjratios:

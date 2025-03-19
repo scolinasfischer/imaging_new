@@ -1,4 +1,4 @@
-function loop_to_run_type1type2_analysis(ratio_all_data, ratiotype, worm_names, T1T2analysispars, analysis_output_dir, general, colors, plotting, moviepars)
+function loop_to_run_type1type2_analysis(ratio_all_data, ratiotype, worm_names, analysis_pars, analysis_output_dir, general, colors, plotting, moviepars)
 
 % Create struct to hold number of type1type2 neurons in each condition and genotype
 nT1T2 = struct;
@@ -25,7 +25,7 @@ for g = 1:length(genotypes)
         end
         
         % Call the analysis function
-        [nT1, nT2] = type1type2_analysis(these_adjratios, ratiotype, these_worm_names, T1T2analysispars, genotype,cond, pdir, general, colors, plotting, moviepars);
+        [nT1, nT2] = type1type2_analysis(these_adjratios, ratiotype, these_worm_names, analysis_pars, genotype,cond, pdir, general, colors, plotting, moviepars);
 
         nT1T2.(genotype).(cond).nT1 = nT1;
         nT1T2.(genotype).(cond).nT2 = nT2;
