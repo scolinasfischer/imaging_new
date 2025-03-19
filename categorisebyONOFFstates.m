@@ -83,8 +83,7 @@ function [offHIGH_norm, offHIGH_badj, cols_offHIGH, ...
         end
     
         % BASELINE LOW: Low activity at the beginning of the baseline period
-        % called last10off cause use 10s prior to odour on, and in AIB is different from baseline start time
-        if this_nratio(moviepars.last10OFF + 1) <= threshold 
+        if this_nratio(moviepars.bstart + 1) <= threshold 
             bLOW_norm = [bLOW_norm this_nratio];
             bLOW_badj = [bLOW_badj this_bratio];
             cols_bLOW = [cols_bLOW this_name];
