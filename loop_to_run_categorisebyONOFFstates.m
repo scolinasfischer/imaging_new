@@ -1,4 +1,4 @@
-function loop_to_run_categorisebyONOFFstates(bratio_all_data, nratio_all_data, worm_names, analysis_output_dir, general,analysispars, colors, plotting, moviepars)
+function loop_to_run_categorisebyONOFFstates(bratio_all_data, nratio_all_data, worm_names, analysis_output_dir, general,analysis_pars, colors, plotting, moviepars)
 
 
 %this function calls the function that categorises neurons by their on/off states. 
@@ -42,6 +42,8 @@ for g = 1:length(genotypes)
          onLOW_norm, onLOW_badj, cols_onLOW, ...
          bLOW_norm, bLOW_badj, cols_bLOW] = ...
          categorisebyONOFFstates(threshold, these_nratios, these_bratios, these_worm_names, moviepars);
+        fprintf('Completed categorisation for genotype %s, condition %s.\n', genotype, cond);
+
       
         
         %save baseline-adjusted data (R0) of categorised worms in struct
@@ -82,11 +84,13 @@ for g = 1:length(genotypes)
     data_table = cell2table(N_percond(2:end, :), 'VariableNames', N_percond(1, :));
     
     % Write to spreadsheet
-    filename = fullfile(pdir, genotype, strcat(general.strain, 'numberON-OFFneurons_allconds.xlsx'));
+    filename = fullfile(analysis_output_dir, genotype, strcat(general.strain, 'numberON-OFFneurons_allconds.xlsx'));
     writetable(data_table, filename);
 
 
 end
+
+fprintf('Categorisation and saving table complete\n');
 
 
 %% Calculate avg+SEM, save, then Plot
@@ -100,15 +104,7 @@ process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nratio, cat
 
 
 
-
-
-
-%Save using save_groupdata function, one xls per category
-
-
-
-
-fprintf('catgeorised ON-OFFneurons');
+fprintf('Categorise by ON-OFF state analysis, plotting, and saving complete. \n');
 
 end
 

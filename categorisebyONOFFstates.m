@@ -42,6 +42,7 @@ function [offHIGH_norm, offHIGH_badj, cols_offHIGH, ...
     end
     
 
+
     
     % -----------------------------------
     % Initialise outputs

@@ -86,9 +86,10 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     analysis_pars.T1T2analysispars.thresholdR0 = 1;
 
 
-
+    %Parameters for ON/OFF categorisation
     analysis_pars.ONOFFcategorisation.threshold = 0.5; %activity level (Fm) required to be classed as on / off (=> is on, <= is off). 
 
+    
     % need to make save of these parameters to output folder^^^^^
 
 
@@ -313,7 +314,7 @@ end
 
 %% Type1 Type2 analysis (originally made for AIY)
 
- if strcmp(analysisparams.T1T2analysis,"TRUE")
+ if strcmp(analysis_pars.furtheranalysis_Type1Type2,"TRUE")
     loop_to_run_type1type2_analysis(bratio_all_data, "badjratios", worm_names, analysis_pars, analysis_output_dir, general,colors, plotting, moviepars)
     loop_to_run_type1type2_analysis(nratio_all_data, "normratios", worm_names, analysis_pars, analysis_output_dir, general,colors, plotting, moviepars)
     
@@ -324,7 +325,12 @@ end
 
 
 
-%% Categorise as ONOFF (originally made for AIB and RIM)
+%% Categorise as ONOFF (originally made for AIB and RIM). 
+% Will use nratio_all_data (min max normalised, Fm) to categorise as
+% ON/OFF, but will produce plots for both normalised and baseline adjusted
+% ratio of categorised worms (categories are offHIGH, onLOW, bLOW). 
 
+if strcmp(analysis_pars.furtheranalysis_ONOFFclassif,"TRUE")
+    loop_to_run_categorisebyONOFFstates(bratio_all_data, nratio_all_data, worm_names, analysis_output_dir, general,analysis_pars, colors, plotting, moviepars)
 
-
+end

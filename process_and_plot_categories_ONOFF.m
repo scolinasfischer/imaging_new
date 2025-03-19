@@ -37,23 +37,23 @@ function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nr
         % Loop through ratiotypes (normratios or badjratios)
         for r = 1:length(ratiotypes)
             ratiotype = ratiotypes{r};
-            
+            fprintf('Now ready to process ratiotype %s\n', ratiotype);
             % Loop through categories (offHIGH, onLOW, bLOW)
             for cat = 1:length(categories)
                 category = categories{cat};
+                fprintf('Now ready to process category %s\n', category);
                 
                 % Create dataset for this category and genotype
                 dataset = struct();
                 dataset.avg = cell(1, length(conditions));
                 dataset.sem = cell(1, length(conditions));
                 dataset.colors = cell(1, length(conditions));
-                dataset.labels = conditions;
-                dataset.plot_title = strcat(genotype, ' - ', category, ' (', ratiotype, ')');
+                dataset.labels = cell(1, length(conditions));
+                dataset.plot_title = strcat(genotype, ' - ', category);
                 
                 % Loop through conditions and compute statistics for each category
                 for c = 1:length(conditions)
-                    cond = conditions{c};
-                    
+                    cond = conditions{c};                    
                     these_worms = catg_wormnames.(genotype).(cond).(category);
 
                     % Extract the appropriate data based on ratiotype using switch/case
@@ -67,6 +67,7 @@ function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nr
                     end
                     
                     % Compute avg and SEM for current ratiotype
+                    fprintf('  -> Computing statistics for %s, %s, %s\n', genotype, cond, category);
                     [avg_ratios, SEM, all_secs] = compute_plot_statistics(these_ratios, general.frame_rate);
                     
                     % Save the results in appropriate structures
@@ -83,6 +84,8 @@ function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nr
                     dataset.avg{c} = avg_ratios;
                     dataset.sem{c} = SEM;
                     dataset.colors{c} = colorstruct.(cond);
+                    dataset.labels{c} = cond;  
+                    
 
 
                     % Output directory for within condition saving data
@@ -95,15 +98,19 @@ function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nr
                     %Call the saving function for the current group to save
                     %spreadsheet with all data and spreadsheet with avg, time, SEM
                     save_groupdata_to_spreadsheets(these_ratios, avg_ratios, ratiotype, category, these_worms,SEM,pdir, all_secs, general)
+                    fprintf('  -> Data saved for %s, %s, %s\n', genotype, cond, category);
 
                 end
                 
 
                 
-                % Call the general plotting function for the current ratiotype
+                % Call the general plotting function for the current group
+                fprintf('   Plot  %s, %s, %s\n', genotype, cond, category);
                 plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars);
+                
 
             end
+
         end
     end
 end
