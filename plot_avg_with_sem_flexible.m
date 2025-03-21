@@ -22,11 +22,11 @@ function plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,general, 
         case "badjratios"
             ylims = [plotting.R0ploty1avg, plotting.R0ploty2avg];
             ylabel_text = 'R-R0/R0';
-            plot_type = plotting.R0name;
+
         case "normratios"
             ylims = [plotting.Fmploty1avg, plotting.Fmploty2avg];
             ylabel_text = 'F-Fmin/Fmax';
-            plot_type = plotting.Fmname;
+
         otherwise
             error("Unexpected ratiotype: %s", ratiotype);
     end
