@@ -52,7 +52,9 @@ function [nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_cat
                 dataset.labels = cell(1, numel(conditions));
                 dataset.plot_title = strcat(genotype, " - ", category);
                 
-
+                %create struct to hold prop ON (normratios only)
+                proportions = struct();
+                totalN = struct();
 
                 % Loop through conditions and compute statistics for each category
                 for c = 1:numel(conditions)
@@ -91,23 +93,17 @@ function [nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_cat
                             nratio_SEM.(genotype).(cond).(category) = SEM;
                             [propON] =  compute_proportions_over_time(ratiotype, these_ratios, these_worms, category,analysis_pars, moviepars);
                             
-                           % Calculate proportion ON using normratios data
+                           % Calculate proportion ON using normratios data and save
                             propON_filename = fullfile(analysis_output_dir, genotype, cond, strcat(general.pars,general.strain, category, cond, '_propON.xlsx'));
                             writematrix(propON, propON_filename, 'FileType', 'spreadsheet');   
 
-                          % duplicate dataset and replace avgSEM data with prop data for the proportions plot
-                            dataset_2 = dataset;
-        
-                            dataset_2 = rmfield(dataset_2, "SEM");
-                            dataset_2 = rmfield(dataset_2, "avg_ratios");
-        
-                            dataset_2.prop{c} = propON;
-                            dataset_2.totalN{c} = numel(these_worms);
-                            dataset_2.plot_title = strcat(genotype, " - ", category, "propON");
 
-                           % Plot cumprop and ncprop plots 
-                           plot_prop_over_time(all_secs, dataset_2, category, pdir, general, colors, moviepars, analysis_pars)
+                           % save propON data per cond to struct
+                            proportions.(cond) = propON;
+                            totalN.(cond) = numel(these_worms);
 
+
+                         
         
         
                          case "badjratios"
@@ -116,6 +112,8 @@ function [nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_cat
                     end
                     
                   
+
+                    
 
                     %Call the saving function for the current group to save
                     %spreadsheet with all data and spreadsheet with avg, time, SEM
@@ -126,11 +124,39 @@ function [nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_cat
                 end
                 
 
-                
-                % Call the general plotting function for the current group
+                %% 3 cond plots
+
+
+                % Call the avg+SEM plotting function for the current group
                 fprintf('   Plot  %s, %s, %s\n', genotype, cond, category);
                 plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars);
                 
+                
+
+
+                % Plot cumprop and ncprop plots if this is normratios data
+                switch ratiotype
+                        case "normratios"
+
+                            % duplicate dataset and replace avgSEM data with prop data for the proportions plot
+                            dataset_2 = dataset;
+                            dataset_2 = rmfield(dataset_2, "sem");
+                            dataset_2 = rmfield(dataset_2, "avg");
+                            dataset_2.plot_title = strcat(genotype, " - ", category, "propON");
+        
+                            %briefly fill prop and totalN fields using cond
+                            %loop
+                            for c = 1:numel(conditions)
+                                cond = conditions{c}; 
+    
+                                dataset_2.prop{c} = proportions.(cond);
+                                dataset_2.totalN{c} = totalN.(cond);
+                                
+                            end
+
+
+                            plot_prop_over_time(all_secs, dataset_2, category, pdir, general, colors, moviepars, analysis_pars)
+                end
 
             end
 

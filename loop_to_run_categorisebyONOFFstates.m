@@ -9,8 +9,13 @@ function loop_to_run_categorisebyONOFFstates(bratio_all_data, nratio_all_data, w
 %Other inputs: worm_names (struct with worm names) 
 
 %It also calls plotting function to plot the data separated by these categories, as well
-%as saving xls files with the following: 
+%as saving xls files. 
+
+
+fprintf('Starting categorise by ON-OFF state analysis. \n');
+
  
+
 
 % Create struct to hold number of offHIGH/onLOW/bLOW neurons in each condition and genotype
 categorised_bratio = struct;

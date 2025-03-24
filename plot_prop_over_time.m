@@ -32,6 +32,8 @@ function plot_prop_over_time(all_secs, dataset, category, pdir, general, colors,
             error("Unexpected category: %s", category);
     end
 
+    
+
     % === Plot Non-Cumulative Proportion (prop) ===
     fig_nc = figure;
     ax = gca;
@@ -46,19 +48,15 @@ function plot_prop_over_time(all_secs, dataset, category, pdir, general, colors,
     trace_legendHandles = gobjects(1, length(dataset.prop));
 
     % Plot non-cumulative proportion for each dataset
-    for i = 1:length(dataset.prop)
-        prop_values = dataset.prop{i};
-        color = dataset.colors{i};
-        trace_legendHandles(i) = plot(all_secs, prop_values, 'Color', color, 'LineWidth', 1.5);
+    conditions = numel(dataset.labels);
+    for c = 1:conditions
+        prop_values = dataset.prop{c};
+        color = dataset.colors{c};
+        time = all_secs(1:moviepars.mend);
+        trace_legendHandles(c) = plot(time, prop_values, 'Color', color, 'LineWidth', 1.5);
     end
     
-    % Add legend for odour/buffer
-    odour_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.paleblue, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
-    buffer_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.palegray, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
     
-    legend([trace_legendHandles, odour_patch, buffer_patch], ...
-           [dataset.labels, {'Odour', 'Buffer'}], ...
-           'Location', 'best', 'Interpreter', 'none');
     
     % Formatting
     xlabel('Time (s)');
@@ -66,11 +64,20 @@ function plot_prop_over_time(all_secs, dataset, category, pdir, general, colors,
     ylim([0, 1]);
     xticks(moviepars.timesecs);
     xticklabels(moviepars.timelabels);
-    xlim([start_time, end_time]);
+    xlim([start_time/9.9, end_time/9.9]);
+
+    % Add legend for odour/buffer
+    odour_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.paleblue, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
+    buffer_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.palegray, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
+
+    legend([trace_legendHandles, odour_patch, buffer_patch], ...
+           [dataset.labels, {'Odour', 'Buffer'}], ...
+           'Location', 'best', 'Interpreter', 'none');
 
     % Save non-cumulative plot
     save_plot(fig_nc, pdir, general, dataset.plot_title, 'propON', analysis_pars);
     close(fig_nc);
+    clear c
 
     % === Calculate and Plot Cumulative Proportion (cumprop) ===
     fig_cum = figure;
@@ -86,17 +93,13 @@ function plot_prop_over_time(all_secs, dataset, category, pdir, general, colors,
     trace_legendHandles = gobjects(1, length(dataset.prop));
 
     % Compute and plot cumulative proportion
-    for i = 1:length(dataset.prop)
-        prop_values = dataset.prop{i};
-        cumprop_values = cumsum(prop_values) / dataset.totalN{i}; % Normalize by total observations
-        color = dataset.colors{i};
-        trace_legendHandles(i) = plot(all_secs, cumprop_values, 'Color', color, 'LineWidth', 1.5);
+    for c = 1:conditions
+        prop_values = dataset.prop{c};
+        cumprop_values = cumsum(prop_values) / dataset.totalN{c}; % Normalize by total observations
+        color = dataset.colors{c};
+        time = all_secs(1:moviepars.mend);
+        trace_legendHandles(c) = plot(time, cumprop_values, 'Color', color, 'LineWidth', 1.5);
     end
-
-    % Add legend for odour/buffer
-    legend([trace_legendHandles, odour_patch, buffer_patch], ...
-           [dataset.labels, {'Odour', 'Buffer'}], ...
-           'Location', 'best', 'Interpreter', 'none');
 
     % Formatting
     xlabel('Time (s)');
@@ -104,7 +107,17 @@ function plot_prop_over_time(all_secs, dataset, category, pdir, general, colors,
     ylim([0, 1]);
     xticks(moviepars.timesecs);
     xticklabels(moviepars.timelabels);
-    xlim([start_time, end_time]);
+    xlim([start_time/9.9, end_time/9.9]);
+    
+    % Add legend for odour/buffer
+    odour_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.paleblue, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
+    buffer_patch = plot(nan, nan, 's', 'MarkerFaceColor', colors.palegray, 'MarkerEdgeColor', 'none', 'MarkerSize', 10);
+
+    legend([trace_legendHandles, odour_patch, buffer_patch], ...
+           [dataset.labels, {'Odour', 'Buffer'}], ...
+           'Location', 'best', 'Interpreter', 'none');
+
+    
 
     % Save cumulative proportion plot
     save_plot(fig_cum, pdir, general, dataset.plot_title, 'cumprop', analysis_pars);
