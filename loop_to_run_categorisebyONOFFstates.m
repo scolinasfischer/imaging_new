@@ -98,8 +98,7 @@ fprintf('Categorisation and saving table complete\n');
 %call function to organise bratio and nratio data and call: 
 % calculate_plot_statistics, plot_avg_and_sem_flexible, and save_group_data
 
-process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nratio, categorised_bratio, catg_wormnames, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
-
+[nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nratio, categorised_bratio, catg_wormnames, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars);
 
 
 

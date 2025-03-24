@@ -1,4 +1,4 @@
-function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nratio, categorised_bratio, catg_wormnames, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
+function [nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nratio, categorised_bratio, catg_wormnames, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
     % This function processes average ratios and SEM for different genotypes, conditions, and categories
     % and then calls a plotting function to visualize the results.
     %
@@ -26,10 +26,9 @@ function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nr
 
     % Structures to store the average and SEM values for normratios and bratio
     nratio_avg = struct();
-    nratio_sem = struct();
+    nratio_SEM = struct();
     bratio_avg = struct();
-    bratio_sem = struct();
-    prop_ONOFF_norm = struct();
+    bratio_SEM = struct();
 
     % Loop through genotypes
     for g = 1:numel(genotypes)
@@ -39,6 +38,7 @@ function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nr
         for r = 1:numel(ratiotypes)
             ratiotype = ratiotypes{r};
             fprintf('Now ready to process ratiotype %s\n', ratiotype);
+
             % Loop through categories (offHIGH, onLOW, bLOW)
             for cat = 1:numel(categories)
                 category = categories{cat};
@@ -72,47 +72,56 @@ function process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nr
                     % Compute avg and SEM for current ratiotype
                     fprintf("  -> Computing statistics for %s, %s, %s\n", genotype, cond, category);
                     [avg_ratios, SEM, all_secs] = compute_plot_statistics(these_ratios, general.frame_rate);
-                    
-                    % Save the results in appropriate structures
-                    switch ratiotype
-                        case "normratios"
-                            nratio_avg.(genotype).(cond).(category) = avg_ratios;
-                            nratio_sem.(genotype).(cond).(category) = SEM;
-                            [propON] =  compute_proportions_over_time(ratiotype, these_ratios, these_worms, category,analysis_pars, moviepars);
 
-                            propON_filename = fullfile(analysis_output_dir, genotype, cond, strcat(general.pars,general.strain, category, cond, '_propON.xlsx'));
-                            writematrix(propON, propON_filename, 'FileType', 'spreadsheet');   
 
-                        case "badjratios"
-                            bratio_avg.(genotype).(cond).(category) = avg_ratios;
-                            bratio_sem.(genotype).(cond).(category) = SEM;
-                    end
-                    
                     % Fill dataset for plotting
                     dataset.avg{c} = avg_ratios;
                     dataset.sem{c} = SEM;
                     dataset.colors{c} = colorstruct.(cond);
                     dataset.labels{c} = cond;  
+
                     
-                    %duplicate dataset and replace avgSEM data with prop data
-                    %for the other plot
-                    dataset_2 = dataset;
-
-                    dataset_2 = rmfield(dataset_2, "SEM");
-                    dataset_2 = rmfield(dataset_2, "avg_ratios");
-
-                    dataset_2.prop{c} = propON;
-                    dataset.plot_title = strcat(genotype, " - ", category, "propON");
-                    
-
                     % Output directory for within condition saving data
                     pdir = fullfile(analysis_output_dir, genotype, cond);
+                    
+                    % Save the results in appropriate structures
+                    switch ratiotype
+                        case "normratios"
+                            nratio_avg.(genotype).(cond).(category) = avg_ratios;
+                            nratio_SEM.(genotype).(cond).(category) = SEM;
+                            [propON] =  compute_proportions_over_time(ratiotype, these_ratios, these_worms, category,analysis_pars, moviepars);
+                            
+                           % Calculate proportion ON using normratios data
+                            propON_filename = fullfile(analysis_output_dir, genotype, cond, strcat(general.pars,general.strain, category, cond, '_propON.xlsx'));
+                            writematrix(propON, propON_filename, 'FileType', 'spreadsheet');   
 
+                          % duplicate dataset and replace avgSEM data with prop data for the proportions plot
+                            dataset_2 = dataset;
+        
+                            dataset_2 = rmfield(dataset_2, "SEM");
+                            dataset_2 = rmfield(dataset_2, "avg_ratios");
+        
+                            dataset_2.prop{c} = propON;
+                            dataset_2.totalN{c} = numel(these_worms);
+                            dataset_2.plot_title = strcat(genotype, " - ", category, "propON");
+
+                           % Plot cumprop and ncprop plots 
+                           plot_prop_over_time(all_secs, dataset_2, category, pdir, general, colors, moviepars, analysis_pars)
+
+        
+        
+                         case "badjratios"
+                            bratio_avg.(genotype).(cond).(category) = avg_ratios;
+                            bratio_SEM.(genotype).(cond).(category) = SEM;
+                    end
+                    
+                  
 
                     %Call the saving function for the current group to save
                     %spreadsheet with all data and spreadsheet with avg, time, SEM
                     save_groupdata_to_spreadsheets(these_ratios, avg_ratios, ratiotype, category, these_worms,SEM,pdir, all_secs, general)
                     fprintf('  -> Data saved for %s, %s, %s\n', genotype, cond, category);
+
 
                 end
                 
