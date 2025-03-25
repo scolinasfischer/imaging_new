@@ -50,7 +50,7 @@ sexc_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/
 %set path for overall analysis output
 % subfolders inside this need to have exact name as the "codes" listed
 % below for each group
-analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIB/newAIBoutput2";
+analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/AIB/newAIBoutput3";
 
 
 %% set parameters, organised into structures for ease of function calling
@@ -58,7 +58,7 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 %general
     
     general.strain = "AIBtest";
-    general.pars = "18_3";
+    general.pars = "25_3_halfmend";
     
     general.frame_rate = 9.9;
 
@@ -90,8 +90,6 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     analysis_pars.ONOFFcategorisation.threshold = 0.5; %activity level (Fm) required to be classed as on / off (=> is on, <= is off). 
 
     
-    % need to make save of these parameters to output folder^^^^^
-
 
 %Y limits and label for plots, depending on ratio type
 
@@ -139,7 +137,7 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     moviepars.OFFend = 2277; %last frame of 1st odour OFF
     moviepars.last10OFF = 990; %in case different from baseline start eg AIB
     moviepars.last10ON = 1584;  %to calculate onLOW neurons R0 
-    moviepars.mend = 3465; %last used frame of movie (full movie)
+    moviepars.mend = 2277; %last used frame of movie (full movie)
     moviepars.halfmend =  2277    ; %last frame of 1st odour off
     moviepars.full_movie_lengthS = 370; %full movie length in seconds
     moviepars.max_movie_length = ceil(general.frame_rate) * moviepars.full_movie_lengthS; % maximum possible frame of movie (this is frame rate were actually 10fps, which is not. in reality most movies around 2185 frames). 
@@ -234,6 +232,9 @@ if ~(strcmp(analysis_pars.calculateR0, "TRUE") || strcmp(analysis_pars.calculate
 end
 
 
+
+% Save analysis parameters for future reference / reloading
+save_analysis_params(analysis_output_dir, general, analysis_pars, plotting, moviepars, colors);
 
 
 %% Extract .mat files to xlsx (if needed)

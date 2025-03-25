@@ -1,4 +1,4 @@
-function loop_to_plot_all_genotypes_per_condition(all_secs, avgratiodata, semdata, ratiotype, pdir, general, analysis_pars, colors, plotting, moviepars)
+function loop_to_plot_all_genotypes_per_condition(all_secs, avgratiodata, semdata, ratiotype, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
     % plot_all_genotypes_per_condition
     %
     % Plots all available genotypes for each condition on the same plot.
@@ -55,6 +55,7 @@ function loop_to_plot_all_genotypes_per_condition(all_secs, avgratiodata, semdat
         end
 
         % === Step 6: Call the general plotting function ===
+        pdir = fullfile(analysis_output_dir, genotype, cond);
         plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir, general, analysis_pars, colors, plotting, moviepars);
     end
 end
