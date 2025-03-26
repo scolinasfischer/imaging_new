@@ -130,7 +130,7 @@ function [nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_cat
                 % Call the avg+SEM plotting function for the current group
                 fprintf('   Plot  %s, %s, %s\n', genotype, cond, category);
                 pdir = fullfile(analysis_output_dir, genotype);
-                plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars);
+                plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir, general, analysis_pars, colors, plotting, moviepars);
                 
                 
 

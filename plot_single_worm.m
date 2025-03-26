@@ -28,11 +28,9 @@ function plot_single_worm(seconds, ratios,ratiotype, this_worm_dirs, analysis_pa
         case "badjratios"
             these_ylims = [plotting.R0ploty1 , plotting.R0ploty2];
             this_ylab = "R-R0/R0";
-            this_plottype = plotting.R0name;
         case "normratios"
             these_ylims = [plotting.Fmploty1, plotting.Fmploty2];
             this_ylab = "F-Fmin/Fmax";
-            this_plottype = plotting.Fmname;
 
         otherwise
             error("Unexpected ratiotype: %s", ratiotype);
@@ -67,7 +65,7 @@ function plot_single_worm(seconds, ratios,ratiotype, this_worm_dirs, analysis_pa
          
         
         % Set plot export name 
-        singleplotname = strcat(this_worm_dirs.fullpath, this_plottype);
+        singleplotname = strcat(this_worm_dirs.fullpath, ratiotype);
          
         % Save as PNG
         saveas(fig, strcat(singleplotname, '.png'));
