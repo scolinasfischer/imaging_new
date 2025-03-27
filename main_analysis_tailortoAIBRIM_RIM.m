@@ -287,7 +287,9 @@ for g = 1:length(genotypes)
         worm_names.(genotype).(cond) = col_names;
 
         
-        if strcmp(analysis_pars.calculateR0, "TRUE")
+
+
+        if analysis_pars.calculateR0 == "TRUE"
             % Store baseline-adjusted ratios (R0) and SEM values                 
             bratio_all_data.(genotype).(cond) = all_badjratios; 
             bratio_avg_data.(genotype).(cond) = badjratios_avg; 
@@ -295,7 +297,7 @@ for g = 1:length(genotypes)
         end
 
 
-        if strcmp(analysis_pars.calculateFm, "TRUE")
+        if analysis_pars.calculateFm == "TRUE"
             % Store minmax normalised ratios (Fm)and SEM values
             nratio_all_data.(genotype).(cond) = all_normratios;             
             nratio_avg_data.(genotype).(cond) = normratios_avg; 

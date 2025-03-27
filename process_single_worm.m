@@ -1,13 +1,46 @@
-% this function accepts the filename for a single worm and processes the
-% data in it: 
-% - smooth, calculate adjratio, etc
-% - plot
-% - could add optional argument for whter to call bleach-correction
 
-%data =
-%process_single_worm(files_to_analyse(i),group_name,pdir,colors,plotting,moviepars);
-function [this_worm_raw, short_fname, badjratios, normratios] = process_single_worm(fname, group_name, pdir, analysis_pars, colors, plotting, moviepars)
+function [this_worm_raw, short_fname, badjratios, normratios, notbc_badjratios, notbc_normratios] = process_single_worm(fname, group_name, genotype, cond,pdir,analysis_output_dir, analysis_pars, colors, plotting, moviepars)
 
+%{
+This function processes the data for a single worm experiment. It performs the following steps:
+- Loads the worm data.
+- Smooths the ratios to remove spikes caused by misalginment between LED and camera timings.
+- Optionally applies bleach correction.
+- Calculates baseline-adjusted and normalized ratios.
+- Optionally plots the calculated ratios.
+
+Inputs:
+- fname: (string) Full filename of the worm data to process.
+- group_name: (string) Name of the group (strain+condition+genotype+parameters of analysis)
+- genotype: (string) Genotype (wt/other)
+- cond: (string) mock/avsv/sexc
+- pdir: (string)  Directory where this worm data is stored  -usually inside
+genotype + cond
+- analysis_output_dir: (string) Directory where output from the analysis
+should be stored (contains pdir) 
+- analysis_pars: (struct) Parameters controlling which analysis steps to perform (e.g., bleach correction, plotting).
+- colors: (struct) Colors used for plotting.
+- plotting: (struct) Parameters for plotting.
+- moviepars: (struct) Time points for baseline and analysis (e.g., bstart, bend).
+
+Outputs:
+- this_worm_raw: (matrix) Raw worm data for further analysis [raw_ratios, raw_green, raw_red].
+- short_fname: (string) Short filename of the worm (no path or extension).
+
+NB if bleach correction was performed, the next two are bleach-corrected,
+if not, they are not:
+- badjratios: (vector) Baseline-adjusted ratios of the worm - may or may
+not be bleach-corrected, depending on parameters. 
+- normratios: (vector) Normalized ratios of the worm - may or may
+not be bleach-corrected, depending on parameters.
+
+If bleach-correction was performed, these outputs contain the non-bleach
+corrected adjusted ratios:
+- notbc_badjratios: Baseline-adjusted ratios (before bleach correction)
+- notbc_normratios: Normalized ratios (before bleach correction)
+
+
+%}
     %get a short filename for this file (filename only, no path or
     %extension)
     [~, short_fname, ~] = fileparts(fname);
@@ -26,6 +59,20 @@ function [this_worm_raw, short_fname, badjratios, normratios] = process_single_w
     %smooth ratio to remove spikes generated as result of small
     %misalignment between led lighting and camera shutter
     ratios = smoothdata(raw_ratios,1,'movmedian',5); %smooth ratio with moving window of 5 frames median
+
+
+    if analysis_pars.bleachcorrect 
+        %run bleach correction and assign data accordingly
+        [bc_ratios] = bleachcorrect(this_worm_raw, frames, secs,genotype, cond,this_worm_dirs, analysis_output_dir);
+
+        smoothraw_ratios = ratios;
+        ratios = bc_ratios;
+        
+        notbc_badjratios = calc_baseline_adj_ratio(smoothraw_ratios, moviepars.bstart, moviepars.bend);
+        notbc_normratios = calc_normalised_ratio(smoothraw_ratios, moviepars.bstart, moviepars.bend);
+
+
+    end
 
 
     %calculate baseline-adjusted ratio 
@@ -50,11 +97,11 @@ function [this_worm_raw, short_fname, badjratios, normratios] = process_single_w
     % badjratios should be "R-R0/R0"
     % normratios should be "F-Fmin/Fmax"
     
-    if strcmp(analysis_pars.calculateR0, "TRUE")
+    if analysis_pars.calculateR0 
         plot_single_worm(secs, badjratios, "badjratios", this_worm_dirs, analysis_pars, colors, plotting, moviepars);
     end
 
-    if strcmp(analysis_pars.calculateFm, "TRUE")
+    if analysis_pars.calculateFm 
         plot_single_worm(secs, normratios, "normratios", this_worm_dirs, analysis_pars, colors, plotting, moviepars);
     end
 

@@ -26,7 +26,7 @@ function [all_badjratios, badj_avg, SEMbadj, all_normratios, norm_avg, SEMnorm, 
     % Process each worm
     for i = 1:n
         
-        [this_worm_raw, this_worm, badjratios, normratios] = process_single_worm(files_to_analyse(i),group_name,output_dir,analysis_pars, colors,plotting,moviepars);
+        [this_worm_raw, this_worm, badjratios, normratios] = process_single_worm(files_to_analyse(i),group_name,genotype, cond,output_dir,analysis_output_dir,analysis_pars, colors,plotting,moviepars);
         if isempty(badjratios) || isempty(normratios)
             worm_names{i} = ""; % Give worm empty string name to keep indices aligned
             continue; % Skip if failed to load
