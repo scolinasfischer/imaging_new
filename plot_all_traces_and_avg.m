@@ -1,5 +1,5 @@
 %% Plot: All traces + average
-function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, ratiotype,pdir, genotype, cond, general, analysis_pars, colors, plotting, moviepars)
+function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, ratiotype,plotname, pdir, general, analysis_pars, colors, plotting, moviepars)
     
     switch ratiotype
         case "badjratios"
@@ -23,7 +23,7 @@ function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, rat
         ax.Box = 'on'; % Turn on the box
         hold on
 
-        title(['Single Traces + AVG ', genotype, cond, general.strain],'Interpreter', 'none');
+        title(['Single Traces + AVG ',  general.strain, plotname],'Interpreter', 'none');
     
 
         % Plot all traces
@@ -45,14 +45,14 @@ function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, rat
     
     
         % Set plot export name 
-        singleplotname = fullfile(pdir, strcat(general.pars,general.strain, ratiotype, genotype, cond,  '_all_traces_avg'));
+        singleplotname = fullfile(pdir, strcat(general.pars,general.strain, ratiotype, plotname,  '_all_traces_avg'));
 
          
         % Save as PNG
         saveas(fig, strcat(singleplotname, '.png'));
     
         % Save as EPS (vector graphics)
-        if strcmp(analysis_pars.export_eps, "TRUE")
+        if analysis_pars.export_eps
             exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
         end
         

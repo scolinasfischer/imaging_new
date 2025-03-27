@@ -50,7 +50,7 @@ sexc_xlsx_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/
 %set path for overall analysis output
 % subfolders inside this need to have exact name as the "codes" listed
 % below for each group
-analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/RIM/newRIMoutput1";
+analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_testing/RIM/newRIMoutput2";
 
 
 %% set parameters, organised into structures for ease of function calling
@@ -58,7 +58,7 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 %general
     
     general.strain = "RIM";
-    general.pars = "25_3__v1";
+    general.pars = "27_3_testbc";
     
     general.frame_rate = 9.9;
 
@@ -69,15 +69,15 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
 
  %set analysis parameters
 
-    analysis_pars.extract_from_mat = "FALSE"; %set to TRUE if its first time and need to extract mat to excel, FALSE if already done    
-    analysis_pars.plot_single_worms = "TRUE"; %set to TRUE id
+    analysis_pars.extract_from_mat = false; %set to TRUE if its first time and need to extract mat to excel, FALSE if already done    
+    analysis_pars.plot_single_worms = true; %set to TRUE if want all signle worm plots. will be slow. 
     analysis_pars.full_or_halfmovieplots = "half"; %set to full for full movie, half for half movie NB this only used to set plot ylim, not for anything else    
-    analysis_pars.calculateR0 = "TRUE"; %set to TRUE will calculate R0 (baseline-adjusted ratio R-R0/R0)
-    analysis_pars.calculateFm = "TRUE"; %set to TRUE will calculate Fm (minmax normalised ratio F-Fmin/Fmax)
-    analysis_pars.export_eps = "FALSE";  %export plots as eps and png or only eps. eps takes long but is needed to edit in affinity
-%     analysis_pars.bleach_correct = "TRUE"; %set true if want to perform bleach correction (and show raw vs bleach corrected comparison plots)
-    analysis_pars.furtheranalysis_Type1Type2 = "FALSE"; %perform type1tpe2 analysis (like for AIY) and output sorted heatmaps, etc
-    analysis_pars.furtheranalysis_ONOFFclassif = "TRUE"; %perform ON/OFF classification analysis (like for RIM and AIB). 
+    analysis_pars.calculateR0 = true; %set to TRUE will calculate R0 (baseline-adjusted ratio R-R0/R0)
+    analysis_pars.calculateFm = true; %set to TRUE will calculate Fm (minmax normalised ratio F-Fmin/Fmax)
+    analysis_pars.export_eps = true;  %export plots as eps and png or only eps. eps takes long but is needed to edit in affinity
+    analysis_pars.bleachcorrect = true; %set true if want to perform bleach correction (and show raw vs bleach corrected comparison plots)
+    analysis_pars.furtheranalysis_Type1Type2 = false; %perform type1tpe2 analysis (like for AIY) and output sorted heatmaps, etc
+    analysis_pars.furtheranalysis_ONOFFclassif = true; %perform ON/OFF classification analysis (like for RIM and AIB). 
 
 
     %Parameters for type1 and type 2 analysis
@@ -174,9 +174,10 @@ analysis_output_dir = "/Volumes/groupfolders/DBIO_Barrios_Lab/IMAGING/feb2025_te
     colors.mockgray    = [161 159 161] / 255;     % Mock gray RGB
     colors.avsvgreen   = [40 243 40] / 255;       % Green RGB
     colors.sexcondpink = [249 138 122] / 255;     % Pink RGB
-    colors.pdf1purple  = [120 0 169] / 255;       % PDF1 purple RGB
+    colors.purple      = [120 0 169] / 255;       % PDF1 purple RGB
     colors.lightblue   = [0.3010 0.7450 0.9330];  % Light blue (eg for type 1 neurons)
     colors.darkblue    = [0 0.4470 0.7410];       % Dark blue (eg for type 2 neurons)
+    colors.darkgray    = [0.3216    0.3176    0.3176]; %Dark gray eg for non-bleach corrected ratios
 
     
 
@@ -243,8 +244,8 @@ moviepars.plotends = moviepars.plotendf / 9.9; %set xlim for plot in seconds
 
 
 
-% Calculate R0 and/or Fm: check at least one is TRUE
-if ~(strcmp(analysis_pars.calculateR0, "TRUE") || strcmp(analysis_pars.calculateFm, "TRUE"))
+% Plot R0 and/or Fm: check at least one is TRUE
+if ~analysis_pars.calculateR0 && ~analysis_pars.calculateFm
     error('At least one of analysis_pars.calculateR0 or analysis_pars.calculateFm must be "TRUE".');
 end
 
@@ -256,7 +257,7 @@ save_analysis_params(analysis_output_dir, general, analysis_pars, plotting, movi
 
 %% Extract .mat files to xlsx (if needed)
 
-if strcmp(analysis_pars.extract_from_mat, "TRUE")
+if analysis_pars.extract_from_mat
     cycle_to_extract_mat_files(all_mat_dirs, all_xlsx_dirs, general.frame_rate);
 end
 
@@ -279,7 +280,7 @@ for g = 1:length(genotypes)
 
     for c = 1:length(conditions)
         cond = conditions(c);
-        [all_badjratios, badjratios_avg, SEMbadj, all_normratios, normratios_avg, SEMnorm, all_secs, col_names] = process_this_group(all_xlsx_dirs{g, c}, analysis_output_dir, genotype, cond, general,analysis_pars, colors, plotting, moviepars);
+        [ratios, notbc_ratios, all_secs, col_names] = process_this_group(all_xlsx_dirs{g, c}, analysis_output_dir, genotype, cond, general,analysis_pars, colors, plotting, moviepars);
 
 
             
@@ -287,22 +288,36 @@ for g = 1:length(genotypes)
         worm_names.(genotype).(cond) = col_names;
 
         
+        % Store baseline-adjusted ratios (R0) and SEM values                 
+        bratio_all_data.(genotype).(cond) = ratios.badj.all; 
+        bratio_avg_data.(genotype).(cond) = ratios.badj.avg; 
+        bSEM_data.(genotype).(cond) = ratios.badj.SEM;
+        
+        % Store minmax normalised ratios (Fm)and SEM values
+        nratio_all_data.(genotype).(cond) = ratios.norm.all;             
+        nratio_avg_data.(genotype).(cond) = ratios.norm.avg; 
+        nSEM_data.(genotype).(cond) = ratios.norm.SEM;
 
 
-        if analysis_pars.calculateR0 == "TRUE"
+        
+        if analysis_pars.bleachcorrect 
+            if isempty(notbc_ratios)
+                warning("notbc_ratios is empty. it should contain pre bleach-corrected data")
+            end
+
             % Store baseline-adjusted ratios (R0) and SEM values                 
-            bratio_all_data.(genotype).(cond) = all_badjratios; 
-            bratio_avg_data.(genotype).(cond) = badjratios_avg; 
-            bSEM_data.(genotype).(cond) = SEMbadj;
-        end
-
-
-        if analysis_pars.calculateFm == "TRUE"
+            notbc_bratio_all_data.(genotype).(cond) = notbc_ratios.badj.all; 
+            notbc_bratio_avg_data.(genotype).(cond) = notbc_ratios.badj.avg; 
+            notbc_bSEM_data.(genotype).(cond) = notbc_ratios.badj.SEM;
+            
             % Store minmax normalised ratios (Fm)and SEM values
-            nratio_all_data.(genotype).(cond) = all_normratios;             
-            nratio_avg_data.(genotype).(cond) = normratios_avg; 
-            nSEM_data.(genotype).(cond) = SEMnorm;
+            notbc_nratio_all_data.(genotype).(cond) = notbc_ratios.norm.all;             
+            notbc_nratio_avg_data.(genotype).(cond) = notbc_ratios.norm.avg; 
+            notbc_nSEM_data.(genotype).(cond) = notbc_ratios.norm.SEM;
         end
+
+
+ 
 
 
     end
@@ -313,18 +328,28 @@ end
 
 
 %3cond plots for baseline-adjusted (R0)
-if strcmp(analysis_pars.calculateR0, "TRUE")
+if analysis_pars.calculateR0
     loop_to_plot_all_conditions_per_genotype(all_secs, bratio_avg_data, bSEM_data, "badjratios", analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
     loop_to_plot_all_genotypes_per_condition(all_secs, bratio_avg_data, bSEM_data, "badjratios", analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
+    
+    if analysis_pars.bleachcorrect 
+        loop_to_plot_bc_vs_nobc(all_secs, bratio_avg_data, bSEM_data, notbc_bratio_avg_data, notbc_bSEM_data,"badjratios", analysis_output_dir, general, analysis_pars, colors, plotting, moviepars );
+    end
+
 end
 
 
 
 
-
-if strcmp(analysis_pars.calculateFm, "TRUE")
+if analysis_pars.calculateFm
     loop_to_plot_all_conditions_per_genotype(all_secs, nratio_avg_data, nSEM_data, "normratios", analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
     loop_to_plot_all_genotypes_per_condition(all_secs, nratio_avg_data, nSEM_data, "normratios", analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
+
+    if analysis_pars.bleachcorrect
+       loop_to_plot_bc_vs_nobc(all_secs, nratio_avg_data, nSEM_data, notbc_nratio_avg_data, notbc_nSEM_data,"normratios", analysis_output_dir, general, analysis_pars, colors, plotting, moviepars );
+    end
+
+
 end
 
 
@@ -335,7 +360,7 @@ end
 
 %% Type1 Type2 analysis (originally made for AIY)
 
- if strcmp(analysis_pars.furtheranalysis_Type1Type2,"TRUE")
+ if analysis_pars.furtheranalysis_Type1Type2
     loop_to_run_type1type2_analysis(bratio_all_data, "badjratios", worm_names, analysis_pars, analysis_output_dir, general,colors, plotting, moviepars)
     loop_to_run_type1type2_analysis(nratio_all_data, "normratios", worm_names, analysis_pars, analysis_output_dir, general,colors, plotting, moviepars)
     

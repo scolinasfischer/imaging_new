@@ -63,7 +63,7 @@ corrected adjusted ratios:
 
     if analysis_pars.bleachcorrect 
         %run bleach correction and assign data accordingly
-        [bc_ratios] = bleachcorrect(this_worm_raw, frames, secs,genotype, cond,this_worm_dirs, analysis_output_dir);
+        [bc_ratios] = bleach_correct(this_worm_raw, frames, secs,genotype, cond,this_worm_dirs, analysis_output_dir,analysis_pars, colors, plotting, moviepars);
 
         smoothraw_ratios = ratios;
         ratios = bc_ratios;
@@ -97,16 +97,18 @@ corrected adjusted ratios:
     % badjratios should be "R-R0/R0"
     % normratios should be "F-Fmin/Fmax"
     
-    if analysis_pars.calculateR0 
-        plot_single_worm(secs, badjratios, "badjratios", this_worm_dirs, analysis_pars, colors, plotting, moviepars);
+    if analysis_pars.plot_single_worms
+        
+        if analysis_pars.calculateR0 
+            plot_single_worm(secs, badjratios, "badjratios", this_worm_dirs, analysis_pars, colors, plotting, moviepars);
+        end
+    
+        if analysis_pars.calculateFm 
+            plot_single_worm(secs, normratios, "normratios", this_worm_dirs, analysis_pars, colors, plotting, moviepars);
+        end
+
+
     end
-
-    if analysis_pars.calculateFm 
-        plot_single_worm(secs, normratios, "normratios", this_worm_dirs, analysis_pars, colors, plotting, moviepars);
-    end
-
-
-     
 
     
 

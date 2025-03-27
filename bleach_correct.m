@@ -1,6 +1,10 @@
 function [bc_ratio] = bleach_correct(this_worm_raw, frames, secs, genotype, cond,this_worm_dirs, analysis_output_dir, analysis_pars, colors, plotting, moviepars)
 %{
-This function performs bleach correction on the green and red channel data for a single worm. It fits an exponential curve to the green and red channels separately, and then uses that fit to bleach-correct the data. The function also saves the results (including bleach-corrected data and summary) and plots the bleach-corrected ratio vs the raw ratio.
+This function performs bleach correction on the green and red channel data for a single worm. 
+It fits an exponential curve to the green and red channels separately, 
+and then uses that fit to bleach-correct the data. 
+The function also saves the results (including bleach-corrected data and summary) 
+and plots the bleach-corrected ratio vs the raw ratio.
 
 Inputs:
 - this_worm_raw: (matrix) Raw data of the worm, with columns representing raw_ratios, green_channel, and red_channel.
@@ -30,7 +34,7 @@ secs_to_fit   = secs(moviepars.bstart:moviepars.mend);
 
 
 %Set pdir to be within the bleach_correct folder 
-pdirbc = fullfile(analysis_output_dir, genotype, bleach_correct);
+pdirbc = fullfile(analysis_output_dir, genotype, "bleach_correct");
 
     for ch = 1:2
     

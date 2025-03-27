@@ -77,7 +77,7 @@ function plot_heatmap(all_adjratios, avg_all_adjratios, ratiotype, heatmapname, 
     
         % Save as EPS (vector graphics)
         
-        if strcmp(analysis_pars.export_eps, "TRUE")
+        if analysis_pars.export_eps
             exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
         end
 

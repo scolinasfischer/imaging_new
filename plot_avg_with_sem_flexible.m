@@ -96,7 +96,7 @@ function plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,general, 
     saveas(fig, strcat(singleplotname, '.png'));
     
     % Save as EPS (vector graphics)
-    if strcmp(analysis_pars.export_eps, "TRUE")
+    if analysis_pars.export_eps
         exportgraphics(fig, strcat(singleplotname, '.eps'), 'ContentType', 'vector');
     end
     
