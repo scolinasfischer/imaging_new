@@ -59,6 +59,7 @@ corrected adjusted ratios:
     %smooth ratio to remove spikes generated as result of small
     %misalignment between led lighting and camera shutter
     ratios = smoothdata(raw_ratios,1,'movmedian',5); %smooth ratio with moving window of 5 frames median
+    ratios = ratios(1:moviepars.mend); %keep only ratios until movie end point
 
 
     if analysis_pars.bleachcorrect 
@@ -68,8 +69,8 @@ corrected adjusted ratios:
         smoothraw_ratios = ratios;
         ratios = bc_ratios;
         
-        notbc_badjratios = calc_baseline_adj_ratio(smoothraw_ratios, moviepars.bstart, moviepars.bend);
-        notbc_normratios = calc_normalised_ratio(smoothraw_ratios, moviepars.bstart, moviepars.bend);
+        notbc_badjratios = calc_baseline_adj_ratio(smoothraw_ratios, moviepars);
+        notbc_normratios = calc_normalised_ratio(smoothraw_ratios, moviepars);
 
 
     end
@@ -82,7 +83,7 @@ corrected adjusted ratios:
     % R0 = average ratio during baseline period (bstart - bend)
 
     
-    badjratios = calc_baseline_adj_ratio(ratios, moviepars.bstart, moviepars.bend);
+    badjratios = calc_baseline_adj_ratio(ratios, moviepars);
 
 
     %calculate min/max normalised ratio
@@ -90,7 +91,7 @@ corrected adjusted ratios:
     %Fmin = avg of lowest 5% of values in the trace
     %Fmax = avg of highest 5% of values in the trace
 
-    normratios = calc_normalised_ratio(ratios, moviepars.bstart, moviepars.mend);
+    normratios = calc_normalised_ratio(ratios, moviepars);
 
 
     %Plot baseline-adj ratio - ensure Y label matches ratio plotted

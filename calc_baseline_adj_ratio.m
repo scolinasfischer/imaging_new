@@ -6,7 +6,10 @@
 
 
 
-function [badjratio] = calc_baseline_adj_ratio(ratios, bstart, bend)
+function [badjratio] = calc_baseline_adj_ratio(ratios, moviepars)
+
+bstart = moviepars.bstart;
+bend   = moviepars.bend;
 
  R0 = mean(ratios(bstart:bend),'omitnan'); % R0
  badjratio = ((ratios - R0)/R0); %baseline adjusted ratio

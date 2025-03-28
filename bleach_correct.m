@@ -48,6 +48,9 @@ pdirbc = fullfile(analysis_output_dir, genotype, "bleach_correct");
     
         end
 
+
+        
+
         % select raw data to fit to be either red or green (column 1 or 2), and only
         % required frames (bstart to mend)
         raw_data_to_fit = raw_greenred(moviepars.bstart:moviepars.mend,ch);
@@ -87,7 +90,7 @@ pdirbc = fullfile(analysis_output_dir, genotype, "bleach_correct");
 
 
         %% Save results of each channel and summary using helper function
-        [channel_data, summary] = save_channel_data(channel, raw_data_to_fit, nc_data, expY, bc_data, all_nans, a, k, R2);
+        [channel_data, summary] = save_channel_data(raw_data_to_fit, nc_data, expY, bc_data, all_nans, a, k, R2);
 
         % Store the results into corresponding channel variables
         if ch == 1
@@ -124,7 +127,7 @@ pdirbc = fullfile(analysis_output_dir, genotype, "bleach_correct");
         xlim([moviepars.bstart moviepars.mend]);
         plot(frames_to_fit,bc_data); %plot time vs bleach corrected data in blue
 
-        bleach_correctedplotname = strcat(short_fname, 'bc',' - ', channel);
+        bleach_correctedplotname = strcat(this_worm_dirs.short_fname, 'bc',' - ', channel);
         bleach_correctedplotname = fullfile(pdirbc,"plots",bleach_correctedplotname);
         saveas(gcf,bleach_correctedplotname,'png');
         close
@@ -136,7 +139,13 @@ pdirbc = fullfile(analysis_output_dir, genotype, "bleach_correct");
 
 
     %% Calculate bleach-corrected ratio from green and red data
-    bc_ratio = green_data.bc_GREEN ./ red_data.bc_RED;
+    bc_ratio = green_data.bc_data ./ red_data.bc_data;
+
+    %add in empty nans before the baseline (bc_ratio is only frames
+    %bstart:mend)
+
+    fluff = NaN((moviepars.bstart-1),1); %create matrix of NaNs
+    bc_ratio = [fluff; bc_ratio];
 
 
     %% Plot Bleach-corrected ratio vs raw ratio for single worm, save plot
@@ -144,15 +153,17 @@ pdirbc = fullfile(analysis_output_dir, genotype, "bleach_correct");
     figure()
     hold on
     title(strcat(this_worm_dirs.short_fname, ' - Bleach-corrected and raw ratio vs Time'))
-    xlim([fstart mend])
-    plot(frames_to_fit,bc_ratio, 'Color' ,[255 102 0]/255, 'DisplayName', 'Bleach-corrected Ratio') 
-    plot(frames_to_fit,smooth_rawratio,'b', 'DisplayName', 'Raw Ratio') 
+    xlim([moviepars.bstart moviepars.mend])
+    plot(frames_to_fit,bc_ratio(moviepars.bstart:moviepars.mend), 'Color' ,[255 102 0]/255, 'DisplayName', 'Bleach-corrected Ratio') 
+    plot(frames_to_fit,smooth_rawratio(moviepars.bstart:moviepars.mend),'b', 'DisplayName', 'Raw Ratio') 
     legend('show') 
-    both_ratiosname = strcat(short_fname,'BC_vs_RAW ratio');
+    both_ratiosname = strcat(this_worm_dirs.short_fname,'BC_vs_RAW ratio');
     both_ratiosname = fullfile(pdirbc,"sumplots",both_ratiosname);
     saveas(gcf,both_ratiosname,'png');
     close
-    
+
+
+
 
 
     %% Bleach-correction: Save output of bleach-correction data & bleach-correction summary to excel
@@ -160,9 +171,9 @@ pdirbc = fullfile(analysis_output_dir, genotype, "bleach_correct");
     data_vars = [ "frames_to_fit", "secs_to_fit", "green_data_to_fit", "red_data_to_fit", ...
                   "nan_removed_green", "nan_removed_red", "fitted_exp_green", ...
                   "fitted_exp_red", "bc_green", "bc_red", "bc_ratio"];
-    output_data = table(frames_to_fit, secs_to_fit, green_data.raw_GREEN_to_fit, red_data.raw_RED_to_fit, ...
-                        green_data.nc_GREEN, red_data.nc_RED, green_data.expY_GREEN, red_data.expY_RED, ...
-                        green_data.bc_GREEN, red_data.bc_RED, bc_ratio, 'VariableNames', data_vars);
+    output_data = table(frames_to_fit, secs_to_fit, green_data.raw_to_fit, red_data.raw_to_fit, ...
+                        green_data.nc_data, red_data.nc_data, green_data.expY, red_data.expY, ...
+                        green_data.bc_data, red_data.bc_data, bc_ratio, 'VariableNames', data_vars);
 
     % Save tables to Excel
     output_fname = strcat(this_worm_dirs.short_fname, '_bc_output.xls');
@@ -184,15 +195,15 @@ end
     
     
 
-function [channel_data, summary] = save_channel_data(channel, raw_data_to_fit, nc_data, expY, bc_data, all_nans, a, k, R2)
+function [channel_data, summary] = save_channel_data( raw_data_to_fit, nc_data, expY, bc_data, all_nans, a, k, R2)
 % Create a structure for the channel-specific data
 channel_data = struct();
 
 % Store the variables in the structure with dynamic field names
-channel_data.(['raw_', channel, '_to_fit']) = raw_data_to_fit;
-channel_data.(['nc_', channel]) = nc_data;
-channel_data.(['expY_', channel]) = expY;
-channel_data.(['bc_', channel]) = bc_data;
+channel_data.raw_to_fit = raw_data_to_fit;
+channel_data.nc_data = nc_data;
+channel_data.expY= expY;
+channel_data.bc_data= bc_data;
 
 % Create a summary table for this channel
 summary = table(length(all_nans), a, k, R2, 'VariableNames', ["total_NaNs", "a", "k", "R2"]);

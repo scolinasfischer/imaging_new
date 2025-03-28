@@ -9,7 +9,9 @@
 %calculate the top and bottom 5% of traces
 
 
-function [norm_ratios] = calc_normalised_ratio(ratios, bstart, mend)
+function [norm_ratios] = calc_normalised_ratio(ratios, moviepars)
+bstart = moviepars.bstart;
+mend   = moviepars.mend;
    
     % Sort all values in ratios from baseline start to end of movie in ascending order
         %check if movie is long enough to reach movie end frame, if not,
