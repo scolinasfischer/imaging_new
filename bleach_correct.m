@@ -141,11 +141,7 @@ pdirbc = fullfile(analysis_output_dir, genotype, "bleach_correct");
     %% Calculate bleach-corrected ratio from green and red data
     bc_ratio = green_data.bc_data ./ red_data.bc_data;
 
-    %add in empty nans before the baseline (bc_ratio is only frames
-    %bstart:mend)
-
-    fluff = NaN((moviepars.bstart-1),1); %create matrix of NaNs
-    bc_ratio = [fluff; bc_ratio];
+   
 
 
     %% Plot Bleach-corrected ratio vs raw ratio for single worm, save plot
@@ -154,7 +150,7 @@ pdirbc = fullfile(analysis_output_dir, genotype, "bleach_correct");
     hold on
     title(strcat(this_worm_dirs.short_fname, ' - Bleach-corrected and raw ratio vs Time'))
     xlim([moviepars.bstart moviepars.mend])
-    plot(frames_to_fit,bc_ratio(moviepars.bstart:moviepars.mend), 'Color' ,[255 102 0]/255, 'DisplayName', 'Bleach-corrected Ratio') 
+    plot(frames_to_fit,bc_ratio, 'Color' ,[255 102 0]/255, 'DisplayName', 'Bleach-corrected Ratio') 
     plot(frames_to_fit,smooth_rawratio(moviepars.bstart:moviepars.mend),'b', 'DisplayName', 'Raw Ratio') 
     legend('show') 
     both_ratiosname = strcat(this_worm_dirs.short_fname,'BC_vs_RAW ratio');
@@ -186,6 +182,12 @@ pdirbc = fullfile(analysis_output_dir, genotype, "bleach_correct");
     
     
     
+    %add in empty nans before the baseline in bc_ratios (bc_ratio is only frames
+    %bstart:mend) before returning bc_ratio as output, so it matches length
+    %of non bc ratios
+
+    fluff = NaN((moviepars.bstart-1),1); %create matrix of NaNs
+    bc_ratio = [fluff; bc_ratio];
 
 
 end

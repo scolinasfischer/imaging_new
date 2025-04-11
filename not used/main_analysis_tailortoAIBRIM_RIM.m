@@ -375,8 +375,9 @@ end
 % Will use nratio_all_data (min max normalised, Fm) to categorise as
 % ON/OFF, but will produce plots for both normalised and baseline adjusted
 % ratio of categorised worms (categories are offHIGH, onLOW, bLOW). 
+% also generates non-cumulative proportion plots
 
-if analysis_pars.furtheranalysis_ONOFFclassif == "TRUE"
+if analysis_pars.furtheranalysis_ONOFFclassif
     loop_to_run_categorisebyONOFFstates(bratio_all_data, nratio_all_data, worm_names, analysis_output_dir, general,analysis_pars, colors, plotting, moviepars)
 
 end

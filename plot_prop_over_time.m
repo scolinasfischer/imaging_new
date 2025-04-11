@@ -85,7 +85,7 @@ function save_plot(fig, pdir, general, plot_title, suffix, analysis_pars)
     % Helper function to save the plot as PNG and EPS
     plotname = fullfile(pdir, strcat(general.pars, general.strain, '_', plot_title, '_', suffix));
     saveas(fig, strcat(plotname, '.png'));
-    if analysis_pars.export_eps == "TRUE"
+    if analysis_pars.export_eps 
         exportgraphics(fig, strcat(plotname, '.eps'), 'ContentType', 'vector');
     end
 end

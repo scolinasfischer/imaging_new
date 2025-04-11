@@ -15,8 +15,6 @@ all_raw_ratios(1:length(raw_ratios2), 2) = raw_ratios2;
 all_raw_ratios(1:length(raw_ratios3), 3) = raw_ratios3;
 
 
-
-
 % Define frame_numbers vector
 frame_numbers = [length(raw_ratios1), length(raw_ratios2), length(raw_ratios3)];
 

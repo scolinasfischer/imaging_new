@@ -54,13 +54,14 @@ corrected adjusted ratios:
 
     %load data for this worm
     [raw_ratios, raw_green, raw_red, frames, secs] = load_single_worm(fname);
-    this_worm_raw = [raw_ratios raw_green raw_red];
+    this_worm_raw = [raw_ratios(1:moviepars.mend) raw_green(1:moviepars.mend) raw_red(1:moviepars.mend)];
 
     %smooth ratio to remove spikes generated as result of small
     %misalignment between led lighting and camera shutter
     ratios = smoothdata(raw_ratios,1,'movmedian',5); %smooth ratio with moving window of 5 frames median
     ratios = ratios(1:moviepars.mend); %keep only ratios until movie end point
-
+    secs = secs(1:moviepars.mend);
+    frames = frames(1:moviepars.mend);
 
     if analysis_pars.bleachcorrect 
         %run bleach correction and assign data accordingly

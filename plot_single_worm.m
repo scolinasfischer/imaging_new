@@ -38,6 +38,7 @@ function plot_single_worm(seconds, ratios,ratiotype, this_worm_dirs, analysis_pa
 
     
     %Start plotting
+%     fig = figure('visible','off');
     fig = figure;
     try
 
