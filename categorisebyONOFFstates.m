@@ -1,26 +1,33 @@
+%{
+ Classifies neurons based on activity states during odour presentation
+
+
+This function categorises neurons into one of three activity states based 
+on normalised ratio (Fm) data:
+  - offHIGH: High activity at the end of baseline period (odour off)
+  - onLOW : Low activity at the end of the first odour on period
+  - bLOW  : Low activity at the beginning of the baseline period
+
+INPUTS:
+  these_nratios     - Normalised ratios (Fm) (each column is 1 worm)
+  these_bratios     - Baseline-adjusted ratios (R0)(each column is 1 worm)
+  these_worm_names  - Cell array of worm(neuron) names 
+  moviepars         - Struct with timing parameters
+
+OUTPUTS:
+(normalised ratios, baseline-adjusted ratios, worm names)
+  offHIGH_norm, offHIGH_badj, cols_offHIGH - Data for offHIGH state 
+  onLOW_norm, onLOW_badj, cols_onLOW       - Data for onLOW state
+  bLOW_norm, bLOW_badj, cols_bLOW          - Data for bLOW state
+
+      
+%} 
+
 function [offHIGH_norm, offHIGH_badj, cols_offHIGH, ...
           onLOW_norm, onLOW_badj, cols_onLOW, ...
           bLOW_norm, bLOW_badj, cols_bLOW] = ...
           categorisebyONOFFstates(threshold, these_nratios, these_bratios, these_worm_names, moviepars)
-%  Classifies neurons based on activity states during odour presentation.
-%
-% This function categorises neurons into one of three activity states based 
-% on normalised ratio (Fm) data:
-%   - offHIGH: High activity at the end of baseline period (odour off)
-%   - onLOW : Low activity at the end of the first odour on period
-%   - bLOW  : Low activity at the beginning of the baseline period
-%
-% INPUTS:
-%   these_nratios     - Normalised ratios (Fm) (each column is 1 worm)
-%   these_bratios     - Baseline-adjusted ratios (R0)(each column is 1 worm)
-%   these_worm_names  - Cell array of worm(neuron) names 
-%   moviepars         - Struct with timing parameters
-%
-% OUTPUTS:
-% (normalised ratios, baseline-adjusted ratios, worm names)
-%   offHIGH_norm, offHIGH_badj, cols_offHIGH - Data for offHIGH state 
-%   onLOW_norm, onLOW_badj, cols_onLOW       - Data for onLOW state
-%   bLOW_norm, bLOW_badj, cols_bLOW          - Data for bLOW state
+
 
 % -----------------------------------
 % Validate Inputs

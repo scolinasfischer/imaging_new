@@ -2,7 +2,7 @@ function [nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_cat
     % This function processes average ratios and SEM for different genotypes, conditions, and categories
     % and then calls a plotting function to visualize the results.
     %
-    % Parameters:
+    % INPUTS:
     %   genotypes      - List of genotypes to process
     %   conditions     - List of conditions (e.g., 'mock', 'avsv', 'sexc')
     %   categorised_nratio - Structure with categorized normalized ratios
