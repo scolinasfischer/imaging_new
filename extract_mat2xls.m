@@ -1,3 +1,14 @@
+%{
+Extracts data from NEURON output .mat files and saves them to .xlsx files.
+
+Inputs:
+- input_dir: folder with .mat files
+- output_dir: where .xlsx files should be saved
+- frame_rate: recording frame rate (e.g., 9.9 Hz)
+
+Automatically handles downsampling for older 20fps videos.
+Will ignore files in subfolders of input_dir. 
+%}
 
 function extract_mat2xls(input_dir,output_dir,frame_rate)
 %extract_mat2xls extracts required info from NEURON output .mat file
@@ -5,8 +16,7 @@ function extract_mat2xls(input_dir,output_dir,frame_rate)
 %   directory. Any .mat files that we want to exclude from analysis can
 %   be placed in subfolder within input directory (eg with the name
 %   "EXCLUDED"), as this function will ignore files in subfolders. 
-%   Frame rate (frame_rate). Until now have always used 10 frames per
-%   second, but as camera is actually slightly slower, set value to 9.9.
+%
 
 
 %% load files and checks of directory and files not empty etc

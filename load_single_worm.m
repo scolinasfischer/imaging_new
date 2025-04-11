@@ -1,7 +1,15 @@
+%{
+Loads a single worm's .xlsx file and extracts raw ratio, green/red intensity, frame, and seconds.
 
-%This function accepts as input filename for single worm. It loads the data
-%for that worm, saves each column to a variable in workspace, and then
-%returns those as outputs. 
+Input:
+- filename: path to .xlsx file
+
+Outputs:
+- raw_ratio: raw GFP/RFP ratio
+- raw_green/red: channel fluorescence
+- frames: frame indices
+- secs: time in seconds
+%}
 
 function [raw_ratio, raw_green, raw_red, frames, secs] = load_single_worm(filename)
 

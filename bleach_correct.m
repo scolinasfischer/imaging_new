@@ -1,8 +1,8 @@
 function [bc_ratio] = bleach_correct(this_worm_raw, frames, secs, genotype, cond,this_worm_dirs, analysis_output_dir, analysis_pars, colors, plotting, moviepars)
 %{
 This function performs bleach correction on the green and red channel data for a single worm. 
-It fits an exponential curve to the green and red channels separately, 
-and then uses that fit to bleach-correct the data. 
+It fits an exponential decay curve to the green and red channels separately, 
+and then divides the original data by the exponential to uses to bleach-correct the data. 
 The function also saves the results (including bleach-corrected data and summary) 
 and plots the bleach-corrected ratio vs the raw ratio.
 
@@ -193,7 +193,23 @@ pdirbc = fullfile(analysis_output_dir, genotype, "bleach_correct");
 end
 
 
+%{
+Helper function for bleach_correct. Organizes a single channel's raw, nan-corrected,
+exponential fit, and corrected data into a struct, and outputs summary stats.
 
+Inputs:
+- raw_data_to_fit: original trace
+- nc_data: nan-corrected trace
+- expY: fitted exponential curve
+- bc_data: corrected trace
+- all_nans: locations of NaNs
+- a, k: exponential fit parameters
+- R2: fit goodness
+
+Outputs:
+- channel_data: struct of raw/nan/fit/corrected vectors
+- summary: table with a, k, R2, total NaNs
+%}
     
     
 

@@ -1,3 +1,15 @@
+%{
+Computes average, SEM, and time vector from a matrix of fluorescence ratios.
+
+Inputs:
+- all_adjratios: matrix (rows: time, cols: neurons)
+- frame_rate: frames per second (used for time vector)
+
+Outputs:
+- avg_all_adjratios: mean ratio over neurons
+- SEM: standard error of the mean
+- all_secs: time in seconds
+%}
 
 function [avg_all_adjratios, SEM, all_secs] = compute_plot_statistics(all_adjratios, frame_rate)
 %% Compute statistics

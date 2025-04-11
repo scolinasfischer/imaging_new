@@ -1,4 +1,24 @@
-% 3plots for within group
+%{
+Computes average and SEM for all traces in a group and generates group-level plots:
+- Avg ± SEM
+- All individual traces + avg
+- Heatmap of all worms
+Also saves data tables.
+
+Inputs:
+- all_adjratios: matrix of adjusted ratios (rows: time, cols: worms)
+- ratiotype: "badjratios" or "normratios"
+- worm_names: list of worm IDs
+- general, analysis_pars, colors, plotting, moviepars: parameter structs
+- pdir: saving directory
+- genotype, cond: for filenames
+- name: suffix to use for plots/files
+
+Outputs:
+- avg_all_adjratios: mean trace
+- SEM: standard error of the mean
+- all_secs: time vector
+%}
 
 
 function [avg_all_adjratios, SEM, all_secs]= analyse_and_plot_group_ratios(all_adjratios, ratiotype, worm_names, general, analysis_pars, colors, plotting, moviepars, pdir, genotype, cond,name)

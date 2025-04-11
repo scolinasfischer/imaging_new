@@ -1,4 +1,24 @@
-%process_this_group(all_xlsx_dirs{r, c}, analysis_output_dir, codes(r, c), general, colors, plotting, moviepars);
+
+%{
+Processes all worms in a group (one genotype + one condition).
+Applies single-worm processing, then collects and averages data.
+Calls plotting and bleach-correction routines.
+
+Inputs:
+- xlsx_dir: directory of .xlsx files for this group
+- analysis_output_dir: global analysis save location
+- genotype, cond: identifiers
+- general, analysis_pars, colors, plotting, moviepars: parameter structs
+
+Outputs:
+- ratios: struct of baseline-adjusted and normalized ratios (avg, SEM, raw)
+- notbc_ratios: same, from before bleach correction (if applied).
+otherwise, is an empty struct.
+- all_secs: time vector
+- worm_names: list of worm column labels
+%}
+
+
 function [ratios, notbc_ratios, all_secs, worm_names] = process_this_group(xlsx_dir, analysis_output_dir, genotype, cond, general, analysis_pars, colors, plotting, moviepars)
 % Get file list    
     files_to_analyse = get_xlsx_filepaths(xlsx_dir);

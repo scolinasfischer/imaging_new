@@ -1,9 +1,15 @@
-%This function calculates the baseline-adjusted ratio 
-%Baseline-adjusted ratio is (R - R0 / R0)
-    %where 
-    % R = green/red ratio at each timepoint
-    % R0 = average ratio during baseline period (bstart - bend)
 
+    %{
+Calculates baseline-adjusted fluorescence ratio (R - R0) / R0).
+R0 is the average ratio during  the baseline window. 
+
+Inputs:
+- ratios: raw or corrected G/R ratio vector
+- moviepars: defines bstart and bend
+
+Output:
+- badjratio: baseline-adjusted vector
+%}
 
 
 function [badjratio] = calc_baseline_adj_ratio(ratios, moviepars)

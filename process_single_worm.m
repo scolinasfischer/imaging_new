@@ -6,7 +6,7 @@ This function processes the data for a single worm experiment. It performs the f
 - Loads the worm data.
 - Smooths the ratios to remove spikes caused by misalginment between LED and camera timings.
 - Optionally applies bleach correction.
-- Calculates baseline-adjusted and normalized ratios.
+- Calculates baseline-adjusted(R0) and normalized (Fm) ratios.
 - Optionally plots the calculated ratios.
 
 Inputs:
@@ -26,6 +26,10 @@ should be stored (contains pdir)
 Outputs:
 - this_worm_raw: (matrix) Raw worm data for further analysis [raw_ratios, raw_green, raw_red].
 - short_fname: (string) Short filename of the worm (no path or extension).
+- badjratios: (R - R0) / R0
+- normratios: (F - Fmin) / Fmax
+- notbc_badjratios, notbc_normratios: same as above, before bleach correction (if applied)
+
 
 NB if bleach correction was performed, the next two are bleach-corrected,
 if not, they are not:

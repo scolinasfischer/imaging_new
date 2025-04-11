@@ -1,13 +1,21 @@
-%this function calculates the normalised ratio (Fm) 
 
 
-%Calculate fmax/min normalised ratio (f-Fmin/Fmax)
-%where      
-    %Fmin = avg of lowest 5% of values in the trace
-    %Fmax = avg of highest 5% of values in the trace
-%the full trace, baseline start (bstart) to movie end (mend) is used to
-%calculate the top and bottom 5% of traces
 
+%{
+Calculates min-max normalized fluorescence ratio (F - Fmin) / Fmax, 
+ where Fmin/Fmax are:
+    Fmin = avg of lowest 5% of values in the trace
+    Fmax = avg of highest 5% of values in the trace
+the full trace, baseline start (bstart) to movie end (mend) is used to
+calculate the top and bottom 5% of traces
+
+Inputs:
+- ratios: raw or corrected G/R ratio
+- moviepars: structure with movie timepoints including bstart and mend 
+
+Output:
+- norm_ratios: normalized ratio vector
+%}
 
 function [norm_ratios] = calc_normalised_ratio(ratios, moviepars)
 bstart = moviepars.bstart;
