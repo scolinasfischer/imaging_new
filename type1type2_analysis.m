@@ -59,7 +59,11 @@ function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, 
 
 
     %% Step 2: Categorize into Type1 and Type2
-    T2cutoff = round(9.9 * analysis_pars.T1T2analysispars.T2cutoffinsecs);
+    framerate = general.frame_rate;  % or wherever you store it globally
+    T2cutoff = round(framerate * analysis_pars.T1T2analysispars.T2cutoffinsecs);
+
+
+
     type1 = [];
     type2 = [];
     % nb these matrices are not transposed, same format as all_adjratios:
@@ -90,7 +94,7 @@ function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, 
 
     %% Step 3: Save Data to Spreadsheet
     % Save maxindex and maxvalues
-    maxindexs = maxindex / 9.9; % Convert frames to seconds
+    maxindexs = maxindex / framerate; % Convert frames to seconds
     maxindexs_maxvals = [maxindexs, maxvalues];
     maxindexsname = fullfile(pdir, strcat(general.strain, genotype, cond, ratiotype, 'timetomax_maxvalue'));
    
