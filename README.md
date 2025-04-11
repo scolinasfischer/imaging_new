@@ -20,7 +20,7 @@ Important notes:
 
 
 
-Further thoughts on time: 
+Further thoughts: 
   - Timings:
     - Currently the analysis assumes that the frame rate is constant during the entire video, however, this is not the case. The frame rate is set manually to 10, but in reality it fluctuates around 9.9. 
     - This causes error to accumulate, because the frames are not timestamped: we assume that frame 792 corresponds to second  80, and that frame 2079 corresponds to frame 210 (assuming frame rate of               9.9). The final frame corresponds to second 220,          however, because the frame rate is variable, the total frame number is variable:
@@ -30,5 +30,7 @@ Further thoughts on time:
     - If want to try to correct for this error, I would use an approach along the lines of script “test_timeresampling4” (but haven’t thought it through fully or executed it so make sure to check and think     if there is a better option).
 
 
+  - Input parameters:
+    - It would probably be more reliable to have set input parameters for each neuron, saved as a .mat file, and load it at the beggnining of the analysis, rather than inputting them manually in the script (especially for the infomration in the             structure "moviepars" . 
 
 
