@@ -1,21 +1,30 @@
+%{
+Generates line plots (avg ± SEM) showing all conditions (mock, avsv, sexc)
+for each genotype on the same figure.
+
+
+
+Inputs:
+- all_secs (vector): Time in seconds (x-axis).
+- avgratiodata (struct): Nested structure of average ratio traces.
+    Format: avgratiodata.(genotype).(condition) = [vector]
+- semdata (struct): Same structure as avgratiodata, but contains SEM vectors.
+- ratiotype (string): 'badjratios' or 'normratios'; used to configure labels/ylimits.
+- analysis_output_dir (string): Base directory to save plots.
+- general (struct): Includes strain name, genotype labels, and parameter descriptors.
+- analysis_pars (struct): Toggles and export settings (e.g., export_eps).
+- colors (struct): Color definitions (mockgray, avsvgreen, sexcondpink).
+- plotting (struct): Plot limits and labels.
+- moviepars (struct): Timepoints, label positions, and x-coordinates for odour shading.
+
+Outputs:
+- Saves PNG and (optionally) EPS plots comparing conditions per genotype.
+%}
+
+
+
 function loop_to_plot_all_conditions_per_genotype(all_secs, avgratiodata, semdata, ratiotype, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
-    % plot_all_conditions_per_genotype
-    %
-    % Plots all available conditions for each genotype on the same plot.
-    %
-    % Parameters:
-    %   avgratiodata  - Struct containing average ratio data (avgratiodata.genotype.condition).
-    %   semdata       - Struct containing SEM data (semdata.genotype.condition).
-    %   ratiotype     - Type of ratio ('badjratios' or 'normratios').
-    %   pdir          - Path to save plots.
-    %   general       - Struct with genotype information and strain details.
-    %   analysis_pars - Struct with analysis parameters.
-    %   colors        - Struct with color information for each condition.
-    %   plotting      - Struct with plotting parameters (limits, labels, etc.).
-    %   moviepars     - Struct with movie parameters (timeframes, labels, etc.).
-    %
-    % Outputs:
-    %   - Saves plots to the specified directory.
+
 
     %create internal color struct:
     colorstruct.mock = colors.mockgray;

@@ -23,6 +23,9 @@ OUTPUTS:
       
 %} 
 
+
+
+
 function [offHIGH_norm, offHIGH_badj, cols_offHIGH, ...
           onLOW_norm, onLOW_badj, cols_onLOW, ...
           bLOW_norm, bLOW_badj, cols_bLOW] = ...

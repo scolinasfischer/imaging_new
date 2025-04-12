@@ -1,21 +1,29 @@
+%{
+Plots the average fluorescence trace with SEM shading for one or more datasets.
+Includes background shading for stimulus periods (odour/buffer), and optional export to EPS.
+
+Inputs:
+- all_secs: (vector) Time in seconds (x-axis)
+- dataset (struct): Contains data to plot. Format:
+    - dataset.avg{i} (vector): Mean trace for condition i
+    - dataset.sem{i} (vector): SEM trace for condition i
+    - dataset.colors{i} (1×3 vector): RGB color for condition i
+    - dataset.labels{i} (string): Label (used in legend) for condition i
+    - dataset.plot_title (string): Title for plot
+- ratiotype: (string) 'badjratios' or 'normratios'
+- pdir: (string) Directory to save plot
+- general: (struct) Strain and parameter labels
+- analysis_pars: (struct) Here use to set eps/png export
+- colors: (struct) Color definitions including odour shading
+- plotting: (struct) Y-axis limits
+- moviepars: (struct) X-axis ticks, shading coordinates, label times
+
+Output:
+- Saves plot as PNG and (optionally) EPS
+%}
+
+
 function plot_avg_with_sem_flexible(all_secs, dataset, ratiotype, pdir,general, analysis_pars, colors, plotting, moviepars)
-
-
-    % plot_avg_with_sem_flexible
-    %
-    % Plots the average ratio with SEM shading for multiple datasets on the same plot.
-    %
-    % Parameters:
-    %   all_secs       - Time vector for x-axis.
-    %   dataset           - Structure containing the datasets (avg, sem, colors, labels, plot_title).
-    %   ratiotype      - String specifying the type of ratio: 'badjratios' or 'normratios'.
-    %   pdir           - Directory path where plots should be saved.
-    %   plotting       - Struct with plot limits, labels, and other formatting info.
-    %   moviepars      - Struct with timeframes, x-coordinates for patches, and axis labels.
-    %   general        - Struct with genotype information and strain details.
-    %
-    % Outputs:
-    %   - Saves the plot to the specified directory as PNG and EPS files.
 
     % === Set up y-axis limits and labels based on ratiotype ===
     switch ratiotype

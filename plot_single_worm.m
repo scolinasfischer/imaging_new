@@ -1,18 +1,29 @@
+%{
+Plots the ratio trace for a single worm. Includes background shading for odour/buffer periods.
+Currently function is set to not export as eps, as rarely need eps of
+single worms and it is very slow. But you can un-comment the section at the
+bottom to allow for this function to save both eps and png plots. 
+
+
+Inputs:
+- seconds: (vector) Time in seconds
+- ratios: (vector) Ratio trace for this worm
+- ratiotype: (string) 'badjratios' or 'normratios'
+- this_worm_dirs: (struct) Contains filenames and output paths
+- analysis_pars:(struct) used to set export eps/png
+- colors: (struct)Plot colors
+- plotting: (struct)Y-axis range settings
+- moviepars: (struct)Timing windows and shading info
+
+Output:
+- Saves trace plot as PNG (and optionally EPS)
+%}
+
+
+
 
 function plot_single_worm(seconds, ratios,ratiotype, this_worm_dirs, analysis_pars, colors, plotting, moviepars)
-    % PLOT_ADJRATIOS plots adjusted fluorescence ratios over time with shading.
-    %
-    % Inputs:
-    %   seconds        - Time vector for x-axis in seconds
-    %   ratios         - Fluorescence ratio values    
-    %   this_worm_dirs - struct containing names for files and directories
-    %   colors         - struct containing colors used in all plots
-    %   plotting        - struct containing parameters for plotting
-    %   moviepars      - struct containing time parameters related to movie
-    %   ratiotype      - string, can be: "badjratios" or "normratios", determines ylim and ylab 
-        
-    %input argument validation 
-    arguments
+       arguments
             seconds (:,1) double   % Ensures input is a column vector
             ratios (:,1) double    % Ensures input is a column vector
             ratiotype (1,1) string {mustBeMember(ratiotype, ["badjratios", "normratios"])}
@@ -83,12 +94,7 @@ function plot_single_worm(seconds, ratios,ratiotype, this_worm_dirs, analysis_pa
     catch ME
     warning("%s: %s", ME.identifier, ME.message); % log the error if occurs
 
-    
-    
-%     % Ensure figure is closed even if an error occurs
-%     close(fig);
-%     hold off;
-    
+
     
     end
 

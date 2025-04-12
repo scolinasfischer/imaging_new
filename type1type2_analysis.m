@@ -1,30 +1,35 @@
+
+    %{
+Classifies worms as Type1 or Type2 based on:
+- time to peak response  during odour ON 1
+- amplitude of max response during odour ON 1
+
+Type1: peak occurs before cutoff or is below threshold  
+Type2: peak occurs after cutoff AND above threshold
+
+Also:
+- Sorts worms by time to peak and plots a heatmap
+- Saves max times, values, average traces, and summary stats
+
+Inputs:
+- all_adjratios: matrix of adjusted ratios for all neurons (rows: time, cols: worms)
+- ratiotype: - String specifying the type of ratio 
+                       ('badjratios' (baseline adjusted, R0) or 
+                       'normratios' (minmax normalised, Fm)).
+- col_names: cell array of worm(neuron) names
+- analysis_pars: struct defining activity thresholds and time cutoff
+- genotype, cond: for labels and saving
+- pdir: output directory
+- general, colors, plotting, moviepars: structs with general and plotting info
+
+Outputs:
+- nT1, nT2: number of Type1 and Type2 neurons
+- Side effects: heatmap, avg plots, Excel exports
+%}
+
+
 function [nT1, nT2 ]=  type1type2_analysis(all_adjratios, ratiotype, col_names, analysis_pars, genotype, cond, pdir,general, colors, plotting, moviepars )
     
-
-% Function to carry out Type1Type2 analysis and save/plot results. runs
-    % on each group (eg 1st group is wt_mock_) at a time
-    % Inputs:
-    %   all_adjratios - matrix of adjusted ratios for all worms
-    %   ratiotype     - String specifying the type of ratio 
-    %                   ('badjratios' (baseline adjusted, R0) or 
-    %                   'normratios' (minmax normalised, Fm)).
-    %   col_names - cell array of worm names
-    %   T1T2analysis - structure containing
-    %                   T2cutoffinsecs: cutoff for Type2 classification (in seconds)
-    %                   thresholdFm: minimum activation to be Type2 for minmax normalised ratios
-    %                   thresholdR0: minimum activation to be Type2 for baseline-adjusted ratios
-    %   pdir          - Directory path where plots should be saved.
-    %   colors        - Struct containing color definitions for each condition and background.
-    %   plotting      - Struct with plot limits, labels, and other formatting info.
-    %   moviepars     - Struct with timeframes, x-coordinates for patches, and axis labels.
-    %   general       - Struct with genotype information and strain details.
-
-
-
-    %As is, function will categorise neurons into two types (based on activity during 1st odour ON period):
-    % - type 1: has a peak of amplitude > "threshold" occurring before time "T2cutoffinsecs"
-    % - type 2: the rest
-
 
 %Set threshold depending on whether using badjratios or normratios
 

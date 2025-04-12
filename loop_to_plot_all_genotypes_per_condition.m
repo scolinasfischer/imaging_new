@@ -1,19 +1,28 @@
+%{
+Plots avg ± SEM traces for all genotypes (e.g. wt, mutants) under the same condition
+on one figure. Each condition gets its own plot, useful for highlighting genotype differences.
+Mutant is plotted slightly darker than the corresponding wild-type colour. 
+
+Inputs:
+- all_secs (vector): Time in seconds.
+- avgratiodata (struct): avg traces for each genotype/condition.
+    Format: avgratiodata.(genotype).(condition) = [vector]
+- semdata (struct): SEM traces in the same structure.
+- ratiotype (string): 'badjratios' or 'normratios'.
+- analysis_output_dir (string): Directory where plots are saved.
+- general (struct): Strain info and parameter descriptors.
+- analysis_pars (struct): Plot export toggles.
+- colors (struct): Color settings, used for each condition and background.
+- plotting (struct): Y-axis and style settings.
+- moviepars (struct): Plot axis/time parameters and shading regions.
+
+Output:
+- One plot per condition showing all genotypes. PNG + optional EPS.
+%}
+
+
 function loop_to_plot_all_genotypes_per_condition(all_secs, avgratiodata, semdata, ratiotype, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
-    % plot_all_genotypes_per_condition
-    %
-    % Plots all available genotypes for each condition on the same plot.
-    %
-    % Parameters:
-    %   avgratiodata  - Struct containing average ratio data (avgratiodata.genotype.condition).
-    %   semdata       - Struct containing SEM data (semdata.genotype.condition).
-    %   ratiotype     - Type of ratio ('badjratios' or 'normratios').
-    %   pdir          - Path to save plots.
-    %   general       - Struct with genotype information and strain details.
-    %   analysis_pars - Struct with analysis parameters.
-    %   colors        - Struct with color information for each condition.
-    %   plotting      - Struct with plotting parameters (limits, labels, etc.).
-    %   moviepars     - Struct with movie parameters (timeframes, labels, etc.).
-    %
+
     % Outputs:
     %   - Saves plots to the specified directory.
 

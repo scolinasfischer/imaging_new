@@ -1,19 +1,40 @@
-function [nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nratio, categorised_bratio, catg_wormnames, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
-    % This function processes average ratios and SEM for different genotypes, conditions, and categories
-    % and then calls a plotting function to visualize the results.
-    %
-    % INPUTS:
-    %   genotypes      - List of genotypes to process
-    %   conditions     - List of conditions (e.g., 'mock', 'avsv', 'sexc')
-    %   categorised_nratio - Structure with categorized normalized ratios
-    %   categorised_bratio - Structure with categorized baseline-adjusted ratios
-    %   catg_wormnames     - Structure with worm names separated by category 
-    %   analysis_output_dir - Directory for saving output plots
+%{
+For each ON/OFF category and ratio type, this function:
+- Computes average + SEM traces per condition
+- Plots avg + SEM traces
+- Saves traces and stats to Excel
+It also computes and plots proportion of neurons active over time(Fm)
+
+Inputs:
+Inputs:
+- genotypes (cell array of strings): List of genotype names.
+- conditions (cell array of strings): List of experimental conditions.
+- categorised_nratio (struct): Normalised ratio traces per category:
+    Format: categorised_nratio.(genotype).(condition).(category) = matrix of [time (rows) × worms (columns)]
+- categorised_bratio (struct): Same structure, but for baseline-adjusted ratios.
+- catg_wormnames (struct): Names of worms in each category:
+    Format: catg_wormnames.(genotype).(condition).(category) = {cell array of names}
+- analysis_output_dir(string): Directory for saving output plots
+- general, analysis_pars, colors, plotting, moviepars: structs with general
+and plotting info
     %   general        - General information for plotting (e.g., strain info)
     %   analysis_pars  - Analysis parameters for plotting
     %   colors         - Struct containing colors for different conditions
     %   plotting       - Struct containing plotting settings (limits, labels, etc.)
     %   moviepars      - Movie parameters (e.g., frame rate)
+
+Outputs:
+- nratio_avg, nratio_SEM, bratio_avg, bratio_SEM: Structs with format:
+    xxx.genotype.condition.category = [vector]
+
+- Plots and Excel spreadsheets saved:
+    - Per-category Excel spreadsheets of data
+    - PNG and (optionally) EPS plots
+    - Excel file of proportion ON over time (normratios only)
+%}
+
+
+function [nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_categories_ONOFF(genotypes, conditions, categorised_nratio, categorised_bratio, catg_wormnames, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
 
     % Internal color struct and categories/ratiotypes
     colorstruct = struct("mock", colors.mockgray, ...
@@ -102,9 +123,7 @@ function [nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_cat
                             proportions.(cond) = propON;
                             totalN.(cond) = numel(these_worms);
 
-
-                         
-        
+    
         
                          case "badjratios"
                             bratio_avg.(genotype).(cond).(category) = avg_ratios;
@@ -112,8 +131,7 @@ function [nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_cat
                     end
                     
                   
-
-                    
+                   
 
                     %Call the saving function for the current group to save
                     %spreadsheet with all data and spreadsheet with avg, time, SEM
@@ -135,7 +153,7 @@ function [nratio_avg, nratio_SEM, bratio_avg, bratio_SEM] = process_and_plot_cat
                 
 
 
-                % Plot cumprop and ncprop plots if this is normratios data
+                % Plot  ncprop plots if this is normratios data
                 switch ratiotype
                         case "normratios"
 

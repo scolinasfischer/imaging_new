@@ -1,6 +1,3 @@
-
-function [this_worm_raw, short_fname, badjratios, normratios, notbc_badjratios, notbc_normratios] = process_single_worm(fname, group_name, genotype, cond,pdir,analysis_output_dir, analysis_pars, colors, plotting, moviepars)
-
 %{
 This function processes the data for a single worm experiment. It performs the following steps:
 - Loads the worm data.
@@ -45,6 +42,11 @@ corrected adjusted ratios:
 
 
 %}
+
+
+function [this_worm_raw, short_fname, badjratios, normratios, notbc_badjratios, notbc_normratios] = process_single_worm(fname, group_name, genotype, cond,pdir,analysis_output_dir, analysis_pars, colors, plotting, moviepars)
+
+
     %get a short filename for this file (filename only, no path or
     %extension)
     [~, short_fname, ~] = fileparts(fname);

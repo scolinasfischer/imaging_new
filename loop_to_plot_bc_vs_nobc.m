@@ -1,24 +1,27 @@
+%{
+Generates a comparison plot of bleach-corrected vs. non-corrected average traces
+for each genotype and condition. Helpful for visually checking impact of bleach correction.
+
+Inputs:
+- all_secs (vector): Time in seconds.
+- bratio_avg_data (struct): Average traces after bleach correction.
+    Format: bratio_avg_data.(genotype).(condition)
+- bSEM_data (struct): SEM for bleach-corrected data.
+- notbc_bratio_avg_data (struct): Avg traces before bleach correction.
+- notbc_bSEM_data (struct): SEM of non-corrected data.
+- ratiotype (string): 'badjratios' or 'normratios'.
+- analysis_output_dir (string): Where plots will be saved.
+- general (struct): Strain and genotype info.
+- analysis_pars (struct): Plot export settings (e.g., export_eps).
+- colors (struct): Includes at .purple (for BC) and .darkgray (no BC).
+- plotting (struct): Y-axis limits and labels.
+- moviepars (struct): Time label and odour shading information.
+
+Outputs:
+- One plot per genotype × condition showing BC vs no-BC traces.
+%}
 
 function loop_to_plot_bc_vs_nobc(all_secs, bratio_avg_data, bSEM_data, notbc_bratio_avg_data, notbc_bSEM_data, ratiotype, analysis_output_dir, general, analysis_pars, colors, plotting, moviepars)
-
-    %
-    % Plots bleach-corrected vs non-bleach-corrected data for all genotypes and conditions on the same plot.
-    %
-    % Parameters:
-    %   bratio_avg_data    - Struct containing average bleach-corrected data (bratio_avg_data.genotype.condition).
-    %   bSEM_data          - Struct containing SEM bleach-corrected data (bSEM_data.genotype.condition).
-    %   notbc_bratio_avg_data - Struct containing average non-bleach-corrected data (notbc_bratio_avg_data.genotype.condition).
-    %   notbc_bSEM_data    - Struct containing SEM non-bleach-corrected data (notbc_bSEM_data.genotype.condition).
-    %   ratiotype          - Type of ratio ('badjratios' or 'normratios').
-    %   analysis_output_dir - Path to save plots.
-    %   general            - Struct with genotype information and strain details.
-    %   analysis_pars      - Struct with analysis parameters.
-    %   colors             - Struct with color information for each condition.
-    %   plotting           - Struct with plotting parameters (limits, labels, etc.).
-    %   moviepars          - Struct with movie parameters (timeframes, labels, etc.).
-    %
-    % Outputs:
-    %   - Saves plots to the specified directory.
 
     % === Step 1: Get list of genotypes ===
     genotypes = fieldnames(bratio_avg_data);

@@ -1,18 +1,36 @@
-%base script to analyse all neuron
 %{
-This script is processes and plots the raw green/red fluorescence ratio.
-It accepts as input a list of .mat files produced by NEURON.
-The steps in analysis are:
-  - Extract desired features from .mat files and save as excels in new
-  directory
-  - For each condition: 
-       - Calculate the baseline-adjusted and normalised ratio for each worm
-       - Calculate the average ratios across all worms
-       - Plot: average + SEM, all traces, and heatmap
-  - Across conditions:
-       - Plot 3 conditions + SEM
-(...) 
+Main driver script for fluorescence analysis of calcium imaging data.
+
+Workflow summary:
+1. Set up analysis parameters: general info, plotting, movie timing, and toggles
+2. Optionally extract raw `.mat` files into `.xlsx` spreadsheets (skip if already done)
+3. Process each genotype × condition group:
+    - Load per-worm data
+    - Apply smoothing, bleach correction (if enabled), and ratio calculations
+    - Save and plot traces
+4. Generate plots for:
+    - All conditions per genotype
+    - All genotypes per condition
+    - Bleach-corrected vs uncorrected data
+5. Optionally classify traces by:
+    - ON/OFF state (offHIGH, onLOW, bLOW)
+    - Response type (Type1, Type2)
+
+Notes:
+- The entire script runs inside a `try-catch` block. 
+If an error occurs, the full workspace is saved to a `.mat` file for debugging.
+
+Inputs: (set inside script)
+- Paths to raw/extracted data
+- List of genotypes and conditions
+- Parameter values for each stage of the analysis
+
+Outputs:
+- PNG/EPS plots
+- Summary tables and Excel files
+- Parameter log for reproducibility
 %}
+
 
 
 %%input
@@ -356,3 +374,4 @@ catch ME
     output_file = fullfile(analysis_output_dir, strcat(general.strain, general.pars, 'workspace.mat'));
     save(output_file);
 
+end

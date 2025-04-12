@@ -1,3 +1,21 @@
+%{
+For each genotype × condition:
+- Calls `type1type2_analysis` to split traces into Type1/Type2
+- Saves number of neurons in each category
+- Outputs summary table of neuron counts
+
+Inputs:
+- ratio_all_data: structured baseline-adjusted or normratios
+- ratiotype: string ('badjratios' or 'normratios')
+- worm_names: structured worm name list
+- analysis_pars, analysis_output_dir, general, colors, plotting, moviepars
+
+Output:
+- Summary table saved to Excel (nT1 and nT2 per condition)
+%}
+
+
+
 function loop_to_run_type1type2_analysis(ratio_all_data, ratiotype, worm_names, analysis_pars, analysis_output_dir, general, colors, plotting, moviepars)
 
 % Create struct to hold number of type1type2 neurons in each condition and genotype

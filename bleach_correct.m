@@ -1,4 +1,3 @@
-function [bc_ratio] = bleach_correct(this_worm_raw, frames, secs, genotype, cond,this_worm_dirs, analysis_output_dir, analysis_pars, colors, plotting, moviepars)
 %{
 This function performs bleach correction on the green and red channel data for a single worm. 
 It fits an exponential decay curve to the green and red channels separately, 
@@ -22,6 +21,10 @@ Inputs:
 Outputs:
 - bc_ratio: (vector) Bleach-corrected ratio calculated as green_channel ./ red_channel.
 %}
+
+
+
+function [bc_ratio] = bleach_correct(this_worm_raw, frames, secs, genotype, cond,this_worm_dirs, analysis_output_dir, analysis_pars, colors, plotting, moviepars)
 
 %save and organise data inputs
 raw_ratio = this_worm_raw(:,1);

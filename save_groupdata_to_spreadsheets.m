@@ -1,3 +1,23 @@
+%{
+Saves processed fluorescence ratio data for a single group (genotype × condition) to Excel:
+- All individual traces (columns = worms)
+- Group average, SEM, and time vector
+
+Inputs:
+- all_adjratios (matrix): Ratio traces for all worms. Size: [timepoints × worms]
+- avg_all_adjratios (vector): Mean trace across all worms.
+- ratiotype (string): 'badjratios' or 'normratios'; used in file names.
+- name (string): Optional name suffix (e.g., 'not_bc', 'Type1').
+- worm_names (cell array of strings): Labels for each worm trace column.
+- SEM (vector): Standard error of the mean at each timepoint.
+- pdir (string): Directory where Excel files are saved.
+- all_secs (vector): Time vector (seconds).
+- general (struct): Contains general.pars and general.strain for filename tags.
+
+Outputs:
+- Excel file with all individual traces.
+- Excel file with [time, avg, SEM] matrix.
+%}
 
 %% Save data to spreadsheets
 function save_groupdata_to_spreadsheets(all_adjratios, avg_all_adjratios, ratiotype,name, worm_names,SEM,pdir, all_secs, general)

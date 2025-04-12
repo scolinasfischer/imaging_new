@@ -5,17 +5,25 @@ Applies single-worm processing, then collects and averages data.
 Calls plotting and bleach-correction routines.
 
 Inputs:
-- xlsx_dir: directory of .xlsx files for this group
-- analysis_output_dir: global analysis save location
-- genotype, cond: identifiers
+- xlsx_dir (string): Folder containing .xlsx files for all worms in this group.
+- analysis_output_dir (string): Base directory for saving plots and spreadsheets.
+- genotype (string): e.g. 'wt', 'mut1'
+- cond (string): Experimental condition (e.g. 'mock', 'avsv', 'sexc')
 - general, analysis_pars, colors, plotting, moviepars: parameter structs
 
 Outputs:
-- ratios: struct of baseline-adjusted and normalized ratios (avg, SEM, raw)
-- notbc_ratios: same, from before bleach correction (if applied).
-otherwise, is an empty struct.
-- all_secs: time vector
-- worm_names: list of worm column labels
+- ratios (struct): Final group data (bleach-corrected or not, depenging on
+settings)
+    - ratios.badj.all (matrix): baseline-adjusted, all worms
+    - ratios.badj.avg (vector): group average
+    - ratios.badj.SEM (vector): SEM
+    - ratios.norm. (all / avg / SEM): as above, for normalized data
+- notbc_ratios (struct): same fields as `ratios`, but **before** bleach
+correction, in the case that ratios is bleach-correctes
+    - Only returned full if analysis_pars.bleachcorrect == true (otherwise
+    is empty struct)
+- all_secs (vector): Time axis for plots
+- worm_names (cell array of strings): Worm identifiers (used as column names)
 %}
 
 

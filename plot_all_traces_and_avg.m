@@ -1,3 +1,21 @@
+%{
+Plots all individual worm traces plus their average on the same figure.
+Useful for visualizing variability across worms in a single group, and if most traces are similar to the mean or not.
+
+Inputs:
+- all_secs: (vector) Time in seconds
+- all_adjratios: (matrix) Individual worm traces (rows: time, cols: worms)
+- avg_all_adjratios: (vector) Group average
+- ratiotype: (string) 'badjratios' or 'normratios'
+- plotname: (string) Name suffix for the plot file
+- pdir: (string) Save directory
+- general, analysis_pars, colors, plotting, moviepars: standard parameter structs
+
+Output:
+- Saves plot as PNG (and EPS if enabled)
+%}
+
+
 %% Plot: All traces + average
 function plot_all_traces_and_avg(all_secs, all_adjratios, avg_all_adjratios, ratiotype,plotname, pdir, general, analysis_pars, colors, plotting, moviepars)
     

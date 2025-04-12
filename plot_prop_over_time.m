@@ -1,21 +1,24 @@
+%{
+Plots the proportion of neurons active over time in a given ON/OFF category (non-cumulative).
+
+Inputs:
+- all_secs: (vector) Time in seconds
+- dataset: (struct) Contains:
+    - prop: cell array of proportion active (over time)
+    - totalN: number of neurons per condition
+    - colors, labels, plot_title
+- category: (string) 'offHIGH' | 'onLOW' | 'bLOW'
+- pdir: (string) Directory to save
+- general, colors, moviepars, analysis_pars: structs with general and
+plotting info
+
+Output:
+- Saves non-cumulative proportion plots as PNG and optional EPS
+%}
+
+
 function plot_prop_over_time(all_secs, dataset, category, pdir, general, colors, moviepars, analysis_pars)
-    % plot_prop_over_time
-    %
-    % Plots the proportion of active neurons over time for multiple datasets,
-    % including both non-cumulative and cumulative proportions.
-    %
-    % Parameters:
-    %   all_secs       - Time vector for x-axis.
-    %   dataset        - Structure containing datasets (prop, totalN, colors, labels, plot_title).
-    %   category       - String defining the condition (offHIGH, onLOW, bLOW).
-    %   pdir           - Directory path where plots should be saved.
-    %   general        - Struct with genotype information and strain details.
-    %   colors         - Struct with color definitions.
-    %   moviepars      - Struct with timeframes, x-coordinates for patches, and axis labels.
-    %   analysis_pars  - Struct containing export settings.
-    %
-    % Outputs:
-    %   - Saves the proportion and cumulative proportion plots as PNG and EPS files.
+
 
     % === Set x-axis limits based on category ===
     switch category

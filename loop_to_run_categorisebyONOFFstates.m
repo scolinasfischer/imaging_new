@@ -1,15 +1,31 @@
+%{
+Main wrapper for categorizing neurons into ON/OFF activity states:
+- offHIGH: high activity at end of baseline
+- onLOW: low activity at end of first odour pulse
+- bLOW: low activity at start of baseline
+
+It loops through all genotypes and conditions, calls the categorisation function,
+plots and saves categorized data, and then computes average traces + proportions
+for each group and state.
+
+Inputs:
+- bratio_all_data: baseline-adjusted ratios, structured by genotype/condition
+- nratio_all_data: normalized ratios, structured by genotype/condition
+- worm_names: struct of worm names per genotype/condition
+- analysis_output_dir: base folder for saving
+- general, analysis_pars, colors, plotting, moviepars: configuration structs
+
+Output:
+- No direct returned output (side effects only:
+    Plots and Excel tables for categorized traces and proportions)
+%}
+
+
+
+
+
 function loop_to_run_categorisebyONOFFstates(bratio_all_data, nratio_all_data, worm_names, analysis_output_dir, general,analysis_pars, colors, plotting, moviepars)
 
-
-%this function calls the function that categorises neurons by their on/off states. 
-
-%It accepts as input the two structures containing normalised ratio data
-%for all genotypes and conditions (one struct for normalised ratios and one
-%struct for baseline-adjusted ratios). 
-%Other inputs: worm_names (struct with worm names) 
-
-%It also calls plotting function to plot the data separated by these categories, as well
-%as saving xls files. 
 
 
 fprintf('Starting categorise by ON-OFF state analysis. \n');

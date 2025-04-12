@@ -1,3 +1,26 @@
+%{
+Saves parameter structs used in the analysis to:
+1. `.mat` file for reloading
+2. `.txt` file for easy inspection and reproducibility
+
+Uses a recursive helper function to print nested structs.
+
+Inputs:
+- pdir (string): Directory to save output files.
+- general (struct): Strain name and parameter string (general.pars).
+- analysis_pars (struct): Toggles for bleach correction, plotting, etc.
+- plotting (struct): Y-axis limits, label sizes, etc.
+- moviepars (struct): Frame indices, odour timing, shading coords.
+- colors (struct): RGB triplets for conditions and plot elements.
+
+Outputs:
+- Files:
+    - analysis_parameters.mat
+    - analysis_parameters.txt
+
+%}
+
+
 function save_analysis_params(pdir, general, analysis_pars, plotting, moviepars, colors)
     % Save parameters to both a .mat file and a .txt file
     %

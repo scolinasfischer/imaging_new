@@ -1,3 +1,20 @@
+%{
+Plots a heatmap of all worm traces in a group, with average trace and odour timing also shown.
+Can be used by group plots, ON/OFF categories, or sorted by peak time (type1 type2).
+
+Inputs:
+- all_adjratios: (matrix) Each worm's trace (rows: time, cols: worms)
+- avg_all_adjratios: (vector) Average trace
+- ratiotype: (string) 'badjratios' or 'normratios'
+- heatmapname: (string) Used in title and output file name
+- worm_names: (cell array) Labels for heatmap y-axis
+- pdir: (string) Save path
+- general, analysis_pars, plotting, moviepars:  structs with general and
+plotting info
+
+Output:
+- Heatmap saved as PNG and optional EPS
+%}
 
 
 %% Plot: Heatmap
