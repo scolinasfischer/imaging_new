@@ -7,13 +7,19 @@ This pipeline analyzes fluorescence imaging data from single neurons, comparing 
 - Ratio calculations (baseline-adjusted and min/max normalized)
 - Optional bleach correction
 - Visualization of single worms and group-level data
-- Categorization into activity states (ON/OFF, Type1/Type2)
+- Categorization by response type (ON/OFF, Type1/Type2)
 - Generation of summary statistics and spreadsheets
 
 ## Main Script: `main_analysis_tailortoRIA.m`
 *(Currently named after use with RIA, but compatible with other neurons)*
-
 Performs the full analysis from raw data extraction to plotting and summary statistics. It handles wild-type and mutant genotypes across multiple experimental conditions.
+
+
+NB - in this code I have used interchangeably "neuron" and "worm". This is not fully correct,
+ as each video file certainly corresponds to a single neuron, but , sometimes, there are two 
+video files for a single worm, for the Left and Right neurons. 
+Mostly each neuron is also from a unique worm.
+
 
 ### **Key Features**
 - Defines and saves all parameter structures: `general`, `analysis_pars`, `plotting`, `moviepars`, `colors`
