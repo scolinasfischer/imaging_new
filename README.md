@@ -88,7 +88,8 @@ START: main_analysis_tailortoRIA.m
             ├──> compute_plot_statistics
             ├──> plot_avg_with_sem_flexible
             ├──> compute_proportions_over_time
-            ├──> plot_prop_over_time
-            │     └──> save_plot
+            └──> plot_prop_over_time
+                  └──> save_plot
+
 ```
 
