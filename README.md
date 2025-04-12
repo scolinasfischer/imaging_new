@@ -40,3 +40,55 @@ Attached is doc with Diagram of analysis flow and general overview of all functi
 
 [imaging_new Analysis Pipeline Documentation.docx](https://github.com/user-attachments/files/19708155/imaging_new.Analysis.Pipeline.Documentation.docx)
 
+```text
+START: main_analysis_tailortoRIA.m
+│
+├──> save_analysis_params               (saves general parameters)
+│
+├──> (optional): cycle_to_extract_mat_files
+│     └──> extract_mat2xls             (extracts .mat to .xlsx)
+│
+├──> FOR EACH genotype × condition:
+│     └──> process_this_group
+│           ├──> get_xlsx_filepaths
+│           ├──> FOR EACH worm:
+│           │     └──> process_single_worm
+│           │           ├──> load_single_worm
+│           │           ├──> (optional) bleach_correct
+│           │           │     └──> save_channel_data
+│           │           ├──> calc_baseline_adj_ratio
+│           │           ├──> calc_normalised_ratio
+│           │           └──> (optional) plot_single_worm
+│           ├──> analyse_and_plot_group_ratios (×2: badj, norm)
+│           │     ├──> compute_plot_statistics
+│           │     ├──> plot_avg_with_sem_flexible
+│           │     ├──> plot_all_traces_and_avg
+│           │     ├──> plot_heatmap
+│           │     └──> save_groupdata_to_spreadsheets
+│           └──> (optional bleach-correction): same above for notbc_*
+│
+├──> loop_to_plot_all_conditions_per_genotype
+│     └──> plot_avg_with_sem_flexible
+│
+├──> loop_to_plot_all_genotypes_per_condition
+│     └──> plot_avg_with_sem_flexible
+│
+├──> loop_to_plot_bc_vs_nobc
+│     └──> plot_avg_with_sem_flexible
+│
+├──> loop_to_run_type1type2_analysis (optional)
+│     └──> type1type2_analysis
+│           ├──> compute_plot_statistics
+│           ├──> plot_heatmap
+│           └──> plot_avg_with_sem_flexible
+│
+└──> loop_to_run_categorisebyONOFFstates (optional)
+      ├──> categorisebyONOFFstates
+      └──> process_and_plot_categories_ONOFF
+            ├──> compute_plot_statistics
+            ├──> plot_avg_with_sem_flexible
+            ├──> compute_proportions_over_time
+            ├──> plot_prop_over_time
+            │     └──> save_plot
+```
+
