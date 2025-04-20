@@ -60,6 +60,26 @@ function [this_worm_raw, short_fname, badjratios, normratios, notbc_badjratios, 
 
     %load data for this worm
     [raw_ratios, raw_green, raw_red, frames, secs] = load_single_worm(fname);
+    
+    %add padding if its a short video or it came from old 20fps videos
+    % Ensure all vectors are at least moviepars.mend frames long
+        maxlen = moviepars.mend;
+        currlen = length(raw_ratios);  % all signals should be same length
+        
+        if currlen < maxlen
+        raw_ratios(end+1:maxlen, 1) = NaN;
+        raw_green(end+1:maxlen, 1) = NaN;
+        raw_red(end+1:maxlen, 1) = NaN;
+        frames(end+1:maxlen, 1) = NaN;
+        secs(end+1:maxlen, 1) = NaN;
+    
+        warning('Data padded with NaNs to reach %d frames (was %d). Worm: %s', ...
+            maxlen, currlen, short_fname);
+        end
+
+
+
+        
     this_worm_raw = [raw_ratios(1:moviepars.mend) raw_green(1:moviepars.mend) raw_red(1:moviepars.mend)];
 
     %smooth ratio to remove spikes generated as result of small
@@ -80,8 +100,12 @@ function [this_worm_raw, short_fname, badjratios, normratios, notbc_badjratios, 
         notbc_normratios = calc_normalised_ratio(smoothraw_ratios, moviepars);
 
 
+    else
+        notbc_badjratios = [];
+        notbc_normratios = [];
     end
 
+    
 
     %calculate baseline-adjusted ratio 
     %Baseline-adjusted ratio is (R - R0 / R0)
